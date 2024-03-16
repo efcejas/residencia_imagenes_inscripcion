@@ -20,5 +20,6 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('encuestas/', include('encuestas.urls')), # Agregamos la ruta de la aplicación 'encuestas'
+    path('asistencia/', include(('asistencia.urls', 'asistencia'), namespace='asistencia')), # Agregamos la ruta de la aplicación 'asistencia' (se pone ('asistencia.urls', 'asistencia') para que sepa que es una aplicacion y cumpla con el estandar de Django
     path('', include(('AppInscripcion.urls', 'AppInscripcion'), namespace='AppInscripcion')), # Agregamos la ruta de la aplicación 
 ]

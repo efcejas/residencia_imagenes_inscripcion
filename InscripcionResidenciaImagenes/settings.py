@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-k1zf!dv103jcip%ibsu@lu-2a)lpn3pcc=y-3fhr)=k5bxhi4&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.0.71', 'localhost', '127.0.0.1']
 
 
 # Definición de aplicación
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Mis aplicaciones
     'AppInscripcion', # Aplicacion para la inscripcion de la residencia
     'encuestas.apps.EncuestasConfig', # Aplicacion para encuestas
+    'asistencia.apps.AsistenciaConfig', # Se poner .apps.AsistenciaConfig para que sepa que es una aplicacion y cumpla con el estandar de Django
 ]
 
 MIDDLEWARE = [
