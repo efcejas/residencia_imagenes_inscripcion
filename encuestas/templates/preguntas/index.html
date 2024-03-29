@@ -1,3 +1,7 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'encuestas/style.css' %}">
+
 {% if ultima_pregunta_lista %}
     <ul>
         {% for pregunta in ultima_pregunta_lista %}
@@ -7,3 +11,4 @@
 {% else %}
     <p>No hay preguntas disponibles.</p>
 {% endif %}
+

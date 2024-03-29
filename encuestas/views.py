@@ -5,6 +5,7 @@ from django.shortcuts import render, get_object_or_404 # Esto sirve para mostrar
 from django.urls import reverse # Esto sirve para redirigir a una vista específica
 from django.db.models import F # Esto sirve para evitar problemas de concurrencia
 from django.views import generic # Esto sirve para crear vistas genéricas
+from django.utils import timezone # Esto sirve para manejar la zona horaria
 
 from .models import Pregunta, Opcion
 
@@ -14,11 +15,19 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Devuelve las últimas cinco preguntas publicadas."""
-        return Pregunta.objects.order_by("-fecha_publicacion")[:5]
+        return Pregunta.objects.filter(
+            fecha_publicacion__lte=timezone.now()
+        ).order_by("-fecha_publicacion")[:5]
 
 class DetalleView(generic.DetailView):
     model = Pregunta
     template_name = "preguntas/detalle.html"
+
+    def get_queryset(self):
+        """
+        Excluye cualquier pregunta que no haya sido publicada todavía.
+        """
+        return Pregunta.objects.filter(fecha_publicacion__lte=timezone.now())
 
 class ResultadosView(generic.DetailView):
     model = Pregunta

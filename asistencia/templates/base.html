@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Control de asistencia{% endblock %}</title>
+    </head>
+    <body>
+        <header>
+            <h1>Control de asistencia</h1>
+        </header>
+        <nav>
+            <ul>
+                <li>Inicio</li>
+                <li>Presentes</li>
+            </ul>
+        <section>
+            {% block content %}{% endblock %}
+        </section>
+        <footer>
+            <p>&copy; {{ year }}. Control de asistencia.</p>
+        </footer>
+    </body>
+</html>

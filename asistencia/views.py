@@ -1,8 +1,26 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-import qrcode
-from django.core.files.base import ContentFile
-from PIL import Image
+# Django imports
+from django.shortcuts import render  # Usado para renderizar plantillas
+from django.http import HttpResponse  # Usado para devolver respuestas HTTP
+from django.core.files.base import ContentFile  # Usado para manejar archivos
+from django.views.generic import TemplateView  # Usado para crear vistas basadas en clases
+
+
+# Librerías de terceros
+import datetime  # Usado para manejar fechas y horas
+import qrcode  # Usado para generar códigos QR
+from PIL import Image  # Usado para manejar imágenes
+
+class InicioView(TemplateView):
+    template_name = "presentes/inicio.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Agrega aquí cualquier dato adicional que necesites en la plantilla.
+        current_year = datetime.datetime.now().year
+        # Agrega el año actual al contexto
+        context["year"] = current_year
+        return context
+
 
 def prueba(request):
     return HttpResponse("Hola, mundo.")
