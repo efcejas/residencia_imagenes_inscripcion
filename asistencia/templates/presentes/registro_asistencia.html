@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h1>Registro de Asistencia</h1>
+        <form id="registroForm" method="post">
+            {% csrf_token %}
+            {{ form.latitud.as_hidden }}
+            {{ form.longitud.as_hidden }}
+            <button type="submit" class="btn btn-primary">Presente</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('registroForm').addEventListener('submit', async function(e) {  // Nota el uso de 'async' aquí
+            e.preventDefault();
+            console.log('Formulario enviado');
+
+            if (navigator.geolocation) {
+                try {
+                    var position = await new Promise(function(resolve, reject) {  // Nota el uso de 'await' aquí
+                        navigator.geolocation.getCurrentPosition(resolve, reject);
+                    });
+
+                    var lat = position.coords.latitude;
+                    var lon = position.coords.longitude;
+                    console.log('Latitud:', lat, 'Longitud:', lon);
+
+                    var form = document.getElementById('registroForm');
+                    var data = new FormData(form);
+                    data.append('latitud', lat);
+                    data.append('longitud', lon);
+
+                    $.ajax({
+                        url: '/asistencia/registro_asistencia/',
+                        method: 'POST',
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            console.log('Solicitud AJAX exitosa');
+                            window.location.href = '/asistencia/inicio/';
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error('Error en la solicitud AJAX:', textStatus, errorThrown);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error al obtener la posición:', error);
+                }
+            } else {
+                console.log("La Geolocalización no está disponible en este navegador.");
+            }
+        });
+    </script>
+{% endblock %}

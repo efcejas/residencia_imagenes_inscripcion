@@ -1,0 +1,35 @@
+{% extends 'basedos.html' %}
+
+{% block title %} Inicio de sesión {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="mb-3">Inicio de sesión</h2>
+                {% if form.errors %}
+                    <div class="alert alert-danger mb-3">
+                        Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.
+                    </div>
+                {% endif %}
+                <form method="post" class="mb-3">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        {{ form.username.label_tag }}
+                        {{ form.username }}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.password.label_tag }}
+                        {{ form.password }}
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary mb-3">Iniciar sesión</button>
+                    </div>
+                    <input type="hidden" name="next" value="{{ next }}">
+                </form>
+                <p class="text-center"><a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a></p>
+                <p class="text-center">¿Nuevo usuario? <a href="{% url 'register' %}">Registrarse</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

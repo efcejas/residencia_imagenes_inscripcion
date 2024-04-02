@@ -16,10 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from asistencia.views import RegisterResidenteView, CustomLogoutView, SuccessView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('encuestas/', include('encuestas.urls')), # Agregamos la ruta de la aplicación 'encuestas'
     path('asistencia/', include(('asistencia.urls', 'asistencia'), namespace='asistencia')), # Agregamos la ruta de la aplicación 'asistencia' (se pone ('asistencia.urls', 'asistencia') para que sepa que es una aplicacion y cumpla con el estandar de Django
-    # debo creas las rutas de autenticacion acá. 
+    # Urls para el manejo de autenticación
+    path('register/', RegisterResidenteView.as_view(), name='register'),
+    path('registro_exitoso/', SuccessView.as_view(), name='registro_exitoso'),
+    path('accounts/logout/', CustomLogoutView.as_view(), name='logout'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

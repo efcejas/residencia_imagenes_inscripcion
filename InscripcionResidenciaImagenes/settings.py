@@ -56,7 +56,7 @@ ROOT_URLCONF = 'InscripcionResidenciaImagenes.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], # Ruta de los templates
+        'DIRS': [BASE_DIR / 'asistencia/templates', BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,8 +82,26 @@ DATABASES = {
     }
 }
 
+# Registro de modelos personalizados
+
+AUTH_USER_MODEL = 'asistencia.Residente'
+
+# Redirección de URLs inicio
+
+LOGIN_REDIRECT_URL = 'asistencia:inicio'
 
 # Validación de contraseña
+
+# Restablecer contraseña
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'soporte.residentesdm@hotmail.com'
+EMAIL_HOST_PASSWORD = '!FQiN.du9LdjsWf'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [

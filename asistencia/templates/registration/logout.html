@@ -1,0 +1,8 @@
+{% extends "basedos.html" %}
+
+{% block content %}
+  <h2>{{ title }}</h2>
+  <p>Has cerrado sesión correctamente.</p>
+  <p>Gracias por tu visita.</p>
+  <a href="{% url 'login' %}">Iniciar sesión de nuevo</a>
+{% endblock %}

@@ -1,15 +1,21 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import Residente, RegistroAsistencia
 
-from .models import Residente
-
-class ResidenteAdmin(admin.ModelAdmin):
-    list_display = ('username', 'last_name', 'first_name', 'dni', 'email')
-    fieldsets = (
-        ('Datos de la Cuenta', {'fields': ('username', 'password', 'email')}),
-        ('Datos Personales', {'fields': ('first_name', 'last_name', 'fecha_nacimiento', 'dni')}),
-        ('Datos de la Residencia', {'fields': ('matricula', 'fecha_de_ingreso')}),
-        ('Permisos', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+class ResidenteAdmin(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + (
+        ('Campos personalizados', {'fields': ('dni', 'fecha_nacimiento', 'matricula', 'telefono', 'fecha_de_ingreso')}),
+    )
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        ('Campos personalizados', {'fields': ('email', 'dni', 'fecha_nacimiento', 'matricula', 'telefono', 'fecha_de_ingreso')}),
     )
 
 admin.site.register(Residente, ResidenteAdmin)
-# Quiero darle formato al admin de django
+
+class RegistroAsistenciaAdmin(admin.ModelAdmin):
+    list_display = ('residente', 'fecha_hora', 'latitud', 'longitud')
+    list_filter = ('residente', 'fecha_hora')
+    search_fields = ('residente__first_name', 'residente__last_name')
+
+admin.site.register(RegistroAsistencia, RegistroAsistenciaAdmin)
+
