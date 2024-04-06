@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-k1zf!dv103jcip%ibsu@lu-2a)lpn3pcc=y-3fhr)=k5bxhi4&
 # ADVERTENCIA DE SEGURIDAD: ¡no ejecute con la depuración activada en producción!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.71', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['residentes-dm-9833103dde7d.herokuapp.com']
 
 
 # Definición de aplicación
