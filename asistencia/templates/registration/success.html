@@ -1,7 +1,9 @@
 {% extends "basedos.html" %}
 
 {% block content %}
-    <h2>¡Registro exitoso!</h2>
-    <p>Gracias por registrarte, ahora puedes iniciar sesión.</p>
-    <p><a href="{% url 'login' %}">Haz clic aquí</a>
+    <div class="container-sm text-center py-5">
+        <h2 class="mb-3">¡Registro exitoso!</h2>
+        <p class="mb-3">Gracias por registrarte, ahora puedes iniciar sesión.</p>
+        <p><a href="{% url 'login' %}" class="btn btn-primary">Haz clic aquí</a></p>
+    </div>
 {% endblock %}

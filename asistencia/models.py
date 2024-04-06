@@ -1,8 +1,7 @@
-from django.db import models
-from django.core.validators import RegexValidator
+from datetime import datetime, time, timedelta
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-# from .models import Residente
-
+from django.db import models
+from django.utils import timezone
 
 class Residente(AbstractUser):
     email = models.EmailField('Correo electrónico', blank=False, null=False, unique=True)
@@ -32,7 +31,19 @@ class RegistroAsistencia(models.Model):
     fecha_hora = models.DateTimeField('Fecha y hora', auto_now_add=True)
     latitud = models.FloatField('Latitud')
     longitud = models.FloatField('Longitud')
+    llegada_tarde = models.BooleanField('¿Llegó tarde?', default=False)
 
+    def save(self, *args, **kwargs):
+        self.llegada_tarde = self.llego_tarde()
+        super().save(*args, **kwargs)
+
+    def llego_tarde(self):
+        hora_inicio_clase = timezone.make_aware(datetime.combine(timezone.localtime().date(), time(23, 41)))
+        hora_fin_clase = hora_inicio_clase + timedelta(minutes=5)  # Añadimos 5 minutos de tolerancia
+        hora_actual = timezone.localtime().replace(second=0, microsecond=0)
+
+        return hora_actual > hora_fin_clase  # Si la hora actual es estrictamente mayor que la hora de fin de la clase (hora de inicio + tolerancia), entonces el residente llegó tarde
+    
     class Meta:
         verbose_name = 'Registro de asistencia'
         verbose_name_plural = 'Registros de asistencia'

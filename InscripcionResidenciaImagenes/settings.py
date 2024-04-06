@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'InscripcionResidenciaImagenes.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'gestion_residentes_db',
+        'USER': 'postgres',
+        'PASSWORD': 'efc8563456',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -88,7 +92,7 @@ AUTH_USER_MODEL = 'asistencia.Residente'
 
 # Redirección de URLs inicio
 
-LOGIN_REDIRECT_URL = 'asistencia:inicio'
+LOGIN_REDIRECT_URL = 'asistencia:asistencias_registradas'
 
 # Validación de contraseña
 

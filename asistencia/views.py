@@ -1,23 +1,20 @@
 # Django imports
-from django.shortcuts import render, redirect  # Usado para renderizar plantillas
-from django.http import HttpResponse  # Usado para devolver respuestas HTTP
-from django.core.files.base import ContentFile  # Usado para manejar archivos
-from django.contrib.auth.decorators import login_required  # Decorador para requerir autenticación
-from django.views.generic import TemplateView  # Usado para crear vistas basadas en clases
-from django.views.generic.edit import CreateView, FormView  # Usado para crear vistas basadas en clases
-from django.urls import reverse_lazy  # Usado para redirigir a una URL después de realizar una acción
-from django.contrib.auth.views import LogoutView  # Importa la vista de logout de Django
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.views.generic import TemplateView
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+from django.contrib.auth.views import LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 from django.views import View
-from .models import Residente, RegistroAsistencia  # Importa los modelos de Residente y RegistroAsistencia
-from .forms import ResidenteRegistrationForm, RegistroAsistenciaForm # Importa el formulario de registro de residentes
-
+from .models import Residente, RegistroAsistencia
+from .forms import ResidenteRegistrationForm, RegistroAsistenciaForm
 
 # Librerías de terceros
-import datetime  # Usado para manejar fechas y horas
-import qrcode  # Usado para generar códigos QR
-from PIL import Image  # Usado para manejar imágenes
+from django.utils import timezone
+import qrcode
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
@@ -37,19 +34,6 @@ class SuccessView(TemplateView):
 class CustomLogoutView(LogoutView):
     template_name = 'registration/logout.html'
 
-# Vistas relacionadas con la página de inicio de la aplicación.
-
-class InicioView(LoginRequiredMixin, TemplateView):
-    template_name = "presentes/inicio.html"
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Agrega aquí cualquier dato adicional que necesites en la plantilla.
-        current_year = datetime.datetime.now().year
-        # Agrega el año actual al contexto
-        context["year"] = current_year
-        return context
-
 # Vistas relacionadas con la página de asistencia.
 
 class RegistroAsistenciaView(LoginRequiredMixin, View):
@@ -62,20 +46,30 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
         if form.is_valid():
             registro_asistencia = form.save(commit=False)
             registro_asistencia.residente = request.user
+            registro_asistencia.llegada_tarde = registro_asistencia.llego_tarde()
             registro_asistencia.save()
-            return redirect('asistencia:inicio')
-        print(form.errors)  # Imprime los errores del formulario
+
+            if registro_asistencia.llegada_tarde:
+                messages.error(request, '¡{}, registraste tu asistencia con tardanza!'.format(request.user.first_name))
+            else:
+                messages.success(request, '¡{}, registraste tu asistencia exitosamente!'.format(request.user.first_name))
+
+            return redirect('asistencia:asistencias_registradas')
         return render(request, 'presentes/registro_asistencia.html', {'form': form})
 
-# Otras vistas de prueba
+class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
+    template_name = 'presentes/lista_asistencias_registradas.html'
 
-def prueba(request):
-    return HttpResponse("Hola, mundo.")
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Obtiene los últimos registros de asistencia del usuario actual
+        context['attendance_records'] = RegistroAsistencia.objects.filter(residente=self.request.user).order_by('-fecha_hora')[:6]
+        return context
 
 # Create your views here.
 
 def generar_qr(request): #genera un qr con la url de la pagina de asistencia
-    img = qrcode.make('http://192.168.0.71:8000/asistencia/registrar_asistencia/') #se pone la url de la pagina de asistencia
+    img = qrcode.make('http://127.0.0.1:8000/asistencia/registro_asistencia/') #se pone la url de la pagina de asistencia
     img.save('qr.png') #se guarda el qr en un archivo   
     return HttpResponse("QR generado.") #se muestra un mensaje de que el qr fue generado
 
