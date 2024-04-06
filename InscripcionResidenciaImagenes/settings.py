@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Mis aplicaciones
-    'encuestas.apps.EncuestasConfig', # Aplicacion para encuestas
     'asistencia.apps.AsistenciaConfig', # Se poner .apps.AsistenciaConfig para que sepa que es una aplicacion y cumpla con el estandar de Django
 ]
 

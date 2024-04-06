@@ -21,7 +21,6 @@ from asistencia.views import RegisterResidenteView, CustomLogoutView, SuccessVie
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('encuestas/', include('encuestas.urls')), # Agregamos la ruta de la aplicación 'encuestas'
     path('asistencia/', include(('asistencia.urls', 'asistencia'), namespace='asistencia')), # Agregamos la ruta de la aplicación 'asistencia' (se pone ('asistencia.urls', 'asistencia') para que sepa que es una aplicacion y cumpla con el estandar de Django
     # Urls para el manejo de autenticación
     path('register/', RegisterResidenteView.as_view(), name='register'),
