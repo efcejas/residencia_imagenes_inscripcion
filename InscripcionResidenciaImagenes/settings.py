@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-k1zf!dv103jcip%ibsu@lu-2a)lpn3pcc=y-3fhr)=k5bxhi4&
 # ADVERTENCIA DE SEGURIDAD: ¡no ejecute con la depuración activada en producción!
 DEBUG = True
 
-ALLOWED_HOSTS = ['residentes-dm-9833103dde7d.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'residentes-dm-9833103dde7d.herokuapp.com']
 
 
 # Definición de aplicación
@@ -145,12 +145,9 @@ STATIC_URL = '/static/'
 # Nueva configuración
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'asistencia', 'static'),
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Agrega esta línea
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Tipo de campo de clave principal predeterminado
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
