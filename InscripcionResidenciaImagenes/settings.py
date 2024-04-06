@@ -75,15 +75,10 @@ WSGI_APPLICATION = 'InscripcionResidenciaImagenes.wsgi.application'
 # Base de datos
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gestion_residentes_db',
-        'USER': 'postgres',
-        'PASSWORD': 'efc8563456',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default='postgres://postgres:efc8563456@localhost:5432/gestion_residentes_db')
 }
 
 # Registro de modelos personalizados
