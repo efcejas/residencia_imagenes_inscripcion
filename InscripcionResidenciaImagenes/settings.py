@@ -134,7 +134,13 @@ USE_TZ = True
 # Archivos estáticos (CSS, JavaScript, Imágenes)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATIC_URL = '/static/'
+
+# Agrega esta línea
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Tipo de campo de clave principal predeterminado
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
