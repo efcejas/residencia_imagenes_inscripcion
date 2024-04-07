@@ -3,22 +3,18 @@
 <div class="container text-start py-5 vh-100">
     <div class="row justify-content-center">
         <div class="col-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="mb-3 text-center">Registro de Asistencia</h5>
-                    <form id="registroForm" method="post" class="mb-3">
-                        {% csrf_token %}
-                        {{ form.latitud.as_hidden }}
-                        {{ form.longitud.as_hidden }}
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary mb-3">Presente</button>
-                        </div>
-                        <div id="spinner" class="spinner-grow mt-3" role="status" style="display: none;">
-                            <span class="visually-hidden">Cargando...</span>
-                        </div>
-                    </form>
+            <h5 class="mb-3 text-center">Registro de Asistencia</h5>
+            <form id="registroForm" method="post" class="mb-3">
+                {% csrf_token %}
+                {{ form.latitud.as_hidden }}
+                {{ form.longitud.as_hidden }}
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary mb-3">Presente</button>
                 </div>
-            </div>
+                <div id="spinner" class="spinner-grow mt-3" role="status" style="display: none;">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </form>
         </div>
     </div>
 </div>
