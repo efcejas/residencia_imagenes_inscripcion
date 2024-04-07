@@ -75,7 +75,7 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
 
             # Verifica si la hora actual está dentro del rango permitido
             hora_inicio = ahora.replace(hour=18, minute=0, second=0)  # Cambiado a 18:00
-            hora_fin = ahora.replace(hour=18, minute=45, second=0)  # Cambiado a 18:45
+            hora_fin = ahora.replace(hour=19, minute=0, second=0)  # Cambiado a 18:45
             
             # Si todas las verificaciones pasan, registra la asistencia
             llegada_a_tiempo = hora_inicio <= ahora < hora_fin
