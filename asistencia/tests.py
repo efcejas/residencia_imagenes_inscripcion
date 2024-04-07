@@ -94,4 +94,3 @@ class RegisterResidenteViewTest(TestCase):
         users = Residente.objects.all()
         self.assertEqual(len(users), 1)
         self.assertEqual(users[0].username, 'newuser')
-

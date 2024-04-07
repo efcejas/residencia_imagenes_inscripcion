@@ -13,7 +13,7 @@ class ResidenteAdmin(UserAdmin):
 admin.site.register(Residente, ResidenteAdmin)
 
 class RegistroAsistenciaAdmin(admin.ModelAdmin):
-    list_display = ('residente', 'fecha_hora', 'llegada_tarde', 'latitud', 'longitud')
+    list_display = ('residente', 'fecha_hora', 'llegada_a_tiempo','llegada_tarde', 'latitud', 'longitud')
     search_fields = ('residente__first_name', 'residente__last_name')
 
 admin.site.register(RegistroAsistencia, RegistroAsistenciaAdmin)
