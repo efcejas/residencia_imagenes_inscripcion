@@ -45,52 +45,42 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
     def post(self, request):
         form = RegistroAsistenciaForm(request.POST)
         if form.is_valid():
-            # Obtiene la hora actual
-            
-            ahora = timezone.now()
-            ahora_local = timezone.localtime(ahora)
-            print("Hora actual en zona horaria local:", ahora_local)
+            ahora = timezone.localtime()
 
-            # Verifica si el usuario ya ha registrado su asistencia hoy
-            ya_registrado_hoy = RegistroAsistencia.objects.filter(residente=request.user, fecha_hora__date=ahora.date()).exists()
-            # Imprime los datos para depuración
-            print("Registro de asistencia:", ya_registrado_hoy)
-            
+            ya_registrado_hoy = RegistroAsistencia.objects.filter(residente=request.user, fecha=ahora.date()).exists()
             if ya_registrado_hoy:
                 messages.error(request, '¡{}, ya has registrado tu asistencia hoy!'.format(request.user.first_name))
                 return render(request, 'presentes/registro_asistencia.html', {'form': form})
 
-            # Obtiene la ubicación del usuario
             latitud = form.cleaned_data.get('latitud')
             longitud = form.cleaned_data.get('longitud')
 
-            # Verifica si la ubicación del usuario está dentro del rango permitido
-            latitud_permitida = -34.60342544726747  # reemplaza con la latitud de tu ubicación
-            longitud_permitida = -58.41512964682172  # reemplaza con la longitud de tu ubicación
-            rango_permitido = 0.30  # reemplaza con el rango permitido en grados decimales
+            latitud_permitida = -34.60367
+            longitud_permitida = -58.41506
+            rango_permitido = 0.0009
             if not (latitud_permitida - rango_permitido <= latitud <= latitud_permitida + rango_permitido and
                     longitud_permitida - rango_permitido <= longitud <= longitud_permitida + rango_permitido):
                 messages.error(request, '¡{}, debes estar dentro del rango permitido para registrar tu asistencia!'.format(request.user.first_name))
                 return render(request, 'presentes/registro_asistencia.html', {'form': form})
 
-            # Verifica si la hora actual está dentro del rango permitido
-            hora_inicio = ahora.replace(hour=18, minute=0, second=0)  # Cambiado a 18:00
-            hora_fin = ahora.replace(hour=19, minute=0, second=0)  # Cambiado a 18:45
-            
-            # Si todas las verificaciones pasan, registra la asistencia
+            hora_inicio = ahora.replace(hour=20, minute=30, second=0)
+            hora_fin = ahora.replace(hour=20, minute=55, second=0)
+
             llegada_a_tiempo = hora_inicio <= ahora < hora_fin
             llegada_tarde = ahora >= hora_fin
             registro_asistencia = form.save(commit=False)
             registro_asistencia.residente = request.user
+            registro_asistencia.fecha = ahora.date()  # Establece fecha a la fecha actual
+            registro_asistencia.hora = ahora.time()  # Establece hora a la hora actual
             registro_asistencia.llegada_a_tiempo = llegada_a_tiempo
             registro_asistencia.llegada_tarde = llegada_tarde
             registro_asistencia.save()
-            
+
             if llegada_tarde:
                 messages.error(request, '¡{}, registraste tu asistencia con tardanza!'.format(request.user.first_name))
             else:
                 messages.success(request, '¡{}, registraste tu asistencia exitosamente!'.format(request.user.first_name))
-            
+
             return redirect('asistencia:asistencias_registradas')
 
         return render(request, 'presentes/registro_asistencia.html', {'form': form})
@@ -101,7 +91,7 @@ class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Obtiene todos los registros de asistencia del usuario actual
-        context['attendance_records'] = RegistroAsistencia.objects.filter(residente=self.request.user).order_by('-fecha_hora')
+        context['attendance_records'] = RegistroAsistencia.objects.filter(residente=self.request.user).order_by('-fecha', '-hora')
         return context
 
 # Create your views here.

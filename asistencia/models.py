@@ -28,7 +28,8 @@ class Residente(AbstractUser):
 
 class RegistroAsistencia(models.Model):
     residente = models.ForeignKey(Residente, on_delete=models.CASCADE)
-    fecha_hora = models.DateTimeField('Fecha y hora', auto_now_add=True)
+    fecha = models.DateField('Fecha', default=timezone.now)
+    hora = models.TimeField('Hora', default='00:00')
     latitud = models.FloatField('Latitud')
     longitud = models.FloatField('Longitud')
     llegada_a_tiempo = models.BooleanField('¿Llegó a tiempo?', default=True)

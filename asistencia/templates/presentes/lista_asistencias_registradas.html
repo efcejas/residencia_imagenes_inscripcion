@@ -26,8 +26,8 @@
                 <tbody>
                     {% for record in attendance_records %}
                     <tr class="{% if record.llegada_tarde %}table-danger{% else %}table-success{% endif %}">
-                        <td>{{ record.fecha_hora|date:"d-m-Y" }}</td>
-                        <td>{{ record.fecha_hora|time:"H:i" }}</td>
+                        <td>{{ record.fecha|date:"d-m-Y" }}</td>
+                        <td>{{ record.hora|time:"H:i" }}</td>
                         <td>{% if record.llegada_tarde %}Llegada tarde{% else %}A tiempo{% endif %}</td>
                     </tr>
                     {% empty %}
