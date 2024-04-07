@@ -1,3 +1,5 @@
+/* Estilos generales de la cabecera */
+
 header.container-fluid {
     color: white;
     background-color: #1C58A6;
@@ -17,6 +19,8 @@ header h1 {
     width: 15vw;
 }
 
+/* Estilos de la cabecera en pantallas pequeñas */
+
 @media (max-width: 768px) {
     header h1 {
         font-size: 3.5vw;
@@ -34,4 +38,24 @@ header h1 {
         margin-left: 10px;
         text-align: left;
     }
+}
+
+/* Estilos de la barra del usuario */
+
+.barra-usuario {
+    background-color: #F2F2F2;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Estilos del pie de página */
+
+.pie-de-pagina {
+    background-color: #F2F2F2;
+}
+
+/* Estilos - lista de registros */
+
+.lista-registro {
+    max-height: 400px; width: 100%;
 }

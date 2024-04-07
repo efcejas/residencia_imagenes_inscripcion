@@ -62,8 +62,8 @@ class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Obtiene los últimos registros de asistencia del usuario actual
-        context['attendance_records'] = RegistroAsistencia.objects.filter(residente=self.request.user).order_by('-fecha_hora')[:6]
+        # Obtiene todos los registros de asistencia del usuario actual
+        context['attendance_records'] = RegistroAsistencia.objects.filter(residente=self.request.user).order_by('-fecha_hora')
         return context
 
 # Create your views here.
