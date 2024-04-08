@@ -63,8 +63,8 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
                 messages.error(request, '¡{}, debes estar dentro del rango permitido para registrar tu asistencia!'.format(request.user.first_name))
                 return render(request, 'presentes/registro_asistencia.html', {'form': form})
 
-            hora_inicio = ahora.replace(hour=20, minute=30, second=0)
-            hora_fin = ahora.replace(hour=21, minute=10, second=0)
+            hora_inicio = ahora.replace(hour=22, minute=30, second=0)
+            hora_fin = ahora.replace(hour=23, minute=10, second=0)
 
             llegada_a_tiempo = hora_inicio <= ahora < hora_fin
             llegada_tarde = ahora >= hora_fin

@@ -50,6 +50,10 @@ header h1 {
 
 /* Estilos del pie de página */
 
+#spinner {
+    display: none;
+}
+
 .pie-de-pagina {
     background-color: #F2F2F2;
 }
