@@ -55,18 +55,18 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
             latitud = form.cleaned_data.get('latitud')
             longitud = form.cleaned_data.get('longitud')
 
-            latitud_permitida = -34.60367
-            longitud_permitida = -58.41506
+            latitud_permitida = -34.61073
+            longitud_permitida = -58.39922
             rango_permitido = 0.0009
             if not (latitud_permitida - rango_permitido <= latitud <= latitud_permitida + rango_permitido and
                     longitud_permitida - rango_permitido <= longitud <= longitud_permitida + rango_permitido):
                 error_message = '¡{}, debes estar dentro del rango permitido para registrar tu asistencia!'.format(request.user.first_name)
                 return render(request, 'presentes/registro_asistencia.html', {'form': form, 'error_message': error_message, 'error_url': reverse('asistencia:asistencias_registradas')})
 
-            hora_inicio_entrada = ahora.replace(hour=21, minute=0, second=0)
-            hora_fin_entrada = ahora.replace(hour=21, minute=35, second=0)
-            hora_inicio_clase = ahora.replace(hour=21, minute=30, second=0)
-            hora_fin_clase = ahora.replace(hour=22, minute=30, second=0)
+            hora_inicio_entrada = ahora.replace(hour=6, minute=30, second=0)
+            hora_fin_entrada = ahora.replace(hour=7, minute=5, second=0)
+            hora_inicio_clase = ahora.replace(hour=7, minute=0, second=0)
+            hora_fin_clase = ahora.replace(hour=8, minute=0, second=0)
 
             if not (hora_inicio_entrada <= ahora <= hora_fin_entrada) and not (hora_inicio_clase <= ahora <= hora_fin_clase):
                 error_message = '¡{}, no es posible registrar asistencias fuera del horario permitido!'.format(request.user.first_name)
