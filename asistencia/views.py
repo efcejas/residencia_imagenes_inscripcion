@@ -63,15 +63,26 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
                 messages.error(request, '¡{}, debes estar dentro del rango permitido para registrar tu asistencia!'.format(request.user.first_name))
                 return render(request, 'presentes/registro_asistencia.html', {'form': form})
 
-            hora_inicio = ahora.replace(hour=22, minute=30, second=0)
-            hora_fin = ahora.replace(hour=23, minute=10, second=0)
+            hora_inicio_entrada = ahora.replace(hour=21, minute=0, second=0)
+            hora_fin_entrada = ahora.replace(hour=21, minute=35, second=0)
+            hora_inicio_clase = ahora.replace(hour=21, minute=30, second=0)
+            hora_fin_clase = ahora.replace(hour=22, minute=30, second=0)
 
-            llegada_a_tiempo = hora_inicio <= ahora < hora_fin
-            llegada_tarde = ahora >= hora_fin
+            if not (hora_inicio_entrada <= ahora <= hora_fin_entrada) and not (hora_inicio_clase <= ahora <= hora_fin_clase):
+                messages.error(request, '¡{}, no es posible registrar asistencias fuera del horario permitido!'.format(request.user.first_name))
+                return render(request, 'presentes/registro_asistencia.html', {'form': form})
+
+            if hora_fin_entrada < ahora <= hora_fin_clase:
+                llegada_tarde = True
+                llegada_a_tiempo = False
+            else:
+                llegada_a_tiempo = hora_inicio_entrada <= ahora <= hora_fin_entrada
+                llegada_tarde = ahora > hora_fin_entrada
+
             registro_asistencia = form.save(commit=False)
             registro_asistencia.residente = request.user
-            registro_asistencia.fecha = ahora.date()  # Establece fecha a la fecha actual
-            registro_asistencia.hora = ahora.time()  # Establece hora a la hora actual
+            registro_asistencia.fecha = ahora.date()
+            registro_asistencia.hora = ahora.time()
             registro_asistencia.llegada_a_tiempo = llegada_a_tiempo
             registro_asistencia.llegada_tarde = llegada_tarde
             registro_asistencia.save()
