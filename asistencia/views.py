@@ -1,5 +1,5 @@
 # Django imports
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
@@ -49,8 +49,8 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
 
             ya_registrado_hoy = RegistroAsistencia.objects.filter(residente=request.user, fecha=ahora.date()).exists()
             if ya_registrado_hoy:
-                messages.error(request, '¡{}, ya has registrado tu asistencia hoy!'.format(request.user.first_name))
-                return render(request, 'presentes/registro_asistencia.html', {'form': form})
+                error_message = '¡{}, ya has registrado tu asistencia hoy!'.format(request.user.first_name)
+                return render(request, 'presentes/registro_asistencia.html', {'form': form, 'error_message': error_message, 'error_url': reverse('asistencia:asistencias_registradas')})
 
             latitud = form.cleaned_data.get('latitud')
             longitud = form.cleaned_data.get('longitud')
@@ -60,8 +60,8 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
             rango_permitido = 0.0009
             if not (latitud_permitida - rango_permitido <= latitud <= latitud_permitida + rango_permitido and
                     longitud_permitida - rango_permitido <= longitud <= longitud_permitida + rango_permitido):
-                messages.error(request, '¡{}, debes estar dentro del rango permitido para registrar tu asistencia!'.format(request.user.first_name))
-                return render(request, 'presentes/registro_asistencia.html', {'form': form})
+                error_message = '¡{}, debes estar dentro del rango permitido para registrar tu asistencia!'.format(request.user.first_name)
+                return render(request, 'presentes/registro_asistencia.html', {'form': form, 'error_message': error_message, 'error_url': reverse('asistencia:asistencias_registradas')})
 
             hora_inicio_entrada = ahora.replace(hour=21, minute=0, second=0)
             hora_fin_entrada = ahora.replace(hour=21, minute=35, second=0)
@@ -69,8 +69,8 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
             hora_fin_clase = ahora.replace(hour=22, minute=30, second=0)
 
             if not (hora_inicio_entrada <= ahora <= hora_fin_entrada) and not (hora_inicio_clase <= ahora <= hora_fin_clase):
-                messages.error(request, '¡{}, no es posible registrar asistencias fuera del horario permitido!'.format(request.user.first_name))
-                return render(request, 'presentes/registro_asistencia.html', {'form': form})
+                error_message = '¡{}, no es posible registrar asistencias fuera del horario permitido!'.format(request.user.first_name)
+                return render(request, 'presentes/registro_asistencia.html', {'form': form, 'error_message': error_message, 'error_url': reverse('asistencia:asistencias_registradas')})
 
             if hora_fin_entrada < ahora <= hora_fin_clase:
                 llegada_tarde = True
