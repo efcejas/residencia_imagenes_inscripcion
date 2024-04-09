@@ -37,6 +37,9 @@ class CustomLogoutView(LogoutView):
 
 # Vistas relacionadas con la página de asistencia.
 
+class HomeView(TemplateView):
+    template_name = 'presentes/home.html'
+
 class RegistroAsistenciaView(LoginRequiredMixin, View):
     def get(self, request):
         form = RegistroAsistenciaForm()
@@ -57,7 +60,7 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
 
             latitud_permitida = -34.61073
             longitud_permitida = -58.39922
-            rango_permitido = 0.0009
+            rango_permitido = 0.0005
             if not (latitud_permitida - rango_permitido <= latitud <= latitud_permitida + rango_permitido and
                     longitud_permitida - rango_permitido <= longitud <= longitud_permitida + rango_permitido):
                 error_message = '¡{}, debes estar dentro del rango permitido para registrar tu asistencia!'.format(request.user.first_name)

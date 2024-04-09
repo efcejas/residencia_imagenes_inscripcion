@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegisterResidenteView, RegistroAsistenciaView, ListaAsistenciaView
+from .views import RegisterResidenteView, RegistroAsistenciaView, ListaAsistenciaView, HomeView
 
 from . import views
 
