@@ -108,7 +108,7 @@ class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
 # Create your views here.
 
 def generar_qr(request): #genera un qr con la url de la pagina de asistencia
-    img = qrcode.make('http://127.0.0.1:8000/asistencia/registro_asistencia/') #se pone la url de la pagina de asistencia
+    img = qrcode.make('https://residentes-dm-9833103dde7d.herokuapp.com/asistencia/registro_asistencia/') #se pone la url de la pagina de asistencia
     img.save('qr.png') #se guarda el qr en un archivo   
     return HttpResponse("QR generado.") #se muestra un mensaje de que el qr fue generado
 
