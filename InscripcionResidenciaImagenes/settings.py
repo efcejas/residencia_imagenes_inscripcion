@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'InscripcionResidenciaImagenes.wsgi.application'
 import dj_database_url
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://postgres:efc8563456@localhost:5432/gestion_residentes_db')
+    'default': dj_database_url.config(default='postgres://postgres:efc8563456@localhost:5432/gestion_residentes')
 }
 
 # Registro de modelos personalizados
