@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Residente, RegistroAsistencia
 
-class ResidenteRegistrationForm(UserCreationForm):
+""" class ResidenteRegistrationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Residente
         fields = UserCreationForm.Meta.fields + ('email', 'first_name', 'last_name', 'dni', 'fecha_nacimiento', 'matricula', 'telefono', 'fecha_de_ingreso')
@@ -30,7 +30,7 @@ class ResidenteRegistrationForm(UserCreationForm):
             'matricula': {
                 'unique': 'Ya existe un residente con esta matrícula.'
             }
-        }
+        } """
 
 class RegistroAsistenciaForm(forms.ModelForm):
     class Meta:

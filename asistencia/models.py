@@ -3,8 +3,20 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
 
-class Residente(AbstractUser):
+class Usuario(AbstractUser):
     email = models.EmailField('Correo electrónico', blank=False, null=False, unique=True)
+
+    REQUIRED_FIELDS = ['email']
+
+    class Meta:
+        verbose_name = 'Usuario'
+        verbose_name_plural = 'Usuarios'
+
+    def __str__(self):
+        return self.get_full_name()
+
+class Residente(models.Model):
+    user = models.OneToOneField(Usuario, on_delete=models.CASCADE, parent_link=True)
     dni = models.CharField('DNI', max_length=8, unique=True)
     fecha_nacimiento = models.DateField('Fecha de nacimiento')
     matricula = models.CharField('Matrícula', max_length=6, unique=True)
@@ -25,6 +37,8 @@ class Residente(AbstractUser):
     
     def __str__(self):
         return self.get_full_name()
+
+#### Tengo que ver y aprender como se hacen los usuarios en Django. 
 
 class RegistroAsistencia(models.Model):
     residente = models.ForeignKey(Residente, on_delete=models.CASCADE)

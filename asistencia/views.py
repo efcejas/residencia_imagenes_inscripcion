@@ -9,8 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.views import View
-from .models import Residente, RegistroAsistencia
-from .forms import ResidenteRegistrationForm, RegistroAsistenciaForm
+from .models import Residente, RegistroAsistencia, Usuario
+from .forms import RegistroAsistenciaForm
 
 # Librerías de terceros
 from django.utils import timezone
@@ -19,7 +19,7 @@ import qrcode
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
-class RegisterResidenteView(SuccessMessageMixin, CreateView):
+""" class RegisterResidenteView(SuccessMessageMixin, CreateView):
     form_class = ResidenteRegistrationForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy('registro_exitoso')  # reemplaza 'login' con la URL a la que quieres redirigir
@@ -27,7 +27,7 @@ class RegisterResidenteView(SuccessMessageMixin, CreateView):
 
     def get_success_message(self, cleaned_data):
         # Aquí, reemplazamos %(username)s en success_message con el nombre de usuario del objeto recién creado
-        return self.success_message % dict(cleaned_data, username=self.object.username)
+        return self.success_message % dict(cleaned_data, username=self.object.username) """
 
 class SuccessView(TemplateView):
     template_name = 'registration/success.html'

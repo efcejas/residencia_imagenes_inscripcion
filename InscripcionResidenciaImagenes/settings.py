@@ -84,7 +84,7 @@ DATABASES = {
 
 # Registro de modelos personalizados
 
-AUTH_USER_MODEL = 'asistencia.Residente'
+AUTH_USER_MODEL = 'asistencia.Usuario'
 
 # Redirección de URLs inicio
 
