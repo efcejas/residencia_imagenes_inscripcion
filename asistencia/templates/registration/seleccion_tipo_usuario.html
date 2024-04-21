@@ -1,0 +1,10 @@
+{% extends "basedos.html" %}
+{% block content %}
+<h1>Registro</h1>
+<p>Por favor, elige el tipo de usuario:</p>
+<ul>
+    <li><a href="{% url 'register' tipo_usuario='residente' %}">Residente</a></li>
+    <li><a href="{% url 'register' tipo_usuario='docente' %}">Docente</a></li>
+    <li><a href="{% url 'register' tipo_usuario='administrativo' %}">Administrativo</a></li>
+</ul>
+{% endblock %}

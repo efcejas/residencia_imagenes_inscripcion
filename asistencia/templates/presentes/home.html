@@ -1,4 +1,27 @@
 {% extends "basedos.html" %}
-{% block content %}
+{% load static %}
 
+{% block content %}
+<div class="container text-center py-3">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center">
+        <div class="col-12 col-md-6">
+            <h1 class="bienvenida display-3">¡Bienvenidos!</h1>
+            <p class="lead">Esta es la página de la residencia en diagnóstico por imágenes de Diangóstico Médico.</p>
+            <!-- <p><em>Aquí podrás encontrar información sobre nuestro programa de residencia y mucho más.</em></p> -->
+        </div>
+        <div class="col-12 col-md-6">
+            <img src="{% static 'images/dibujo-residentes-dos.jpeg' %}" class="img-fluid" width="85%" alt="Dibujo de residentes">
+        </div>
+    </div>
+</div>
+<div class="container text-center py-3">
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Conocer más</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
+        </li>
+      </ul>
+</div>
 {% endblock %}

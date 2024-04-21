@@ -36,7 +36,7 @@
                 <h6 class="mb-0">{{ user.get_full_name }}</h6>
                 <a href="{% url 'password_change' %}" style="font-size: x-small;">Cambiar contraseña</a>
             </div>
-            <form method="post" action="{% url 'logout' %}" class="mr-2">
+            <form method="post" action="{% url 'cerrar_sesion' %}" class="mr-2">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-secondary btn-sm">Cerrar sesión</button>
             </form>

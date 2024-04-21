@@ -19,6 +19,12 @@ header h1 {
     width: 15vw;
 }
 
+.bienvenida {
+    color: #1C58A6;
+    font-family: nimbus-sans, sans-serif;
+    font-size: bold;
+}
+
 /* Estilos de la cabecera en pantallas pequeñas */
 
 @media (max-width: 768px) {
