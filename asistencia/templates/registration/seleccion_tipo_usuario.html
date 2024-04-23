@@ -1,10 +1,12 @@
 {% extends "basedos.html" %}
 {% block content %}
-<h1>Registro</h1>
-<p>Por favor, elige el tipo de usuario:</p>
-<ul>
-    <li><a href="{% url 'register' tipo_usuario='residente' %}">Residente</a></li>
-    <li><a href="{% url 'register' tipo_usuario='docente' %}">Docente</a></li>
-    <li><a href="{% url 'register' tipo_usuario='administrativo' %}">Administrativo</a></li>
-</ul>
+<div class="container-sm text-center py-5">
+    <h1>Registro</h1>
+    <p class="mb-4">Por favor, elige el tipo de usuario:</p>
+    <div class="d-flex flex-column align-items-center">
+        <a href="{% url 'register' tipo_usuario='residente' %}" class="btn btn-primary mb-3 col-12 col-md-5">Residente</a>
+        <a href="{% url 'register' tipo_usuario='docente' %}" class="btn btn-secondary mb-3 col-12 col-md-5">Docente</a>
+        <a href="{% url 'register' tipo_usuario='administrativo' %}" class="btn btn-success col-12 col-md-5">Administrativo</a>
+    </div>
+</div>
 {% endblock %}

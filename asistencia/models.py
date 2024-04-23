@@ -79,4 +79,4 @@ class RegistroAsistencia(models.Model):
         verbose_name_plural = 'Registros de asistencia'
 
     def __str__(self):
-        return f'{self.residente.get_full_name()}'
+        return f'Registro de asistencia para Residente {self.residente}'

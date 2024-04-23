@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <!-- Muestra los mensajes de éxito -->
-<div class="container vh-100">
+<div class="container">
     {% if messages %}
         <div class="messages text-center col-md-8 mx-auto mt-3">
             {% for message in messages %}
@@ -15,6 +15,8 @@
     <!-- Muestra la lista de registros de asistencia -->
     <div class="d-flex justify-content-center col-md-8 mx-auto py-4">
         <div class="overflow-auto lista-registro">
+            <!-- Instrucciones para escanear el QR -->
+            <p class="text-center lead">Para registrar tu asistencia, debes escanear el código QR que se encuentra en el aula.</p>
             <table class="table text-center">
                 <thead class="table-secondary">
                     <tr>

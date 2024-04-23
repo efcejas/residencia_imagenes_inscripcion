@@ -12,6 +12,11 @@ class RegistroFormResidente(forms.ModelForm):
         model = Residente
         fields = ['dni', 'fecha_nacimiento', 'matricula', 'telefono', 'fecha_de_ingreso']
 
+        widgets = {
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_de_ingreso': forms.DateInput(attrs={'type': 'date'}),
+        }
+
 class RegistroFormDocente(forms.ModelForm):
     class Meta:
         model = Docente
