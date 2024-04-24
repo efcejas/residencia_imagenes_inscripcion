@@ -1,11 +1,11 @@
 # Django imports
 from django.shortcuts import render, redirect, reverse, get_list_or_404
 from django.http import HttpResponse
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth import logout
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.views import View
@@ -16,6 +16,9 @@ from .forms import RegistroAsistenciaForm, RegistroFormUsuario, RegistroFormResi
 from django.utils import timezone
 from django.db.models import Q  # Para hacer consultas más complejas
 import qrcode
+from django.db.models.functions import TruncMonth
+from django.db.models import CharField, Value as V
+from django.db.models.functions import Concat
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
@@ -149,6 +152,25 @@ class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
         context['attendance_records'] = RegistroAsistencia.objects.filter(
             residente=perfil_usuario).order_by('-fecha', '-hora')
         return context
+
+# Vista para mostrar los registros de asistencia de un residente o de todos los residentes
+
+class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = RegistroAsistencia
+    template_name = 'presentes/lista_control_asistencia.html'
+    context_object_name = 'control_asistencia'
+
+    def get_queryset(self):
+        return RegistroAsistencia.objects.annotate(
+            mes=TruncMonth('fecha')
+        ).order_by('-mes', '-fecha', '-hora')
+
+    def test_func(self):
+        return hasattr(self.request.user, 'docente_profile') or hasattr(self.request.user, 'administrativo_profile')
+
+    def handle_no_permission(self):
+        # redirige a la página de inicio o a una página de error si el usuario no tiene permiso
+        return redirect('home')
 
 # Create your views here.
 

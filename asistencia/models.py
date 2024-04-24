@@ -63,8 +63,6 @@ def create_user_profile(sender, instance, created, **kwargs):
         elif hasattr(instance, 'administrativo_profile'):
             Administrativo.objects.create(user=instance)
 
-# Casi logro que el código funcione, pero me falta algo. ¿Qué es?
-
 class RegistroAsistencia(models.Model):
     residente = models.ForeignKey(Residente, on_delete=models.CASCADE)
     fecha = models.DateField('Fecha', default=timezone.now)
