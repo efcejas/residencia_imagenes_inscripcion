@@ -84,11 +84,11 @@ DATABASES = {
 
 # Registro de modelos personalizados
 
-AUTH_USER_MODEL = 'asistencia.Residente'
+AUTH_USER_MODEL = 'asistencia.Usuario'
 
 # Redirección de URLs inicio
 
-LOGIN_REDIRECT_URL = 'asistencia:asistencias_registradas'
+LOGIN_REDIRECT_URL = 'home'
 
 # Validación de contraseña
 

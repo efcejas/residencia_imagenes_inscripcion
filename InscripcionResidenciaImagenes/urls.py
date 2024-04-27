@@ -16,16 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from asistencia.views import RegisterResidenteView, CustomLogoutView, SuccessView, HomeView
-
+from django.views.generic import TemplateView
+from asistencia.views import SuccessView, RegistroView
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home'),
-    path('admin/', admin.site.urls),
-    path('asistencia/', include(('asistencia.urls', 'asistencia'), namespace='asistencia')), # Agregamos la ruta de la aplicación 'asistencia' (se pone ('asistencia.urls', 'asistencia') para que sepa que es una aplicacion y cumpla con el estandar de Django
-    # Urls para el manejo de autenticación
-    path('register/', RegisterResidenteView.as_view(), name='register'),
-    path('registro_exitoso/', SuccessView.as_view(), name='registro_exitoso'),
-    path('accounts/logout/', CustomLogoutView.as_view(), name='logout'),
+    # Rutas de la página principal
+    path('', TemplateView.as_view(template_name='presentes/home.html'), name='home'),
+
+    # Rutas de autenticación
+    path('accounts/cerrar_sesion/', auth_views.LogoutView.as_view(template_name='registration/cerrar_sesion.html'), name='cerrar_sesion'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('register/<str:tipo_usuario>/', RegistroView.as_view(), name='register'),
+    path('registro_exitoso/', SuccessView.as_view(), name='registro_exitoso'),
+
+    # Rutas de selección de usuario
+    path('seleccion_tipo_usuario/', TemplateView.as_view(template_name='registration/seleccion_tipo_usuario.html'), name='seleccion_tipo_usuario'),
+
+    # Rutas de la aplicación 'asistencia'
+    path('asistencia/', include(('asistencia.urls', 'asistencia'), namespace='asistencia')),
+
+    # Rutas de administración
+    path('admin/', admin.site.urls),
 ]

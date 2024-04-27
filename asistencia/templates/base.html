@@ -34,20 +34,23 @@
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <h6 class="mb-0">{{ user.get_full_name }}</h6>
-                <a href="{% url 'password_change' %}" style="font-size: x-small;">Cambiar contraseña</a>
+                <a href="{% url 'password_change' %}" class="cambiar_contraseña">Cambiar contraseña</a>
             </div>
-            <form method="post" action="{% url 'logout' %}" class="mr-2">
+            <form method="post" action="{% url 'cerrar_sesion' %}" class="mr-2">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-secondary btn-sm">Cerrar sesión</button>
             </form>
         </div>
         {% endif %}
     </div>
-    <section class="container-sm">
-        {% block content %}{% endblock %}
-    </section>
-    <footer class="container-fluid py-5 pie-de-pagina">
-        <p class="mb-0">Acá debería ir el pie de página</p>
+    <main class="container">
+    {% block content %}
+    {% endblock %}
+    </main>
+    <footer class="container-fluid py-3 pie-de-pagina text-center">
+        <p>© 2024 <strong>Dr. Enso Fermín Cejas.</strong> Todos los derechos reservados.</p>
+        <p class="lh-sm">Departamento de Docencia e Investigación de Diagnóstico Médico.<br>
+            Contacto: <a href="mailto:enso.cejas@diagnosticomedico.com">enso.cejas@diagnosticomedico.com</a></p>
     </footer>
     <!-- JavaScript y Popper.js de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -1,5 +1,4 @@
 /* Estilos generales de la cabecera */
-
 header.container-fluid {
     color: white;
     background-color: #3D5DAA;
@@ -13,10 +12,25 @@ header h1 {
     margin: 0;
 }
 
+main.container {
+    min-height: 63vh;
+    height: auto;
+}
+
 .logodm img {
     max-width: 200px;
     min-width: 90px;
     width: 15vw;
+}
+
+.cambiar_contraseña {
+    font-size: x-small;
+}
+
+.bienvenida {
+    color: #1C58A6;
+    font-family: nimbus-sans, sans-serif;
+    font-size: bold;
 }
 
 /* Estilos de la cabecera en pantallas pequeñas */

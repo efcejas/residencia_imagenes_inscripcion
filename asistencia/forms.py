@@ -1,36 +1,31 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Residente, RegistroAsistencia
+from .models import Usuario, Residente, Docente, Administrativo, RegistroAsistencia
 
-class ResidenteRegistrationForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
+class RegistroFormUsuario(UserCreationForm):
+    class Meta:
+        model = Usuario
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+
+class RegistroFormResidente(forms.ModelForm):
+    class Meta:
         model = Residente
-        fields = UserCreationForm.Meta.fields + ('email', 'first_name', 'last_name', 'dni', 'fecha_nacimiento', 'matricula', 'telefono', 'fecha_de_ingreso')
-        labels = {
-            'username': 'Nombre de usuario',
-            'email': 'Correo electrónico',
-            'dni': 'DNI',
-            'first_name': 'Nombre/s',
-            'last_name': 'Apellido/s',
-            'fecha_nacimiento': 'Fecha de nacimiento',
-            'matricula': 'Matrícula',
-            'telefono': 'Teléfono',
-            'fecha_de_ingreso': 'Fecha de ingreso a la residencia'
+        fields = ['dni', 'fecha_nacimiento', 'matricula', 'telefono', 'fecha_de_ingreso']
+
+        widgets = {
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_de_ingreso': forms.DateInput(attrs={'type': 'date'}),
         }
-        error_messages = {
-            'username': {
-                'unique': 'Ya existe un residente con este nombre de usuario.'
-            },
-            'email': {
-                'unique': 'Ya existe un residente con este correo electrónico.'
-            },
-            'dni': {
-                'unique': 'Ya existe un residente con este DNI.'
-            },
-            'matricula': {
-                'unique': 'Ya existe un residente con esta matrícula.'
-            }
-        }
+
+class RegistroFormDocente(forms.ModelForm):
+    class Meta:
+        model = Docente
+        fields = []
+
+class RegistroFormAdministrativo(forms.ModelForm):
+    class Meta:
+        model = Administrativo
+        fields = ['telefono']
 
 class RegistroAsistenciaForm(forms.ModelForm):
     class Meta:
