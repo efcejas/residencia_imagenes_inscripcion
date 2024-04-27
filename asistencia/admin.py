@@ -7,7 +7,7 @@ class UsuarioAdmin(UserAdmin):
     ordering = ('username',)
 
 class ResidenteAdmin(admin.ModelAdmin):
-    list_display = ('get_first_name', 'get_last_name', 'dni', 'fecha_nacimiento', 'matricula', 'telefono', 'fecha_de_ingreso')
+    list_display = ('get_first_name', 'get_last_name', 'dni_con_puntos', 'fecha_nacimiento', 'matricula_con_puntos', 'telefono', 'fecha_de_ingreso')
     ordering = ('user__first_name', 'user__last_name')
     
     def get_first_name(self, obj):

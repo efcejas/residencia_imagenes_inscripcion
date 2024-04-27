@@ -16,7 +16,16 @@
     <div class="d-flex justify-content-center col-md-8 mx-auto py-4">
         <div class="overflow-auto lista-registro">
             <!-- Instrucciones para escanear el QR -->
-            <p class="text-center lead">Para registrar tu asistencia, debes escanear el código QR que se encuentra en el aula.</p>
+            <div class="container mb-3">
+                <div class="row align-items-center justify-content-center justify-content-md-center">
+                    <div class="col-12 col-md-auto text-center text-md-left mb-md-0">
+                        <p class="lead mb-md-0">Para registrar asistencia:</p>
+                    </div>
+                    <div class="col-12 col-md-auto text-center text-md-left">
+                        <button class="btn btn-primary" onclick="location.href='{% url 'asistencia:registro_asistencia' %}'">Haz clic aquí</button>
+                    </div>
+                </div>
+            </div>
             <table class="table text-center">
                 <thead class="table-secondary">
                     <tr>

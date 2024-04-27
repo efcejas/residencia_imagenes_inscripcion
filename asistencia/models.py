@@ -17,6 +17,17 @@ class Usuario(AbstractUser):
     def __str__(self):
         return self.get_full_name()
 
+    def save(self, *args, **kwargs):
+        # Normaliza el nombre y el apellido
+        self.first_name = self.first_name.title()
+        self.last_name = self.last_name.title()
+
+        # Normaliza el email
+        email_username, domain = self.email.rsplit('@', 1)
+        self.email = email_username + '@' + domain.lower()
+
+        super().save(*args, **kwargs)
+
 class Residente(models.Model):
     user = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='residente_profile')
     dni = models.CharField('DNI', max_length=8, unique=True)
@@ -31,6 +42,12 @@ class Residente(models.Model):
 
     def __str__(self):
         return self.user.get_full_name()
+
+    def dni_con_puntos(self):
+        return "{:,}".format(int(self.dni)).replace(",", ".")
+
+    def matricula_con_puntos(self):
+        return "{:,}".format(int(self.matricula)).replace(",", ".")
 
 class Docente(models.Model):
     user = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='docente_profile')
@@ -78,3 +95,5 @@ class RegistroAsistencia(models.Model):
 
     def __str__(self):
         return f'Registro de asistencia para Residente {self.residente}'
+
+

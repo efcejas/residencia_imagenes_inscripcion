@@ -1,24 +1,26 @@
 # Django imports
-from django.shortcuts import render, redirect, reverse, get_list_or_404
-from django.http import HttpResponse
-from django.views.generic import TemplateView, ListView
-from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib import messages
+from django.db.models import CharField, Value as V
+from django.db.models.functions import Concat, TruncMonth
+from django.http import HttpResponse
+from django.shortcuts import get_list_or_404, redirect, render, reverse
+from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views import View
-from .models import Residente, RegistroAsistencia, Usuario
-from .forms import RegistroAsistenciaForm, RegistroFormUsuario, RegistroFormResidente, RegistroFormDocente, RegistroFormAdministrativo
+from django.views.generic import ListView, TemplateView
+from django.views.generic.edit import CreateView
 
 # Librerías de terceros
-from django.utils import timezone
-from django.db.models import Q  # Para hacer consultas más complejas
 import qrcode
-from django.db.models.functions import TruncMonth
-from django.db.models import CharField, Value as V
-from django.db.models.functions import Concat
+from django.db.models import Q  # Para hacer consultas más complejas
+
+# Local imports
+from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo, 
+                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario)
+from .models import RegistroAsistencia, Residente, Usuario
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
