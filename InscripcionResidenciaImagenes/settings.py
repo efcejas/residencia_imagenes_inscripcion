@@ -137,6 +137,7 @@ USE_TZ = True
 
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # Configuración existente
 STATIC_URL = '/static/'
