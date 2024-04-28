@@ -1,11 +1,11 @@
 {% extends "basedos.html" %}
 
 {% block content %}
-  <div class="container-sm text-center py-5">
-    <h5 class="mb-3">{{ title }}</h5>
-    <p class="mb-3">Has cerrado sesión correctamente.</p>
-    <p class="mb-3">¡Gracias por tu visita!</p>
-    <a href="{% url 'login' %}" class="btn btn-primary">Ingresa nuevamente</a>
-    <p class="mt-3">O puedes <a href="{% url 'home' %}">volver al inicio</a>.</p>
-  </div>
+<div class="container-sm text-center py-5">
+  <h5 class="mb-3">{{ title }}</h5>
+  <p class="mb-3">Has cerrado sesión correctamente.</p>
+  <p class="mb-3">¡Gracias por tu visita!</p>
+  <a href="{% url 'login' %}" class="btn btn-primary">Ingresa nuevamente</a>
+  <p class="mt-3">O puedes <a href="{% url 'home' %}">volver al inicio</a>.</p>
+</div>
 {% endblock %}

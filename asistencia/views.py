@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import CharField, Value as V
 from django.db.models.functions import Concat, TruncMonth
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_list_or_404, redirect, render, reverse
 from django.urls import reverse_lazy
 from django.utils import timezone

@@ -1,19 +1,19 @@
-{% extends "basedos.html" %}
+{% extends 'basedos.html' %}
 
 {% block content %}
 {% if form.errors %}
-    <div class="alert alert-danger mb-0 mt-3">
-        {{ form.non_field_errors }}
-        {{ form.errors }}
-    </div>
+<div class="alert alert-danger mb-0 mt-3">
+  {{ form.non_field_errors }}
+  {{ form.errors }}
+</div>
 {% endif %}
-    <div class="container-sm py-3">
-        <h2>Registro</h2>
-        <form method="post" id="registroForm">
-            {% csrf_token %}
-        {{ user_form.as_p }}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Registrarse</button>
-    </form>
-    </div>
+<div class="container-sm py-3">
+  <h2>Registro</h2>
+  <form method="post" id="registroForm">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Registrarse</button>
+  </form>
+</div>
 {% endblock %}
