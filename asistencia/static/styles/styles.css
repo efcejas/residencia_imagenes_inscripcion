@@ -33,6 +33,7 @@ main.container {
     font-size: bold;
 }
 
+
 /* Estilos de la cabecera en pantallas pequeñas */
 
 @media (max-width: 768px) {
@@ -41,7 +42,7 @@ main.container {
         margin-top: 5px;
         text-align: center;
     }
-
+    
     .logodm img {
         width: 80px;
     }
@@ -76,4 +77,66 @@ main.container {
 
 .lista-registro {
     max-height: 250px; width: 100%;
+}
+
+/* Estilos - de los formularios de registro */
+.titulo_registro {
+    color: #1C58A6;
+    font-family: nimbus-sans, sans-serif;
+    font-size: bold;
+}
+
+#registroForm .errorlist {
+    color: red;
+    border: 1px solid red;
+    padding: 10px;
+    border-radius: 5px;
+    list-style-type: none; /* Elimina la viñeta */
+    text-align: center; /* Centra el texto */
+}
+
+#registroForm label {
+    display: flex;
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+#registroForm p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: center;
+}
+
+#registroForm input[type="text"], 
+#registroForm input[type="password"], 
+#registroForm input[type="email"], 
+#registroForm input#id_fecha_nacimiento, 
+#registroForm input#id_fecha_de_ingreso {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: block;
+}
+
+#registroForm p input#id_fecha_nacimiento, 
+#registroForm p input#id_fecha_de_ingreso {
+    max-width: 250px;
+}
+
+@media (max-width: 917px) {
+    #registroForm input[type="text"], 
+    #registroForm input[type="password"], 
+    #registroForm input[type="email"], 
+    #registroForm input#id_fecha_nacimiento, 
+    #registroForm input#id_fecha_de_ingreso {
+        padding: 5px;
+    }
+
+    #registroForm p {
+        justify-content: space-between;
+    }
 }
