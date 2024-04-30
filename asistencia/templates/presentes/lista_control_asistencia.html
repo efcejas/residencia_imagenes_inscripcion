@@ -1,53 +1,58 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container py-4">
-    <h2 class="text-center">Control de asistencias</h2>
-    <div class="d-flex justify-content-center col-md-8 mx-auto">
-        <div class="overflow-auto lista-registro">
-            {% if control_asistencia %}
-                {% regroup control_asistencia by mes as control_asistencia_por_mes %}
-                {% for mes in control_asistencia_por_mes %}
-                <h3 class="text-center">{{ mes.grouper|date:"F Y" }}</h3>
-                {% regroup mes.list by fecha as control_asistencia_por_fecha %}
-                {% for fecha in control_asistencia_por_fecha %}
-                <h4 class="text-center">{{ fecha.grouper|date:"d-m" }}</h4>
-                <table class="table text-center">
-                    <thead class="table-secondary">
-                        <tr>
-                            <th scope="col">Residente</th>
-                            <th scope="col">Hora</th>
-                            <th scope="col">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for registro in fecha.list %}
-                        <tr class="{% if registro.llegada_tarde %}table-danger{% else %}table-success{% endif %}">
-                            <td>{{ registro.residente }}</td>
-                            <td>{{ registro.hora|time:"H:i" }}</td>
-                            <td>{% if registro.llegada_tarde %}Llegada tarde{% else %}A tiempo{% endif %}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% endfor %}
-                {% endfor %}
-            {% else %}
-                <table class="table text-center">
-                    <thead class="table-secondary">
-                        <tr>
-                            <th scope="col">Residente</th>
-                            <th scope="col">Hora</th>
-                            <th scope="col">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="3">No hay registros de asistencia por el momento</td>
-                        </tr>
-                    </tbody>
-                </table>
-            {% endif %}
+<div class="container d-flex flex-column flex-md-row justify-content-center py-5">
+    <div class="container col-12 col-md-4 text-center text-md-start">
+        <h5 class="titulo_registro">Control de asistencias</h5>
+        <p class="fw-lighter lh-sm"><small>Aquí se gestionará el seguimiento de las asistencias de los residentes.</small></p>
+    </div>
+    <div class="container-fluid col-12 col-md-8">
+        <div class="d-flex justify-content-center col-md-12 mx-auto">
+            <div class="overflow-auto lista-registro">
+                {% if control_asistencia %}
+                    {% regroup control_asistencia by mes as control_asistencia_por_mes %}
+                    {% for mes in control_asistencia_por_mes %}
+                    <h3 class="text-center">{{ mes.grouper|date:"F Y" }}</h3>
+                    {% regroup mes.list by fecha as control_asistencia_por_fecha %}
+                    {% for fecha in control_asistencia_por_fecha %}
+                    <h4 class="text-center">{{ fecha.grouper|date:"d-m" }}</h4>
+                    <table class="table text-center">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th scope="col">Residente</th>
+                                <th scope="col">Hora</th>
+                                <th scope="col">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for registro in fecha.list %}
+                            <tr class="{% if registro.llegada_tarde %}table-danger{% else %}table-success{% endif %}">
+                                <td>{{ registro.residente }}</td>
+                                <td>{{ registro.hora|time:"H:i" }}</td>
+                                <td>{% if registro.llegada_tarde %}Llegada tarde{% else %}A tiempo{% endif %}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    <table class="table text-center">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th scope="col">Residente</th>
+                                <th scope="col">Hora</th>
+                                <th scope="col">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">No hay registros de asistencia por el momento</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

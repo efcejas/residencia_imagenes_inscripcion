@@ -91,6 +91,7 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
                 latitud = form.cleaned_data.get('latitud')
                 longitud = form.cleaned_data.get('longitud')
 
+                # Coordenadas de la sede pichincha de Investigaciones Médicas. 
                 latitud_permitida = -34.61068 
                 longitud_permitida = -58.39927
                 rango_permitido = 0.0005
