@@ -11,7 +11,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 # Librerías de terceros
 import qrcode
@@ -175,6 +175,8 @@ class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListVi
         # redirige a la página de inicio o a una página de error si el usuario no tiene permiso
         return redirect('home')
 
+# Vistas relacionadas con la gestion de sedes
+
 class SedesCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = Sedes
     fields = ['nombre_sede', 'direccion', 'telefono', 'referente']
@@ -205,6 +207,45 @@ class SedesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def handle_no_permission(self):
         return redirect('home')
 
+class SedeUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+    model = Sedes
+    fields = ['nombre_sede', 'direccion', 'telefono', 'referente']
+    template_name = 'presentes/sede_form.html'
+    success_url = reverse_lazy('asistencia:sedes_list')
+    success_message = '¡La sede se ha actualizado exitosamente!' 
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if self.request.method == 'POST':
+            return render(self.request, self.template_name, {'form': form})
+        return response
+
+    def test_func(self):
+        return hasattr(self.request.user, 'administrativo_profile')
+
+    def handle_no_permission(self):
+        return redirect('home')
+
+class SedeDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, DeleteView):
+    model = Sedes
+    template_name = 'presentes/sede_confirm_delete.html'
+    success_url = reverse_lazy('asistencia:sedes_list')
+    success_message = '¡La sede se ha eliminado exitosamente!' 
+
+    def test_func(self):
+        return hasattr(self.request.user, 'administrativo_profile')
+
+    def handle_no_permission(self):
+        return redirect('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sede'] = self.object
+        return context
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super().delete(request, *args, **kwargs)
 # Create your views here.
 
 def generar_qr(request):  # genera un qr con la url de la pagina de asistencia

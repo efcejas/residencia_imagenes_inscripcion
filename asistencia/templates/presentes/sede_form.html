@@ -33,25 +33,26 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="nombre_sede" class="form-label">Nombre de la sede</label>
-                                <input type="text" class="form-control" id="nombre_sede" name="nombre_sede" required>
+                                <input type="text" class="form-control" id="nombre_sede" name="nombre_sede" value="{{ form.nombre_sede.value|default_if_none:'' }}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="direccion" class="form-label">Dirección</label>
-                                <input type="text" class="form-control" id="direccion" name="direccion" required>
+                                <input type="text" class="form-control" id="direccion" name="direccion" value="{{ form.direccion.value|default_if_none:'' }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="telefono" class="form-label">Teléfono</label>
-                                <input type="text" class="form-control" id="telefono" name="telefono" required>
+                                <input type="text" class="form-control" id="telefono" name="telefono" value="{{ form.telefono.value|default_if_none:'' }}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="referente" class="form-label">Referente</label>
-                                <input type="text" class="form-control" id="referente" name="referente" required>
+                                <input type="text" class="form-control" id="referente" name="referente" value="{{ form.referente.value|default_if_none:'' }}" required>
                             </div>
                         </div>
                     </div>
                     <div class="text-end">
+                        <a href="{% url 'asistencia:sedes_list' %}" class="btn btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
                 </form>

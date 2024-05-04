@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-sm py-5">
+    <!-- Botones de acción -->
+    <div class="text-center">
+        <!-- Botón de cancelar -->
+        <p class="fw-lighter lh-sm">
+                ¿Estás seguro de que deseas eliminar la sede <strong>{{ sede.nombre_sede }}</strong>?
+        </p>
+        <a href="{% url 'asistencia:sedes_list' %}" class="btn btn-secondary">Cancelar</a>
+
+        <!-- Formulario de eliminación -->
+        <form method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

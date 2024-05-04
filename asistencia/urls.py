@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from .views import RegistroAsistenciaView, ListaAsistenciaView, RegistroAsistenciaListView, SedesCreateView, SedesListView
+from .views import RegistroAsistenciaView, ListaAsistenciaView, RegistroAsistenciaListView, SedesCreateView, SedesListView, SedeUpdateView, SedeDeleteView
 
 from . import views
 
@@ -14,6 +14,8 @@ urlpatterns = [
     # Rutas relacionadas con las sedes
     path('sedes/nueva/', SedesCreateView.as_view(), name='sedes_create'),  # Vista para crear una nueva sede
     path('sedes/', SedesListView.as_view(), name='sedes_list'),  # Vista para listar todas las sedes
+    path('sede/update/<int:pk>/', SedeUpdateView.as_view(), name='sede_update'),  # Vista para editar una sede
+    path('sede/delete/<int:pk>/', SedeDeleteView.as_view(), name='sede_delete'),  # Vista para eliminar una sede
 
     # Rutas relacionadas con los códigos QR
     path('generar_qr/', views.generar_qr, name='generar_qr'),  # Vista para generar un código QR
