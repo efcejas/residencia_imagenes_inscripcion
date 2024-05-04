@@ -59,6 +59,11 @@
     <li class="nav-item">
       <a class="nav-link" href="{% url 'asistencia:control_asistencia' %}">Control de asistencias</a>
     </li>
+    {% if user.administrativo_profile %}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Lista de sedes</a>
+    </li>
+    {% endif %}
     <!-- <li class="nav-item">
       <a class="nav-link" href="#">Panel de seguimiento</a>
     </li> -->

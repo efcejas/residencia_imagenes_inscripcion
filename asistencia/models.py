@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+# Modelos relacionados con la autenticación de usuarios
+
 class Usuario(AbstractUser):
     email = models.EmailField('Correo electrónico', blank=False, null=False, unique=True)
 
@@ -80,6 +82,8 @@ def create_user_profile(sender, instance, created, **kwargs):
         elif hasattr(instance, 'administrativo_profile'):
             Administrativo.objects.create(user=instance)
 
+# Modelos relacionados con la asistencia de los residentes
+
 class RegistroAsistencia(models.Model):
     residente = models.ForeignKey(Residente, on_delete=models.CASCADE)
     fecha = models.DateField('Fecha', default=timezone.now)
@@ -96,4 +100,29 @@ class RegistroAsistencia(models.Model):
     def __str__(self):
         return f'Registro de asistencia para Residente {self.residente}'
 
+# Otros modelos a organizar. 
 
+class Sedes(models.Model):
+    nombre_sede = models.CharField(max_length=100, unique=True, error_messages={'unique': 'Esa sede ya está registrada.'})
+    direccion = models.CharField(max_length=100, unique=True, error_messages={'unique': 'Ya existe una sede registrada con esa dirección.'})
+    telefono = models.CharField('Teléfono', max_length=15)
+    referente = models.CharField('Referente', max_length=50)
+
+    class Meta:
+        verbose_name = 'Sede'
+        verbose_name_plural = 'Sedes'
+
+    def save(self, *args, **kwargs):
+        # Normaliza el nombre de la sede
+        self.nombre_sede = self.nombre_sede.title()
+
+        # Normaliza la dirección
+        self.direccion = self.direccion.title()
+
+        # Normaliza el nombre del referente
+        self.referente = self.referente.title()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nombre_sede

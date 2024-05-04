@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-sm py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="text-center text-md-start">
+                    <h5 class="titulo_registro">Crear nueva sede</h5>
+                    <p class="fw-lighter lh-sm"><small>Completa el formulario para crear una nueva sede.</small></p>
+                    {% if form.nombre_sede.errors %}
+                        <div class="text-center mb-3">
+                            <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+                                {{ form.nombre_sede.errors.as_text|cut:"*" }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if form.direccion.errors %}
+                        <div class="text-center mb-3">
+                            <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+                                {{ form.direccion.errors.as_text|cut:"*" }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombre_sede" class="form-label">Nombre de la sede</label>
+                                <input type="text" class="form-control" id="nombre_sede" name="nombre_sede" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="direccion" class="form-label">Dirección</label>
+                                <input type="text" class="form-control" id="direccion" name="direccion" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="referente" class="form-label">Referente</label>
+                                <input type="text" class="form-control" id="referente" name="referente" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

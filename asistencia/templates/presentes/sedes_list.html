@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-sm py-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="text-center text-md-start">
+                <h5 class="titulo_registro">Lista de sedes</h5>
+                <p class="fw-lighter lh-sm"><small>Acá se podrán visualizar todas las sedes registradas.</small></p>
+            </div>
+            {% for message in messages %}
+            <div class="text-center py-3">
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show mb-0"
+                    role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-lg-8">
+            <div class="table-responsive-sm">
+                <table class="table table-sm table align-middle table-striped table-hover">
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col">Sede</th>
+                            <th scope="col" style="min-width: min-content;">Dirección</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col" style="min-width: 180px;">Referente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sede in sedes %}
+                        <tr class="text-center">
+                            <td>{{ sede.nombre_sede }}</td>
+                            <td style="min-width: min-content;">{{ sede.direccion }}</td>
+                            <td>{{ sede.telefono }}</td>
+                            <td style="min-width: 180px;">{{ sede.referente }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">
+                                <p class="fw-lighter lh-sm text-center"><small>No hay sedes registradas por el momento.</small></p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="text-end py-3">
+        <a class="btn btn-primary" href="{% url 'asistencia:sedes_create' %}">Registrar sede</a>
+    </div>
+</div>
+{% endblock %}

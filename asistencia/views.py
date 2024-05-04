@@ -19,8 +19,8 @@ from django.db.models import Q  # Para hacer consultas más complejas
 
 # Local imports
 from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo, 
-                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario)
-from .models import RegistroAsistencia, Residente, Usuario
+                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm)
+from .models import RegistroAsistencia, Residente, Usuario, Sedes
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
@@ -173,6 +173,36 @@ class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListVi
 
     def handle_no_permission(self):
         # redirige a la página de inicio o a una página de error si el usuario no tiene permiso
+        return redirect('home')
+
+class SedesCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
+    model = Sedes
+    fields = ['nombre_sede', 'direccion', 'telefono', 'referente']
+    template_name = 'presentes/sede_form.html'
+    success_url = reverse_lazy('asistencia:sedes_list')
+    success_message = '¡La sede se ha creado exitosamente!'
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if self.request.method == 'POST':
+            return render(self.request, self.template_name, {'form': form})
+        return response
+
+    def test_func(self):
+        return hasattr(self.request.user, 'administrativo_profile')
+
+    def handle_no_permission(self):
+        return redirect('home')
+
+class SedesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Sedes
+    template_name = 'presentes/sedes_list.html'
+    context_object_name = 'sedes'
+
+    def test_func(self):
+        return hasattr(self.request.user, 'administrativo_profile')
+
+    def handle_no_permission(self):
         return redirect('home')
 
 # Create your views here.
