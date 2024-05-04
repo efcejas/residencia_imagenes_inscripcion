@@ -24,7 +24,7 @@
                     <thead>
                         <tr class="text-center">
                             <th scope="col">Sede</th>
-                            <th scope="col" style="min-width: min-content;">Dirección</th>
+                            <th scope="col" style="min-width: 120px;">Dirección</th>
                             <th scope="col">Teléfono</th>
                             <th scope="col" style="min-width: 180px;">Referente</th>
                         </tr>
@@ -33,7 +33,7 @@
                         {% for sede in sedes %}
                         <tr class="text-center">
                             <td>{{ sede.nombre_sede }}</td>
-                            <td style="min-width: min-content;">{{ sede.direccion }}</td>
+                            <td style="min-width: 120px;">{{ sede.direccion }}</td>
                             <td>{{ sede.telefono }}</td>
                             <td style="min-width: 180px;">{{ sede.referente }}</td>
                         </tr>
