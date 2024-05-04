@@ -51,4 +51,9 @@ class SedeForm(forms.ModelForm):
     class Meta:
         model = Sedes
         fields = ['nombre_sede', 'direccion', 'telefono', 'referente']
+
+        help_texts = {
+            'nombre_sede': 'El nombre de la sede debe ser único, generalmente correspondiente al barrio, zona o calle de ubicación. Ejemplo: "Junín".',
+            'referente': 'Anteponga "Dr." o "Dra." al nombre del referente según corresponda.',
+        }
         

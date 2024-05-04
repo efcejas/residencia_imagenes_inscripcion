@@ -179,7 +179,7 @@ class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListVi
 
 class SedesCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = Sedes
-    fields = ['nombre_sede', 'direccion', 'telefono', 'referente']
+    form_class = SedeForm
     template_name = 'presentes/sede_form.html'
     success_url = reverse_lazy('asistencia:sedes_list')
     success_message = '¡La sede se ha creado exitosamente!'
