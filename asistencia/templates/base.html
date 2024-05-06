@@ -47,6 +47,19 @@
                                 <li>
                                     <a class="dropdown-item" href="{% url 'home' %}" class="nav-link">Inicio</a>
                                 </li>
+                                {% if user.docente_profile or user.administrativo_profile %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}" class="nav-link">Control de asistencias</a>
+                                </li>
+                                {% endif %}
+                                {% if user.administrativo_profile %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}" class="nav-link">Sedes</a>
+                                </li>
+                                {% endif %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'password_change' %}" class="nav-link">Cambiar contraseña</a>
+                                </li>
                                 <li>
                                     <form method="post" action="{% url 'cerrar_sesion' %}" class="dropdown-item form-inline m-0">
                                         {% csrf_token %}
