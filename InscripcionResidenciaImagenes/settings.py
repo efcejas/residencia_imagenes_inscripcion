@@ -99,7 +99,7 @@ import os
 EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 ANYMAIL = {
     "MAILGUN_API_KEY": os.getenv('MAILGUN_API_KEY'),
-    "MAILGUN_SENDER_DOMAIN": os.getenv('MAILGUN_DOMAIN'),
+    "MAILGUN_SENDER_DOMAIN": 'residentes-dm-9833103dde7d.herokuapp.com',
 }
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'enso.cejas@diagnosticomedico.com')
 
