@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Construya rutas dentro del proyecto de esta manera: BASE_DIR /'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -96,12 +99,13 @@ LOGIN_REDIRECT_URL = 'home'
 
 import os
 
-EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
-ANYMAIL = {
-    "MAILGUN_API_KEY": os.getenv('MAILGUN_API_KEY'),
-    "MAILGUN_SENDER_DOMAIN": 'residentes-dm-9833103dde7d.herokuapp.com',
-}
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'enso.cejas@diagnosticomedico.com')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'enso.cejas@diagnosticomedico.com'
 
 # Resto de tu código...
 
