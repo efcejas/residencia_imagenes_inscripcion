@@ -31,21 +31,39 @@
     </header>
     <div class="container-fluid sticky-top barra-usuario">
         {% if user.is_authenticated %}
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h6 class="mb-0">{{ user.get_full_name }}</h6>
-                <a href="{% url 'password_change' %}" class="cambiar_contraseña">Cambiar contraseña</a>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <h5 class="navbar-brand m-0">{{ user.get_full_name }}</h5>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNavDarkDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Menú</button>
+                            <ul class="dropdown-menu dropdown-menu-lg-end">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'home' %}" class="nav-link">Inicio</a>
+                                </li>
+                                <li>
+                                    <form method="post" action="{% url 'cerrar_sesion' %}" class="dropdown-item form-inline m-0">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-link p-0">Cerrar sesión</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <form method="post" action="{% url 'cerrar_sesion' %}" class="mr-2">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-secondary btn-sm">Cerrar sesión</button>
-            </form>
-        </div>
+        </nav>
         {% endif %}
     </div>
     <main class="container">
-    {% block content %}
-    {% endblock %}
+        {% block content %}
+        {% endblock %}
     </main>
     <footer class="container-fluid py-3 pie-de-pagina text-center">
         <p>© 2024 <strong>Dr. Enso Fermín Cejas.</strong> Todos los derechos reservados.</p>
