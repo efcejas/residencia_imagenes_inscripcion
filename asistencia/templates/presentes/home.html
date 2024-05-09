@@ -3,27 +3,56 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<div class="container-fluid py-3 pb-0">
+<div class="container-fluid">
   <div class="d-md-flex justify-content-between align-items-center flex-column flex-md-row">
-    <div class="text-center mb-2 mb-md-0">
+    <div class="text-center text-md-start col col-md-4 mt-2 mt-md-0 mb-md-0">
       <p class="lead mb-0">¡Hola, {{ user.first_name }}!</p>
     </div>
-    <div class="text-center">
-      <form method="post" action="{% url 'cerrar_sesion' %}" class="mr-2">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-secondary btn-sm">Cerrar sesión</button>
-      </form>
+    <div class="container text-center">
+      <ul class="nav justify-content-center justify-content-md-end">
+        {% if user.residente_profile %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'asistencia:asistencias_registradas' %}">Ver asistencias</a>
+        </li>
+        {% endif %}
+        {% if user.docente_profile %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'asistencia:control_asistencia' %}">Control de asistencias</a>
+        </li>
+        {% endif %}
+        {% if user.administrativo_profile %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'asistencia:control_asistencia' %}">Control de asistencias</a>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Lista de sedes</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <form method="post" action="{% url 'cerrar_sesion' %}">
+            {% csrf_token %}
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+          </form>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
 {% endif %}
 <div class="container text-center">
+  {% if user.is_authenticated and user.residente_profile %}
+  <div class="d-md-flex align-items-center justify-content-center pt-3">
+      <p class="text-md-start lead">Para registrar tu asistencia, hacé clic en la siguiente imagen:</p>
+      <a href="{% url 'asistencia:registro_asistencia' %}">
+        <img src="{% static 'images/icono-asistencia.png' %}" class="img-fluid" style="max-height: 120px;" alt="Icono de asistencia">
+      </a>
+  </div>
   <div class="d-flex flex-column flex-md-row align-items-center justify-content-center py-3">
-    {% if user.is_authenticated and user.residente_profile %}
-    <div class="col-12 col-md-6">
-      <h1 class="bienvenida display-3">¡Sigamos aprendiendo juntos!</h1>
-      <p class="lead">Aquí podrás ver tus asistencias registradas y gestionar tus actividades dentro de la residencia.
-      </p>
+    <div class="row">
+      <div class="col-12">
+        <h1 class="bienvenida display-3">¡Sigamos aprendiendo juntos!</h1>
+        <p class="lead">Aquí podrás ver tus asistencias registradas y gestionar tus actividades dentro de la residencia.
+        </p>
+      </div>
     </div>
     {% elif user.is_authenticated and user.docente_profile %}
     <div class="col-12 col-md-6">
@@ -46,48 +75,10 @@
         alt="Dibujo de residentes">
     </div>
   </div>
-  <div class="development">
+  <div class="development pb-md-3">
     <h2 class="display-6">¡En proceso de desarrollo!</h2>
     <p class="lead">Estamos trabajando para mejorar esta página. ¡Mantente atento a las
       actualizaciones!</p>
   </div>
 </div>
-{% if user.is_authenticated %}
-{% if user.docente_profile or user.administrativo_profile %}
-<div class="container text-center py-3">
-  <ul class="nav justify-content-center">
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'asistencia:control_asistencia' %}">Control de asistencias</a>
-    </li>
-    {% if user.administrativo_profile %}
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Lista de sedes</a>
-    </li>
-    {% endif %}
-    <!-- <li class="nav-item">
-      <a class="nav-link" href="#">Panel de seguimiento</a>
-    </li> -->
-  </ul>
-</div>
-{% else %}
-<div class="container text-center py-3">
-  <ul class="nav justify-content-center">
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'asistencia:asistencias_registradas' %}">Ver asistencias</a>
-    </li>
-  </ul>
-</div>
-{% endif %}
-{% else %}
-<div class="container text-center py-3">
-  <ul class="nav justify-content-center">
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'seleccion_tipo_usuario' %}">Registrarse</a>
-    </li>
-  </ul>
-</div>
-{% endif %}
 {% endblock %}
