@@ -175,6 +175,19 @@ class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListVi
         # redirige a la página de inicio o a una página de error si el usuario no tiene permiso
         return redirect('home')
 
+# Vistas relacionadas con la gestión de usuarios residentes
+
+class ResidentesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Residente
+    template_name = 'presentes/residentes_list.html'
+    context_object_name = 'residentes'
+
+    def test_func(self):
+        return hasattr(self.request.user, 'administrativo_profile')
+
+    def handle_no_permission(self):
+        return redirect('home')
+
 # Vistas relacionadas con la gestion de sedes
 
 class SedesCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):

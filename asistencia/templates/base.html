@@ -49,12 +49,15 @@
                                 </li>
                                 {% if user.docente_profile or user.administrativo_profile %}
                                 <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}" class="nav-link">Gestión de residentes</a>
+                                </li>
+                                <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}" class="nav-link">Control de asistencias</a>
                                 </li>
                                 {% endif %}
                                 {% if user.administrativo_profile %}
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}" class="nav-link">Sedes</a>
+                                    <a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}" class="nav-link">Gestión de sedes</a>
                                 </li>
                                 {% endif %}
                                 <li>

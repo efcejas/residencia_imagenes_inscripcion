@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-sm py-3">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="text-center text-md-start">
+                <h5 class="titulo_registro">Lista de residentes</h5>
+                <p class="fw-normal lh-sm"><small>Acá se podrán visualizar todos los residentes registrados.</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-sm">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">DNI</th>
+                            <th scope="col">Fecha de nacimiento</th>
+                            <th scope="col">Matrícula</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Fecha de ingreso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for residente in residentes %}
+                        <tr>
+                            <td>{{ residente.user.first_name }}</td>
+                            <td>{{ residente.user.last_name }}</td>
+                            <td>{{ residente.user.email }}</td>
+                            <td>{{ residente.dni }}</td>
+                            <td>{{ residente.fecha_nacimiento }}</td>
+                            <td>{{ residente.matricula }}</td>
+                            <td>{{ residente.telefono }}</td>
+                            <td>{{ residente.fecha_de_ingreso }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
