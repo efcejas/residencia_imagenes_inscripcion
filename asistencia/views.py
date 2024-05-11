@@ -174,7 +174,7 @@ class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListVi
         ).order_by('-mes', '-fecha', '-hora')
 
     def test_func(self):
-        return hasattr(self.request.user, 'docente_profile') or hasattr(self.request.user, 'administrativo_profile')
+        return hasattr(self.request.user, 'docente_profile') or hasattr(self.request.user, 'administrativo_profile') or self.request.user.is_superuser
 
     def handle_no_permission(self):
         # redirige a la página de inicio o a una página de error si el usuario no tiene permiso
@@ -194,8 +194,8 @@ class ResidentesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return context
 
     def test_func(self):
-        # Agregué perfil docente.
-        return hasattr(self.request.user, 'administrativo_profile') or hasattr(self.request.user, 'docente_profile')
+        # Agregué perfil docente y superuser.
+        return hasattr(self.request.user, 'administrativo_profile') or hasattr(self.request.user, 'docente_profile') or self.request.user.is_superuser
 
     def handle_no_permission(self):
         return redirect('home')
@@ -229,11 +229,10 @@ class SedesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     context_object_name = 'sedes'
 
     def test_func(self):
-        return hasattr(self.request.user, 'administrativo_profile')
+        return hasattr(self.request.user, 'administrativo_profile') or self.request.user.is_superuser
 
     def handle_no_permission(self):
         return redirect('home')
-
 
 class SedeUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = Sedes
