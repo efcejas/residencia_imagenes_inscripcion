@@ -55,6 +55,11 @@
                                 <li>
                                     <a class="dropdown-item" href="{% url 'home' %}" class="nav-link">Inicio</a>
                                 </li>
+                                {% if user.residente_profile %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:asistencias_registradas' %}" class="nav-link">Ver asistencias registradas</a>
+                                </li>
+                                {% endif %}
                                 {% if user.docente_profile or user.administrativo_profile %}
                                 <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}"
@@ -73,7 +78,7 @@
                                 {% endif %}
                             </ul>
                             <button class="btn dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">Configuración de la cuenta</button>
+                                aria-expanded="false">Cuenta</button>
                             <ul class="dropdown-menu dropdown-menu-lg-end">
                                 <li>
                                     <a class="dropdown-item" href="{% url 'password_change' %}" class="nav-link">Cambiar
