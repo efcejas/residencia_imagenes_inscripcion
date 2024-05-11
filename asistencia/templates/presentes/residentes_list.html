@@ -2,11 +2,18 @@
 
 {% block content %}
 <div class="container-sm py-3">
-    <div class="row">
-        <div class="col-lg-7">
+    <div class="row align-items-center">
+        <div class="col-12 col-md-6">
             <div class="text-center text-md-start">
                 <h5 class="titulo_registro">Lista de residentes</h5>
                 <p class="fw-normal lh-sm"><small>Acá se podrán visualizar todos los residentes registrados.</small></p>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card  text-primary-emphasis bg-primary-subtle border border-primary-subtle">
+                <div class="card-body">
+                    <p class="card-text text-center">Actualmente hay un registro total de {{ total_residentes }} residentes.</p>
+                </div>
             </div>
         </div>
     </div>

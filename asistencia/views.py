@@ -182,6 +182,11 @@ class ResidentesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = 'presentes/residentes_list.html'
     context_object_name = 'residentes'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_residentes'] = Residente.objects.count()
+        return context
+
     def test_func(self):
         return hasattr(self.request.user, 'administrativo_profile')
 
