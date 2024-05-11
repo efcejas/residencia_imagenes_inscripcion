@@ -188,7 +188,7 @@ class ResidentesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return context
 
     def test_func(self):
-        return hasattr(self.request.user, 'administrativo_profile') # Agregar perfil docente 
+    return hasattr(self.request.user, 'administrativo_profile') or hasattr(self.request.user, 'docente_profile') # Agregué perfil docente.
 
     def handle_no_permission(self):
         return redirect('home')
