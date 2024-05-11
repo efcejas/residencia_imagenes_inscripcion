@@ -21,7 +21,8 @@
 
     <!-- DataTables -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 
     <title>{% block title %}Control de asistencia{% endblock %}</title>
 </head>
@@ -48,29 +49,39 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDarkDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Menú</button>
+                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">Menú</button>
                             <ul class="dropdown-menu dropdown-menu-lg-end">
                                 <li>
                                     <a class="dropdown-item" href="{% url 'home' %}" class="nav-link">Inicio</a>
                                 </li>
                                 {% if user.docente_profile or user.administrativo_profile %}
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}" class="nav-link">Gestión de residentes</a>
+                                    <a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}"
+                                        class="nav-link">Gestión de residentes</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}" class="nav-link">Control de asistencias</a>
+                                    <a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}"
+                                        class="nav-link">Control de asistencias</a>
                                 </li>
                                 {% endif %}
                                 {% if user.administrativo_profile %}
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}" class="nav-link">Gestión de sedes</a>
+                                    <a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}"
+                                        class="nav-link">Gestión de sedes</a>
                                 </li>
                                 {% endif %}
+                            </ul>
+                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">Configuración de la cuenta</button>
+                            <ul class="dropdown-menu dropdown-menu-lg-end">
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'password_change' %}" class="nav-link">Cambiar contraseña</a>
+                                    <a class="dropdown-item" href="{% url 'password_change' %}" class="nav-link">Cambiar
+                                        contraseña</a>
                                 </li>
                                 <li>
-                                    <form method="post" action="{% url 'cerrar_sesion' %}" class="dropdown-item form-inline m-0">
+                                    <form method="post" action="{% url 'cerrar_sesion' %}"
+                                        class="dropdown-item form-inline m-0">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-link p-0">Cerrar sesión</button>
                                     </form>
