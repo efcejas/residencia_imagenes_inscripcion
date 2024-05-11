@@ -76,6 +76,20 @@
                                         class="nav-link">Gestión de sedes</a>
                                 </li>
                                 {% endif %}
+                                {% if user.is_superuser %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}"
+                                        class="nav-link">Gestión de residentes</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}"
+                                        class="nav-link">Control de asistencias</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}"
+                                        class="nav-link">Gestión de sedes</a>
+                                </li>
+                                {% endif %}
                             </ul>
                             <button class="btn dropdown-toggle" data-bs-toggle="dropdown"
                                 aria-expanded="false">Cuenta</button>
