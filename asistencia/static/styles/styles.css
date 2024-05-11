@@ -79,6 +79,26 @@ main.container {
     max-height: 250px; width: 100%;
 }
 
+/* Estilos - listas de residentes */
+
+#myTable_length, #myTable_filter, #myTable_info, #myTable_paginate {
+   font-size: 0.8em;
+   padding: 10px;
+}
+
+#myTable_info {
+    display: none;
+}
+
+#myTable thead th {
+    font-size: 0.8em;
+}
+
+#myTable tbody td {
+    font-size: 0.8em;
+}
+
+
 /* Estilos - de los formularios de registro */
 .titulo_registro {
     color: #1C58A6;
