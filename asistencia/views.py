@@ -18,11 +18,12 @@ import qrcode
 from django.db.models import Q  # Para hacer consultas más complejas
 
 # Local imports
-from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo, 
+from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo,
                     RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm)
 from .models import RegistroAsistencia, Residente, Usuario, Sedes
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
+
 
 class RegistroView(CreateView):
     template_name = 'registration/register.html'
@@ -61,10 +62,12 @@ class RegistroView(CreateView):
         # El formulario no es válido, vuelve a renderizar la página de registro con el formulario y los errores de validación
         return self.render_to_response(self.get_context_data(form=form))
 
+
 class SuccessView(TemplateView):
     template_name = 'registration/success.html'
 
 # Vistas relacionadas con la página de asistencia.
+
 
 class RegistroAsistenciaView(LoginRequiredMixin, View):
     def get(self, request):
@@ -91,8 +94,8 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
                 latitud = form.cleaned_data.get('latitud')
                 longitud = form.cleaned_data.get('longitud')
 
-                # Coordenadas de la sede pichincha de Investigaciones Médicas. 
-                latitud_permitida = -34.61068 
+                # Coordenadas de la sede pichincha de Investigaciones Médicas.
+                latitud_permitida = -34.61068
                 longitud_permitida = -58.39927
                 rango_permitido = 0.0005
                 if not (latitud_permitida - rango_permitido <= latitud <= latitud_permitida + rango_permitido and
@@ -144,6 +147,7 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
             request.session['error_message'] = error_message
             return redirect('error_sin_perfil_residente')
 
+
 class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
     template_name = 'presentes/lista_asistencias_registradas.html'
 
@@ -157,6 +161,7 @@ class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
         return context
 
 # Vista para mostrar los registros de asistencia de un residente o de todos los residentes
+
 
 class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = RegistroAsistencia
@@ -177,6 +182,7 @@ class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListVi
 
 # Vistas relacionadas con la gestión de usuarios residentes
 
+
 class ResidentesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Residente
     template_name = 'presentes/residentes_list.html'
@@ -188,12 +194,14 @@ class ResidentesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return context
 
     def test_func(self):
-    return hasattr(self.request.user, 'administrativo_profile') or hasattr(self.request.user, 'docente_profile') # Agregué perfil docente.
+        # Agregué perfil docente.
+        return hasattr(self.request.user, 'administrativo_profile') or hasattr(self.request.user, 'docente_profile')
 
     def handle_no_permission(self):
         return redirect('home')
 
 # Vistas relacionadas con la gestion de sedes
+
 
 class SedesCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = Sedes
@@ -214,6 +222,7 @@ class SedesCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMix
     def handle_no_permission(self):
         return redirect('home')
 
+
 class SedesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Sedes
     template_name = 'presentes/sedes_list.html'
@@ -225,12 +234,13 @@ class SedesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def handle_no_permission(self):
         return redirect('home')
 
+
 class SedeUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = Sedes
     fields = ['nombre_sede', 'direccion', 'telefono', 'referente']
     template_name = 'presentes/sede_form.html'
     success_url = reverse_lazy('asistencia:sedes_list')
-    success_message = '¡La sede se ha actualizado exitosamente!' 
+    success_message = '¡La sede se ha actualizado exitosamente!'
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
@@ -244,11 +254,12 @@ class SedeUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
     def handle_no_permission(self):
         return redirect('home')
 
+
 class SedeDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, DeleteView):
     model = Sedes
     template_name = 'presentes/sede_confirm_delete.html'
     success_url = reverse_lazy('asistencia:sedes_list')
-    success_message = '¡La sede se ha eliminado exitosamente!' 
+    success_message = '¡La sede se ha eliminado exitosamente!'
 
     def test_func(self):
         return hasattr(self.request.user, 'administrativo_profile')
@@ -264,8 +275,9 @@ class SedeDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
-        
+
 # Create your views here.
+
 
 def generar_qr(request):  # genera un qr con la url de la pagina de asistencia
     # se pone la url de la pagina de asistencia
