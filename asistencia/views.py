@@ -19,11 +19,10 @@ from django.db.models import Q  # Para hacer consultas más complejas
 
 # Local imports
 from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo,
-                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm)
+                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm)
 from .models import RegistroAsistencia, Residente, Usuario, Sedes
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
-
 
 class RegistroView(CreateView):
     template_name = 'registration/register.html'
@@ -62,12 +61,10 @@ class RegistroView(CreateView):
         # El formulario no es válido, vuelve a renderizar la página de registro con el formulario y los errores de validación
         return self.render_to_response(self.get_context_data(form=form))
 
-
 class SuccessView(TemplateView):
     template_name = 'registration/success.html'
 
 # Vistas relacionadas con la página de asistencia.
-
 
 class RegistroAsistenciaView(LoginRequiredMixin, View):
     def get(self, request):
@@ -162,7 +159,6 @@ class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
 
 # Vista para mostrar los registros de asistencia de un residente o de todos los residentes
 
-
 class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = RegistroAsistencia
     template_name = 'presentes/lista_control_asistencia.html'
@@ -181,7 +177,6 @@ class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListVi
         return redirect('home')
 
 # Vistas relacionadas con la gestión de usuarios residentes
-
 
 class ResidentesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Residente
@@ -202,7 +197,6 @@ class ResidentesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
 # Vistas relacionadas con la gestion de sedes
 
-
 class SedesCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = Sedes
     form_class = SedeForm
@@ -221,7 +215,6 @@ class SedesCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMix
 
     def handle_no_permission(self):
         return redirect('home')
-
 
 class SedesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Sedes
@@ -253,7 +246,6 @@ class SedeUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
     def handle_no_permission(self):
         return redirect('home')
 
-
 class SedeDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, DeleteView):
     model = Sedes
     template_name = 'presentes/sede_confirm_delete.html'
@@ -275,8 +267,48 @@ class SedeDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
 
-# Create your views here.
+# Vistas relacionadas con herramientas útiles para los residentes
 
+class CalcularWashoutView(View):
+    template_name = 'presentes/calculo_lavado_suprarrenal.html'
+
+    def get(self, request):
+        form = WashoutSuprarrenalForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = WashoutSuprarrenalForm(request.POST)
+        if form.is_valid():
+            HU_sin_contraste = form.cleaned_data['HU_sin_contraste']
+            HU_contraste_minuto = form.cleaned_data['HU_contraste_minuto']
+            HU_contraste_retraso = form.cleaned_data['HU_contraste_retraso']
+
+            # Calcula el lavado absoluto si HU_sin_contraste es proporcionado
+            if HU_sin_contraste is not None:
+                lavado_absoluto = ((HU_contraste_minuto - HU_contraste_retraso) / (HU_contraste_minuto - HU_sin_contraste)) * 100
+            else:
+                lavado_absoluto = None
+
+            # Calcula el lavado relativo usando las fórmulas de washout suprarrenal
+            lavado_relativo = (HU_contraste_minuto - HU_contraste_retraso) / HU_contraste_minuto * 100
+
+            # Determina si la lesión es altamente sugestiva de adenoma
+            if lavado_absoluto is not None and lavado_absoluto >= 60 and lavado_relativo >= 40:
+                es_adenoma = True
+            else:
+                es_adenoma = False
+
+            return render(request, self.template_name, {
+                'form': form,
+                'lavado_absoluto': lavado_absoluto,
+                'lavado_relativo': lavado_relativo,
+                'es_adenoma': es_adenoma,
+            })
+        else:
+            # Si el formulario no es válido, simplemente renderiza el template con el formulario que contiene los errores
+            return render(request, self.template_name, {'form': form})
+
+# Create your views here.
 
 def generar_qr(request):  # genera un qr con la url de la pagina de asistencia
     # se pone la url de la pagina de asistencia

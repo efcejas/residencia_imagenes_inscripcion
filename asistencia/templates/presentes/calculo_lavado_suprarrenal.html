@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-12 pt-3">
+    <div class="text-center text-md-start">
+        <h5 class="titulo_registro">Calculadora de lavado suprarrenal (Washout)</h5>
+        <p class="fw-normal lh-sm text-md-start"><small>
+                Esta calculadora está diseñada para su uso en el exámenes de TC con protocolo Washout suprarrenal,
+                enfocado a lesiones suprarrenales pobres en lípidos. Recuerde que las lesiones mayores a 4 cm deben
+                considerarse sospechosas de neoplasia maligna, independientemente de sus características de lavado.
+            </small></p>
+    </div>
+</div>
+<div class="row">
+    <div class="container-sm py-3 col-11 col-md-5 col-lg-4">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="HU_sin_contraste" class="form-label">HU - fase sin contraste</label>
+                <input type="number" class="form-control" id="HU_sin_contraste" name="HU_sin_contraste"
+                    value="{{ form.HU_sin_contraste.value|default_if_none:'' }}">
+                <p class="fw-light lh-sm"><small>{{ form.HU_sin_contraste.help_text }}</small></p>
+            </div>
+            <div class="mb-3">
+                <label for="HU_contraste_minuto" class="form-label">HU - fase portal</label>
+                <input type="number" class="form-control" id="HU_contraste_minuto" name="HU_contraste_minuto"
+                    value="{{ form.HU_contraste_minuto.value|default_if_none:'' }}" required>
+                <p class="fw-light lh-sm"><small>{{ form.HU_contraste_minuto.help_text }}</small></p>
+            </div>
+            <div class="mb-3">
+                <label for="HU_contraste_retraso" class="form-label">HU - fase retardada</label>
+                <input type="number" class="form-control" id="HU_contraste_retraso" name="HU_contraste_retraso"
+                    value="{{ form.HU_contraste_retraso.value|default_if_none:'' }}" required>
+                <p class="fw-light lh-sm"><small>{{ form.HU_contraste_retraso.help_text }}</small></p>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Calcular</button>
+                <a href="{% url 'asistencia:washout_suprarrenal' %}" class="btn btn-secondary">Reiniciar</a>
+            </div>
+        </form>
+    </div>
+    <div class="container col-11 col-md-7 col-lg-8 text-center text-md-start d-flex flex-column justify-content-center">
+        {% if lavado_absoluto is not None and lavado_relativo is not None %}
+            <div class="row text-center">
+                <h5 id="lavadoAbsoluto" class="col-6 mb-3">Lavado Absoluto: {{ lavado_absoluto|floatformat:1 }}%</h5>
+                <h5 id="lavadoRelativo" class="col-6 mb-3">Lavado Relativo: {{ lavado_relativo|floatformat:1 }}%</h5>
+            </div>
+            <div class="row text-center">
+                {% if lavado_absoluto > 60 %}
+                    <p class="col-12 mb-3">Un lavado absoluto mayor al 60% es altamente sugestivo de adenoma suprarrenal.</p>
+                {% else %}
+                    <p class="col-12 mb-3">Un lavado absoluto menor al 60% sugiere una lesión suprarrenal no adenomatosa.</p>
+                {% endif %}
+                {% if lavado_relativo > 40 %}
+                    <p class="col-12 mb-3">Un lavado relativo mayor al 40% es altamente sugestivo de adenoma suprarrenal.</p>
+                {% else %}
+                    <p class="col-12 mb-3">Un lavado relativo menor al 40% sugiere una lesión suprarrenal no adenomatosa.</p>
+                {% endif %}
+            </div>
+        {% elif lavado_absoluto is None and lavado_relativo is not None %}
+            <div class="row text-center justify-content-center">
+                <h5 id="lavadoRelativo" class="col-6 mb-3">Lavado Relativo: {{ lavado_relativo|floatformat:1 }}%</h5>
+            </div>
+            <div class="row text-center">
+                {% if lavado_relativo > 40 %}
+                    <p class="col-12 mb-3">Un lavado relativo mayor al 40% es altamente sugestivo de adenoma suprarrenal.</p>
+                {% else %}
+                    <p class="col-12 mb-3">Un lavado relativo menor al 40% sugiere una lesión suprarrenal no adenomatosa.</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <!-- No mostrar resultados -->
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
