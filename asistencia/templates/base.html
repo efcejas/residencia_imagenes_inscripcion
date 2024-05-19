@@ -91,6 +91,19 @@
                                 </li>
                                 {% endif %}
                             </ul>
+                        </li>
+                        {% if user.residente_profile or user.docente_profile or user.is_superuser %}
+                        <li class="nav-item dropdown">
+                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Herramientas</button>
+                            <ul class="dropdown-menu dropdown-menu-lg-end">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:washout_suprarrenal' %}" class="nav-link">Calculadora de
+                                        lavado suprarrenal</a>
+                                </li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item dropdown">
                             <button class="btn dropdown-toggle" data-bs-toggle="dropdown"
                                 aria-expanded="false">Cuenta</button>
                             <ul class="dropdown-menu dropdown-menu-lg-end">
