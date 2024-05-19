@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Modal -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Mensaje</h5>
+                </div>
+                <div class="modal-body">
+                    {% if messages %}
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-center text-md-start col-12 col-md-6">
+            <div class="col">
+                <h5 class="titulo_registro">Perfil de usuario - <strong>{{ user.username }}</strong></h5>
+            </div>
+            <p>A continuación, podés acceder a tu información personal. <br> Es importante que mantengas tus datos actualizados.
+            </p>
+        </div>
+        <div class="col-12 col-md-6">
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3 form-group col-md-12 col-lg-9">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type }}" class="form-control mb-3"
+                        id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value }}">
+                </div>
+                {% endfor %}
+                {% if form_residente %}
+                {% for field in form_residente %}
+                <div class="mb-3 form-group col-md-12 col-lg-9">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {% if field.field.widget.input_type == 'date' %}
+                    <input type="date" class="form-control mb-3" id="{{ field.id_for_label }}" name="{{ field.name }}"
+                        value="{{ field.value|date:'Y-m-d' }}">
+                    {% else %}
+                    <input type="{{ field.field.widget.input_type }}" class="form-control mb-3"
+                        id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value }}">
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% elif form_docente %}
+                {% for field in form_docente %}
+                <div class="mb-3 form-group col-md-12 col-lg-9">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type }}" class="form-control mb-3"
+                        id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value }}">
+                </div>
+                {% endfor %}
+                {% elif form_administrativo %}
+                {% for field in form_administrativo %}
+                <div class="mb-3 form-group col-md-12 col-lg-9">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type }}" class="form-control mb-3"
+                        id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value }}">
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="text-end col-md-12 col-lg-9">
+                    <button type="submit" class="btn btn-primary">Actualizar perfil</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Usa jQuery para mostrar el modal si hay algún mensaje y se realizaron cambios en los datos
+    $(document).ready(function () {
+        {% if messages and request.session.data_changed %}
+        $('#messageModal').modal('show');
+        {% endif %}
+    });
+</script>
+{% endblock %}

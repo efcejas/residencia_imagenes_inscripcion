@@ -46,6 +46,20 @@ class RegistroAsistenciaForm(forms.ModelForm):
         model = RegistroAsistencia
         fields = ('latitud', 'longitud')
         
+# Formularios relacionados con herramientas útiles para los residentes
+
+class WashoutSuprarrenalForm(forms.Form):
+    HU_sin_contraste = forms.FloatField(label='HU - fase sin contraste', required=False, help_text='Ingrese el valor de HU en la fase sin contraste.')
+    HU_contraste_minuto = forms.FloatField(label='HU - fase portal', required=True, help_text='Ingrese el valor de HU en la fase portal.')
+    HU_contraste_retraso = forms.FloatField(label='HU - fase retardada', required=True, help_text='Ingrese el valor de HU en la fase retardada (a los 15 min).')
+
+    class Meta:
+        widgets = {
+            'HU_sin_contraste': forms.NumberInput(attrs={'step': '0.1'}),
+            'HU_contraste_minuto': forms.NumberInput(attrs={'step': '0.1'}),
+            'HU_contraste_retraso': forms.NumberInput(attrs={'step': '0.1'}),
+        }
+
 # Forumularios para la creación de sedes
 class SedeForm(forms.ModelForm):
     class Meta:

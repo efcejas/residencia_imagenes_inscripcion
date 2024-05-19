@@ -6,7 +6,7 @@
         <div class="col-lg-4">
             <div class="text-center text-md-start">
                 <h5 class="titulo_registro">Lista de sedes</h5>
-                <p class="fw-lighter lh-sm"><small>Acá se podrán visualizar todas las sedes registradas.</small></p>
+                <p class="fw-normal lh-sm"><small>Acá se podrán visualizar todas las sedes registradas.</small></p>
             </div>
             {% for message in messages %}
             <div class="text-center mb-3">
@@ -37,8 +37,8 @@
                             <td>{{ sede.telefono }}</td>
                             <td style="min-width: 180px;">{{ sede.referente }}</td>
                             <td>
-                                <a href="{% url 'asistencia:sede_update' sede.id %}" class="btn btn-secondary" style="--bs-btn-padding-y: .15rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Modificar</a>
-                                <a href="{% url 'asistencia:sede_delete' sede.id %}" class="btn btn-danger" style="--bs-btn-padding-y: .15rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Eliminar</a>
+                                <a href="{% url 'asistencia:sede_update' sede.id %}" class="btn btn-secondary" style="--bs-btn-padding-y: .15rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; min-width: 68px;">Modificar</a>
+                                <a href="{% url 'asistencia:sede_delete' sede.id %}" class="btn btn-danger" style="--bs-btn-padding-y: .15rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; min-width: 68px;">Eliminar</a>
                             </td>
                         </tr>
                         {% empty %}
