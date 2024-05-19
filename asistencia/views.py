@@ -1,6 +1,6 @@
 # Django imports
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import logout, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import CharField, Value as V
@@ -18,9 +18,9 @@ import qrcode
 from django.db.models import Q  # Para hacer consultas más complejas
 
 # Local imports
-from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo, 
-                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm)
-from .models import RegistroAsistencia, Residente, Usuario, Sedes
+from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo,
+                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm)
+from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
@@ -64,6 +64,67 @@ class RegistroView(CreateView):
 class SuccessView(TemplateView):
     template_name = 'registration/success.html'
 
+# Vistas relacionadas con los perfiles de usuario
+
+class PerfilView(LoginRequiredMixin, UpdateView):
+    model = get_user_model()
+    fields = ['first_name', 'last_name', 'email']  # Ajusta los campos según tus necesidades
+    template_name = 'presentes/perfil.html'
+    success_url = reverse_lazy('asistencia:perfil')
+
+    def get_object(self):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user = self.get_object()
+
+        if hasattr(user, 'residente_profile'):
+            context['form_residente'] = RegistroFormResidente(instance=user.residente_profile)
+        elif hasattr(user, 'docente_profile'):
+            context['form_docente'] = RegistroFormDocente(instance=user.docente_profile)
+        elif hasattr(user, 'administrativo_profile'):
+            context['form_administrativo'] = RegistroFormAdministrativo(instance=user.administrativo_profile)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+    
+        if form.has_changed():
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Tus datos se han actualizado correctamente.')
+                request.session['data_changed'] = True
+            else:
+                messages.error(request, 'Hubo un error al actualizar tus datos.')
+                request.session['data_changed'] = False
+        # ...
+        user = self.get_object()
+
+        if hasattr(user, 'residente_profile'):
+            form_residente = RegistroFormResidente(request.POST, instance=user.residente_profile)
+            if form_residente.is_valid():
+                form_residente.save()
+            else:
+                messages.error(request, 'Hubo un error al actualizar el perfil de residente.')
+        elif hasattr(user, 'docente_profile'):
+            form_docente = RegistroFormDocente(request.POST, instance=user.docente_profile)
+            if form_docente.is_valid():
+                form_docente.save()
+            else:
+                messages.error(request, 'Hubo un error al actualizar el perfil de docente.')
+        elif hasattr(user, 'administrativo_profile'):
+            form_administrativo = RegistroFormAdministrativo(request.POST, instance=user.administrativo_profile)
+            if form_administrativo.is_valid():
+                form_administrativo.save()
+            else:
+                messages.error(request, 'Hubo un error al actualizar el perfil de administrativo.')
+
+        return super().form_valid(form)
+
 # Vistas relacionadas con la página de asistencia.
 
 class RegistroAsistenciaView(LoginRequiredMixin, View):
@@ -91,8 +152,8 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
                 latitud = form.cleaned_data.get('latitud')
                 longitud = form.cleaned_data.get('longitud')
 
-                # Coordenadas de la sede pichincha de Investigaciones Médicas. 
-                latitud_permitida = -34.61068 
+                # Coordenadas de la sede pichincha de Investigaciones Médicas.
+                latitud_permitida = -34.61068
                 longitud_permitida = -58.39927
                 rango_permitido = 0.0005
                 if not (latitud_permitida - rango_permitido <= latitud <= latitud_permitida + rango_permitido and
@@ -169,10 +230,29 @@ class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListVi
         ).order_by('-mes', '-fecha', '-hora')
 
     def test_func(self):
-        return hasattr(self.request.user, 'docente_profile') or hasattr(self.request.user, 'administrativo_profile')
+        return hasattr(self.request.user, 'docente_profile') or hasattr(self.request.user, 'administrativo_profile') or self.request.user.is_superuser
 
     def handle_no_permission(self):
         # redirige a la página de inicio o a una página de error si el usuario no tiene permiso
+        return redirect('home')
+
+# Vistas relacionadas con la gestión de usuarios residentes
+
+class ResidentesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Residente
+    template_name = 'presentes/residentes_list.html'
+    context_object_name = 'residentes'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_residentes'] = Residente.objects.count()
+        return context
+
+    def test_func(self):
+        # Agregué perfil docente y superuser.
+        return hasattr(self.request.user, 'administrativo_profile') or hasattr(self.request.user, 'docente_profile') or self.request.user.is_superuser
+
+    def handle_no_permission(self):
         return redirect('home')
 
 # Vistas relacionadas con la gestion de sedes
@@ -202,7 +282,7 @@ class SedesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     context_object_name = 'sedes'
 
     def test_func(self):
-        return hasattr(self.request.user, 'administrativo_profile')
+        return hasattr(self.request.user, 'administrativo_profile') or self.request.user.is_superuser
 
     def handle_no_permission(self):
         return redirect('home')
@@ -212,7 +292,7 @@ class SedeUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
     fields = ['nombre_sede', 'direccion', 'telefono', 'referente']
     template_name = 'presentes/sede_form.html'
     success_url = reverse_lazy('asistencia:sedes_list')
-    success_message = '¡La sede se ha actualizado exitosamente!' 
+    success_message = '¡La sede se ha actualizado exitosamente!'
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
@@ -230,7 +310,7 @@ class SedeDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
     model = Sedes
     template_name = 'presentes/sede_confirm_delete.html'
     success_url = reverse_lazy('asistencia:sedes_list')
-    success_message = '¡La sede se ha eliminado exitosamente!' 
+    success_message = '¡La sede se ha eliminado exitosamente!'
 
     def test_func(self):
         return hasattr(self.request.user, 'administrativo_profile')
@@ -246,7 +326,48 @@ class SedeDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
-        
+
+# Vistas relacionadas con herramientas útiles para los residentes
+
+class CalcularWashoutView(View):
+    template_name = 'presentes/calculo_lavado_suprarrenal.html'
+
+    def get(self, request):
+        form = WashoutSuprarrenalForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = WashoutSuprarrenalForm(request.POST)
+        if form.is_valid():
+            HU_sin_contraste = form.cleaned_data['HU_sin_contraste']
+            HU_contraste_minuto = form.cleaned_data['HU_contraste_minuto']
+            HU_contraste_retraso = form.cleaned_data['HU_contraste_retraso']
+
+            # Calcula el lavado absoluto si HU_sin_contraste es proporcionado
+            if HU_sin_contraste is not None:
+                lavado_absoluto = ((HU_contraste_minuto - HU_contraste_retraso) / (HU_contraste_minuto - HU_sin_contraste)) * 100
+            else:
+                lavado_absoluto = None
+
+            # Calcula el lavado relativo usando las fórmulas de washout suprarrenal
+            lavado_relativo = (HU_contraste_minuto - HU_contraste_retraso) / HU_contraste_minuto * 100
+
+            # Determina si la lesión es altamente sugestiva de adenoma
+            if lavado_absoluto is not None and lavado_absoluto >= 60 and lavado_relativo >= 40:
+                es_adenoma = True
+            else:
+                es_adenoma = False
+
+            return render(request, self.template_name, {
+                'form': form,
+                'lavado_absoluto': lavado_absoluto,
+                'lavado_relativo': lavado_relativo,
+                'es_adenoma': es_adenoma,
+            })
+        else:
+            # Si el formulario no es válido, simplemente renderiza el template con el formulario que contiene los errores
+            return render(request, self.template_name, {'form': form})
+
 # Create your views here.
 
 def generar_qr(request):  # genera un qr con la url de la pagina de asistencia

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-sm py-3">
+    <div class="row align-items-center">
+        <div class="col-12 col-md-6">
+            <div class="text-center text-md-start">
+                <h5 class="titulo_registro">Lista de residentes</h5>
+                <p class="fw-normal lh-sm"><small>Acá se podrán visualizar todos los residentes registrados.</small></p>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card  text-primary-emphasis bg-primary-subtle border border-primary-subtle">
+                <div class="card-body">
+                    <p class="card-text text-center">Actualmente hay un registro total de {{ total_residentes }} residentes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mb-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="myTable" class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr class="table-secondary text-center">
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">DNI</th>
+                            <th scope="col">Fecha de nacimiento</th>
+                            <th scope="col">Matrícula</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Fecha de ingreso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for residente in residentes %}
+                        <tr>
+                            <td>{{ residente.user.first_name }}</td>
+                            <td>{{ residente.user.last_name }}</td>
+                            <td>{{ residente.user.email }}</td>
+                            <td>{{ residente.dni }}</td>
+                            <td>{{ residente.fecha_nacimiento }}</td>
+                            <td>{{ residente.matricula }}</td>
+                            <td>{{ residente.telefono }}</td>
+                            <td>{{ residente.fecha_de_ingreso }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable({
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
+        }
+    });
+} );
+</script>
+{% endblock %}
