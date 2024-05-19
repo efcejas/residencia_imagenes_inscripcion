@@ -1,6 +1,6 @@
 # Django imports
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import logout, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import CharField, Value as V
@@ -20,7 +20,7 @@ from django.db.models import Q  # Para hacer consultas más complejas
 # Local imports
 from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo,
                     RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm)
-from .models import RegistroAsistencia, Residente, Usuario, Sedes
+from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
@@ -63,6 +63,67 @@ class RegistroView(CreateView):
 
 class SuccessView(TemplateView):
     template_name = 'registration/success.html'
+
+# Vistas relacionadas con los perfiles de usuario
+
+class PerfilView(LoginRequiredMixin, UpdateView):
+    model = get_user_model()
+    fields = ['first_name', 'last_name', 'email']  # Ajusta los campos según tus necesidades
+    template_name = 'presentes/perfil.html'
+    success_url = reverse_lazy('asistencia:perfil')
+
+    def get_object(self):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user = self.get_object()
+
+        if hasattr(user, 'residente_profile'):
+            context['form_residente'] = RegistroFormResidente(instance=user.residente_profile)
+        elif hasattr(user, 'docente_profile'):
+            context['form_docente'] = RegistroFormDocente(instance=user.docente_profile)
+        elif hasattr(user, 'administrativo_profile'):
+            context['form_administrativo'] = RegistroFormAdministrativo(instance=user.administrativo_profile)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+    
+        if form.has_changed():
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Tus datos se han actualizado correctamente.')
+                request.session['data_changed'] = True
+            else:
+                messages.error(request, 'Hubo un error al actualizar tus datos.')
+                request.session['data_changed'] = False
+        # ...
+        user = self.get_object()
+
+        if hasattr(user, 'residente_profile'):
+            form_residente = RegistroFormResidente(request.POST, instance=user.residente_profile)
+            if form_residente.is_valid():
+                form_residente.save()
+            else:
+                messages.error(request, 'Hubo un error al actualizar el perfil de residente.')
+        elif hasattr(user, 'docente_profile'):
+            form_docente = RegistroFormDocente(request.POST, instance=user.docente_profile)
+            if form_docente.is_valid():
+                form_docente.save()
+            else:
+                messages.error(request, 'Hubo un error al actualizar el perfil de docente.')
+        elif hasattr(user, 'administrativo_profile'):
+            form_administrativo = RegistroFormAdministrativo(request.POST, instance=user.administrativo_profile)
+            if form_administrativo.is_valid():
+                form_administrativo.save()
+            else:
+                messages.error(request, 'Hubo un error al actualizar el perfil de administrativo.')
+
+        return super().form_valid(form)
 
 # Vistas relacionadas con la página de asistencia.
 
@@ -143,7 +204,6 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
             error_message = 'Para poder marcar tu asistencia, necesitas tener un perfil de residente. Por favor, contacta al administrador para que te ayude a crear uno.'
             request.session['error_message'] = error_message
             return redirect('error_sin_perfil_residente')
-
 
 class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
     template_name = 'presentes/lista_asistencias_registradas.html'
