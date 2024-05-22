@@ -100,6 +100,25 @@ class RegistroAsistencia(models.Model):
     def __str__(self):
         return f'Registro de asistencia para Residente {self.residente}'
 
+# Modelos relacionados con la gestión de grupos 
+
+class Grupo(models.Model):
+    nombre_grupo = models.CharField('Nombre del grupo', max_length=50, unique=True, error_messages={'unique': 'Ya existe un grupo registrado con ese nombre.'})
+    aula = models.CharField('Aula', max_length=10)
+
+    class Meta:
+        verbose_name = 'Grupo'
+        verbose_name_plural = 'Grupos'
+
+    def save(self, *args, **kwargs):
+        # Normaliza el nombre del grupo
+        self.nombre_grupo = self.nombre_grupo.title()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nombre_grupo
+
 # Otros modelos a organizar. 
 
 class Sedes(models.Model):
