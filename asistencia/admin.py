@@ -76,4 +76,3 @@ admin.site.register(RegistroAsistencia, RegistroAsistenciaAdmin)
 admin.site.register(Sedes, SedesAdmin)
 
 
-
