@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, Grupo
+from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes
 
 class UsuarioAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
@@ -65,15 +65,11 @@ class SedesAdmin(admin.ModelAdmin):
     list_display = ('nombre_sede', 'direccion', 'telefono', 'referente')
     ordering = ('nombre_sede',)
 
-class GrupoAdmin(admin.ModelAdmin):
-    list_display = ('nombre_grupo', 'aula')
-
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Docente, DocenteAdmin)
 admin.site.register(Residente, ResidenteAdmin)
 admin.site.register(Administrativo, AdministrativoAdmin)
 admin.site.register(RegistroAsistencia, RegistroAsistenciaAdmin)
 admin.site.register(Sedes, SedesAdmin)
-admin.site.register(Grupo, GrupoAdmin)
 
 
