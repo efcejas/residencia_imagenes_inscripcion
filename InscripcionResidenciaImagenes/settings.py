@@ -99,13 +99,13 @@ LOGIN_REDIRECT_URL = 'home'
 
 import os
 
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')  # El backend de correo electrónico que Django debe usar para enviar correos electrónicos.
-EMAIL_HOST = os.getenv('EMAIL_HOST')  # El host del servidor de correo electrónico.
-EMAIL_PORT = os.getenv('EMAIL_PORT')  # El puerto que se debe usar para conectar con el servidor de correo electrónico.
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == 'True'  # Si se debe usar TLS al conectar con el servidor de correo electrónico.
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # El nombre de usuario para usar al conectar con el servidor de correo electrónico.
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # La contraseña para usar al conectar con el servidor de correo electrónico.
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')  # La dirección de correo electrónico que se debe usar como remitente por defecto cuando Django envía correos electrónicos.
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')
+DEFAULT_FROM_EMAIL = 'enso.cejas@diagnosticomedico.com'
 
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
