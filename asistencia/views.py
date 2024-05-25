@@ -64,40 +64,6 @@ class RegistroView(CreateView):
 class SuccessView(TemplateView):
     template_name = 'registration/success.html'
 
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-
-def send_email(to_emails, subject, html_content):
-    message = Mail(
-        from_email='efccejas@hotmail.com',
-        to_emails=to_emails,
-        subject=subject,
-        html_content=html_content)
-    try:
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-        response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
-    except Exception as e:
-        print(e.message)
-
-def contact(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            subject = form.cleaned_data['subject']
-            message = form.cleaned_data['message']
-            sender = form.cleaned_data['sender']
-            recipients = ['ensofermincejas@gmail.com']
-
-            send_email(recipients, subject, message)
-            return redirect('contact_thanks')
-    else:
-        form = ContactForm()
-
-    return render(request, 'contact.html', {'form': form})
-
 # Vistas relacionadas con los perfiles de usuario
 
 class PerfilView(LoginRequiredMixin, UpdateView):
