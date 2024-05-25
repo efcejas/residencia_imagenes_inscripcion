@@ -46,16 +46,10 @@ class Residente(models.Model):
         return self.user.get_full_name()
 
     def dni_con_puntos(self):
-        try:
-            return "{:,}".format(int(self.dni)).replace(",", ".")
-        except ValueError:
-            return self.dni
+        return "{:,}".format(int(self.dni)).replace(",", ".")
 
     def matricula_con_puntos(self):
-        try:
-            return "{:,}".format(int(self.matricula)).replace(",", ".")
-        except ValueError:
-            return self.matricula
+        return "{:,}".format(int(self.matricula)).replace(",", ".")
 
 class Docente(models.Model):
     user = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='docente_profile')
