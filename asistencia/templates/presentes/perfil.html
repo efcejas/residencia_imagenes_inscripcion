@@ -27,12 +27,12 @@
     </div>
     <div class="row">
         <div class="text-center text-md-start col-12 col-md-6">
-            <div class="row flex-md-row flex-column align-items-end mb-md-3">
-                <div class="col-md-auto">
-                    <img src="{% static 'images/icono-usuario.png' %}" class="img-fluid" style="max-height: 100px;" alt="Ícono de usuario">
+            <div class="row flex-row align-items-end justify-content-center justify-content-md-start mb-3">
+                <div class="col-auto">
+                    <img src="{% static 'images/icono-usuario.png' %}" class="img-fluid" style="max-height: 48px;" alt="Ícono de usuario">
                 </div>
-                <div class="col-md p-0">
-                    <h5 class="titulo_registro mb-md-0">Perfil de usuario <strong>{{ user.username }}</strong></h5>
+                <div class="col-auto text-start p-0">
+                    <h5 class="titulo_registro mb-0">Perfil de usuario<br><strong>{{ user.username }}</strong></h5>
                 </div>
             </div>
             <p>A continuación, podés acceder a tu información personal. <br> Es importante que mantengas tus datos actualizados.
