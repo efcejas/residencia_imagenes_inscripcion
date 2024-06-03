@@ -10,8 +10,10 @@ Para obtener la lista completa de configuraciones y sus valores, consulte
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 load_dotenv()
 
@@ -19,7 +21,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Configuración de desarrollo de inicio rápido: no adecuada para producción
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+# Ver https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # ADVERTENCIA DE SEGURIDAD: ¡mantenga en secreto la clave secreta utilizada en la producción!
 SECRET_KEY = 'django-insecure-k1zf!dv103jcip%ibsu@lu-2a)lpn3pcc=y-3fhr)=k5bxhi4&'
@@ -29,9 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'residentes-dm-9833103dde7d.herokuapp.com']
 
-
 # Definición de aplicación
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Mis aplicaciones
-    'asistencia.apps.AsistenciaConfig', # Se poner .apps.AsistenciaConfig para que sepa que es una aplicacion y cumpla con el estandar de Django
+    'asistencia.apps.AsistenciaConfig', # Se pone .apps.AsistenciaConfig para que sepa que es una aplicacion y cumpla con el estandar de Django
 ]
 
 MIDDLEWARE = [
@@ -75,40 +75,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'InscripcionResidenciaImagenes.wsgi.application'
 
-
 # Base de datos
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-import dj_database_url
-
 DATABASES = {
     'default': dj_database_url.config(default='postgres://postgres:efc8563456@localhost:5432/gestion_residentes')
 }
 
 # Registro de modelos personalizados
-
 AUTH_USER_MODEL = 'asistencia.Usuario'
 
 # Redirección de URLs inicio
-
 LOGIN_REDIRECT_URL = 'home'
 
 # Validación de contraseña
-
-# Restablecer contraseña
-
-import os
-
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')  # El backend de correo electrónico que Django debe usar para enviar correos electrónicos.
-EMAIL_HOST = os.getenv('EMAIL_HOST')  # El host del servidor de correo electrónico.
-EMAIL_PORT = os.getenv('EMAIL_PORT')  # El puerto que se debe usar para conectar con el servidor de correo electrónico.
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == 'True'  # Si se debe usar TLS al conectar con el servidor de correo electrónico.
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # El nombre de usuario para usar al conectar con el servidor de correo electrónico.
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # La contraseña para usar al conectar con el servidor de correo electrónico.
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')  # La dirección de correo electrónico que se debe usar como remitente por defecto cuando Django envía correos electrónicos.
-
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -124,30 +102,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Configuración de correo electrónico
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 
 # Internacionalización
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'es-ar'
-
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
 # Archivos estáticos (CSS, JavaScript, Imágenes)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-import os
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-
-# Configuración existente
 STATIC_URL = '/static/'
-
-# Nueva configuración
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'asistencia', 'static'),
@@ -155,6 +126,4 @@ STATICFILES_DIRS = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Tipo de campo de clave principal predeterminado
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
