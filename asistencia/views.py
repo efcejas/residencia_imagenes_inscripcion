@@ -162,9 +162,8 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
                         request.user.first_name)
                     return render(request, 'presentes/registro_asistencia.html', {'form': form, 'error_message': error_message, 'error_url': reverse('asistencia:asistencias_registradas')})
 
-                hora_inicio_entrada = ahora.replace(
-                    hour=6, minute=30, second=0)
-                hora_fin_entrada = ahora.replace(hour=7, minute=5, second=0)
+                hora_inicio_entrada = ahora.replace(hour=6, minute=30, second=0)
+                hora_fin_entrada = ahora.replace(hour=7, minute=0, second=0)
                 hora_inicio_clase = ahora.replace(hour=7, minute=0, second=0)
                 hora_fin_clase = ahora.replace(hour=8, minute=0, second=0)
 
