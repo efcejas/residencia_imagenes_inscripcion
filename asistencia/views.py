@@ -154,11 +154,20 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
                 longitud = form.cleaned_data.get('longitud')
 
                 # Coordenadas de la sede pichincha de Investigaciones Médicas.
-                latitud_permitida = -34.61068
-                longitud_permitida = -58.39927
+                latitud_permitida1 = -34.61068
+                longitud_permitida1 = -58.39927
+
+                # Coordenadas de la sede Junín de Diagnóstico Médico.
+                latitud_permitida2 = -34.59685  # Reemplaza estos valores con las coordenadas reales
+                longitud_permitida2 = -58.39732  # Reemplaza estos valores con las coordenadas reales
+
                 rango_permitido = 0.0005
-                if not (latitud_permitida - rango_permitido <= latitud <= latitud_permitida + rango_permitido and
-                        longitud_permitida - rango_permitido <= longitud <= longitud_permitida + rango_permitido):
+
+                # Verificar si el usuario está dentro del rango permitido de alguna de las ubicaciones permitidas
+                if not ((latitud_permitida1 - rango_permitido <= latitud <= latitud_permitida1 + rango_permitido and
+                        longitud_permitida1 - rango_permitido <= longitud <= longitud_permitida1 + rango_permitido) or
+                        (latitud_permitida2 - rango_permitido <= latitud <= latitud_permitida2 + rango_permitido and
+                        longitud_permitida2 - rango_permitido <= longitud <= longitud_permitida2 + rango_permitido)):
                     error_message = '¡{}, debes estar dentro del rango permitido para registrar tu asistencia!'.format(
                         request.user.first_name)
                     return render(request, 'presentes/registro_asistencia.html', {'form': form, 'error_message': error_message, 'error_url': reverse('asistencia:asistencias_registradas')})
