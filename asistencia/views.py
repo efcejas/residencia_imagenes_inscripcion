@@ -12,10 +12,11 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from datetime import datetime
 
 # Librerías de terceros
 import qrcode
-from django.db.models import Q  # Para hacer consultas más complejas
+from django.db.models import Q, Max # Para hacer consultas más complejas
 
 # Local imports
 from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo,
@@ -218,15 +219,48 @@ class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
 
 # Vista para mostrar los registros de asistencia de un residente o de todos los residentes
 
-class RegistroAsistenciaListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+class RegistroAsistenciaFiltradoListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = RegistroAsistencia
     template_name = 'presentes/lista_control_asistencia.html'
     context_object_name = 'control_asistencia'
 
     def get_queryset(self):
-        return RegistroAsistencia.objects.annotate(
-            mes=TruncMonth('fecha')
-        ).order_by('-mes', '-fecha', '-hora')
+        # Obtiene el queryset base
+        queryset = RegistroAsistencia.objects.all()
+
+        # Filtra por día si se proporciona el parámetro 'dia'
+        dia = self.request.GET.get('dia')
+        if dia:
+            queryset = queryset.filter(fecha=dia)
+        else:
+            # Si no se proporciona un parámetro 'dia', muestra los registros del día más reciente
+            fecha_mas_reciente = queryset.aggregate(Max('fecha'))['fecha__max']
+            if fecha_mas_reciente:
+                queryset = queryset.filter(fecha=fecha_mas_reciente)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Obtiene el queryset base
+        queryset = RegistroAsistencia.objects.all()
+
+        # Filtra por día si se proporciona el parámetro 'dia'
+        dia = self.request.GET.get('dia')
+        if dia:
+            dia = datetime.strptime(dia, "%Y-%m-%d").date()  # Convierte el string a fecha
+            queryset = queryset.filter(fecha=dia)
+        else:
+            # Si no se proporciona un parámetro 'dia', muestra los registros del día más reciente
+            fecha_mas_reciente = queryset.aggregate(Max('fecha'))['fecha__max']
+            if fecha_mas_reciente:
+                queryset = queryset.filter(fecha=fecha_mas_reciente)
+                dia = fecha_mas_reciente  # Usa la fecha más reciente
+
+        context['control_asistencia'] = queryset
+        context['dia'] = dia  # Añade la fecha al contexto
+        return context
 
     def test_func(self):
         return hasattr(self.request.user, 'docente_profile') or hasattr(self.request.user, 'administrativo_profile') or self.request.user.is_superuser
