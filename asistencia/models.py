@@ -108,6 +108,32 @@ class RegistroAsistencia(models.Model):
 
 # Modelos relacionados con la gestión de grupos 
 
+class GruposResidentes(models.Model):
+    OPCIONES_RESIDENCIAS = [
+        ('DM', 'Diagnóstico Médico'),
+        ('IM', 'Investigaciones Médicas'),
+        ('FV', 'Fundación Favaloro'),
+        ('US', 'Universidad del Salvador'),
+    ]
+
+    OPCIONES_AÑO = [
+        ('R1', 'Primer año'),
+        ('R2', 'Segundo año'),
+        ('R3', 'Tercer año'),
+        ('R4', 'Cuarto año'),
+    ]
+       
+    residente = models.ForeignKey(Residente, on_delete=models.CASCADE)
+    residencia = models.CharField('Residencia', max_length=20, choices=OPCIONES_RESIDENCIAS)
+    año = models.CharField('Año', max_length=20, choices=OPCIONES_AÑO)
+
+    class Meta:
+        verbose_name = 'Residentes por año'
+        verbose_name_plural = 'Grupos de residentes por año'
+
+    def __str__(self):
+        return f'{self.residente} - {self.residencia} - {self.año}'
+        
 # Otros modelos a organizar. 
 
 class Sedes(models.Model):
