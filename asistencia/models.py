@@ -128,8 +128,8 @@ class GruposResidentes(models.Model):
     año = models.CharField('Año', max_length=20, choices=OPCIONES_AÑO)
 
     class Meta:
-        verbose_name = 'Residentes por año'
-        verbose_name_plural = 'Grupos de residentes por año'
+        verbose_name = 'Residentes'
+        verbose_name_plural = 'Residentes por año y residencia'
 
     def __str__(self):
         return f'{self.residente} - {self.residencia} - {self.año}'
