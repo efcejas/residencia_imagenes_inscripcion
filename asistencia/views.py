@@ -210,12 +210,17 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
 
         # Si el usuario no tiene un perfil de residente asociado, maneja este caso según sea necesario
         else:
-            error_message = 'Para poder marcar tu asistencia, necesitas tener un perfil de residente. Por favor, contacta al administrador para que te ayude a crear uno.'
+            error_message = 'Para acceder a esta funcionalidad, primero debes tener un perfil de residente asociado. Comunícate con el administrador del sistema.'
             request.session['error_message'] = error_message
             return redirect('asistencia:error_sin_perfil_residente')
 
 class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
     template_name = 'presentes/lista_asistencias_registradas.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not hasattr(request.user, 'residente_profile'):
+            return redirect('asistencia:error_sin_perfil_residente')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
