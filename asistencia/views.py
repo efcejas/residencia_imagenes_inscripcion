@@ -212,7 +212,7 @@ class RegistroAsistenciaView(LoginRequiredMixin, View):
         else:
             error_message = 'Para poder marcar tu asistencia, necesitas tener un perfil de residente. Por favor, contacta al administrador para que te ayude a crear uno.'
             request.session['error_message'] = error_message
-            return redirect('error_sin_perfil_residente')
+            return redirect('asistencia:error_sin_perfil_residente')
 
 class ListaAsistenciaView(LoginRequiredMixin, TemplateView):
     template_name = 'presentes/lista_asistencias_registradas.html'
