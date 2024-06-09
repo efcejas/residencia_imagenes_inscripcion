@@ -67,7 +67,7 @@ class SedesAdmin(admin.ModelAdmin):
 
 class GruposResidentesAdmin(admin.ModelAdmin):
     list_display = ('residente', 'residencia', 'año')  # Los campos que quieres mostrar en la lista
-    search_fields = ('residente__nombre', 'residencia', 'año')  # Los campos por los que quieres buscar
+    search_fields = ('residente', 'residencia', 'año')  # Los campos por los que quieres buscar
     list_filter = ('residencia', 'año')  # Los campos por los que quieres filtrar
 
 admin.site.register(Usuario, UsuarioAdmin)
