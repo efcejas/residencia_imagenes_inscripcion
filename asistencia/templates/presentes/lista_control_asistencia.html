@@ -9,12 +9,6 @@
         <p class="fw-normal lh-sm"><small>Aquí se gestionará el seguimiento de las asistencias de los residentes.</small></p>
     </div>
     <div class="container-fluid text-end col-12 col-md-8">
-        {% if dia %}
-        <div class="d-flex justify-content-center justify-content-md-end">
-            <h6 class="text-center text-md-start fs-5 fs-md-3">Asistencias registradas del día {{ dia|date:"d/m/Y" }}
-            </h6>
-        </div>
-        {% endif %}
         <form method="GET" class="d-flex align-items-end justify-content-center justify-content-md-end">
             <label for="dia" class="me-2 align-self-center">Seleccionar</label>
             <div class="form-group me-2">
@@ -22,6 +16,12 @@
             </div>
             <button type="submit" class="btn btn-primary">Filtrar</button>
         </form>
+        {% if dia %}
+        <div class="d-flex justify-content-center justify-content-md-end">
+            <h6 class="text-center text-md-start fs-5 fs-md-3">Asistencias registradas del día {{ dia|date:"d/m/Y" }}
+            </h6>
+        </div>
+        {% endif %}
     </div>
 </div>
 
