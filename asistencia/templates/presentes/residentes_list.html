@@ -27,6 +27,8 @@
                         <tr class="table-secondary text-center">
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
+                            <th scope="col">Año</th>
+                            <th scope="col">Residencia</th>
                             <th scope="col">Email</th>
                             <th scope="col">DNI</th>
                             <th scope="col">Fecha de nacimiento</th>
@@ -35,11 +37,21 @@
                             <th scope="col">Fecha de ingreso</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         {% for residente in residentes %}
                         <tr>
                             <td>{{ residente.user.first_name }}</td>
                             <td>{{ residente.user.last_name }}</td>
+                            <td>
+                                {% if residente.gruposresidentes_set.exists %}
+                                    {{ residente.gruposresidentes_set.first.año }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if residente.gruposresidentes_set.exists %}
+                                    {{ residente.gruposresidentes_set.first.residencia }}
+                                {% endif %}
+                            </td>
                             <td>{{ residente.user.email }}</td>
                             <td>{{ residente.dni }}</td>
                             <td>{{ residente.fecha_nacimiento }}</td>
@@ -48,7 +60,7 @@
                             <td>{{ residente.fecha_de_ingreso }}</td>
                         </tr>
                         {% endfor %}
-                    </tbody>
+                    </tbody>                    
                 </table>
             </div>
         </div>
