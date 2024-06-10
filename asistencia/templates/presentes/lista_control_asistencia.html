@@ -30,6 +30,7 @@
         <thead class="table-secondary">
             <tr>
                 <th scope="col">Residente</th>
+                <th scope="col">Año</th>
                 <th scope="col">Hora</th>
                 <th scope="col">Estado</th>
             </tr>
@@ -38,6 +39,7 @@
             {% for registro in control_asistencia %}
             <tr class="{% if registro.llegada_tarde %}table-danger{% else %}table-success{% endif %}">
                 <td class="p-1">{{ registro.residente }}</td>
+                <td class="p-1">{{ registro.residente.gruposresidentes_set.first.año }}</td>
                 <td class="p-1">{{ registro.hora|time:"H:i" }}</td>
                 <td class="p-1">{% if registro.llegada_tarde %}Llegada tarde{% else %}A tiempo{% endif %}</td>
             </tr>
