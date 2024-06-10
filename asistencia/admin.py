@@ -69,6 +69,7 @@ class GruposResidentesAdmin(admin.ModelAdmin):
     list_display = ('residente', 'residencia', 'año')  # Los campos que quieres mostrar en la lista
     search_fields = ('residente__user__first_name', 'residente__user__last_name', 'residencia', 'año')  # Los campos por los que quieres buscar
     list_filter = ('residencia', 'año')  # Los campos por los que quieres filtrar
+    ordering = ('residente__user__first_name', 'residente__user__last_name')  # El orden en que quieres mostrar los registros
 
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Docente, DocenteAdmin)
