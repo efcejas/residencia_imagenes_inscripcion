@@ -168,7 +168,7 @@ class Aulas(models.Model):
     ]
 
     sede = models.ForeignKey(Sedes, on_delete=models.CASCADE)
-    nombre_aula = models.CharField('Nombre del aula', max_length=50)
+    nombre_aula = models.CharField('Nombre del aula', max_length=50, choices=OPCION_AULA)
     latitud = models.FloatField('Latitud')
     longitud = models.FloatField('Longitud')
 
