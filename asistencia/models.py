@@ -159,7 +159,7 @@ class Sedes(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.nombre_sede
+        return self.nombre_sede + ' - ' + self.direccion
 
 class Aulas(models.Model):
     OPCION_AULA = [
