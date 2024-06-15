@@ -72,8 +72,16 @@ class GruposResidentesAdmin(admin.ModelAdmin):
     ordering = ('residente__user__first_name', 'residente__user__last_name')  # El orden en que quieres mostrar los registros
 
 class AulasAdmin(admin.ModelAdmin):
-    list_display = ('nombre_aula', 'sede')
+    list_display = ('nombre_aula', 'get_nombre_sede', 'get_direccion_sede')
     ordering = ('nombre_aula',)
+
+    def get_nombre_sede(self, obj):
+        return obj.sede.nombre_sede  # Retorna el nombre de la sede
+    get_nombre_sede.short_description = 'Sede'  # Etiqueta para la columna
+
+    def get_direccion_sede(self, obj):
+        return obj.sede.direccion  # Retorna la direccion de la sede
+    get_direccion_sede.short_description = 'Dirección'  # Etiqueta para la columna
 
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Docente, DocenteAdmin)
