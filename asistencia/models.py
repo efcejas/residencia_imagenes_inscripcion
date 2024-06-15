@@ -160,3 +160,21 @@ class Sedes(models.Model):
 
     def __str__(self):
         return self.nombre_sede
+
+class Aulas(models.Model):
+    OPCION_AULA = [
+        ('DM', 'Diagnóstico Médico'),
+        ('IM', 'Investigaciones Médicas'),
+    ]
+
+    sede = models.ForeignKey(Sedes, on_delete=models.CASCADE)
+    nombre_aula = models.CharField('Nombre del aula', max_length=50)
+    latitud = models.FloatField('Latitud')
+    longitud = models.FloatField('Longitud')
+
+    class Meta:
+        verbose_name = 'Aula'
+        verbose_name_plural = 'Aulas'
+    
+    def __str__(self):
+        return f'{self.nombre_aula} - {self.sede}'

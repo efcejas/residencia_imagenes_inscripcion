@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes
+from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas
 
 class UsuarioAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
@@ -71,6 +71,10 @@ class GruposResidentesAdmin(admin.ModelAdmin):
     list_filter = ('residencia', 'año')  # Los campos por los que quieres filtrar
     ordering = ('residente__user__first_name', 'residente__user__last_name')  # El orden en que quieres mostrar los registros
 
+class AulasAdmin(admin.ModelAdmin):
+    list_display = ('nombre_aula', 'sede')
+    ordering = ('nombre_aula',)
+
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Docente, DocenteAdmin)
 admin.site.register(Residente, ResidenteAdmin)
@@ -78,6 +82,7 @@ admin.site.register(Administrativo, AdministrativoAdmin)
 admin.site.register(RegistroAsistencia, RegistroAsistenciaAdmin)
 admin.site.register(Sedes, SedesAdmin)
 admin.site.register(GruposResidentes, GruposResidentesAdmin)
+admin.site.register(Aulas, AulasAdmin)
 
 
 
