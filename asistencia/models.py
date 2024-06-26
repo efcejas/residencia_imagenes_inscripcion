@@ -163,8 +163,7 @@ class EvaluacionPeriodica(models.Model):
         verbose_name_plural = 'Evaluaciones periódicas'
     
     def __str__(self):
-        grupo_residente = GruposResidentes.objects.get(residente=self.residente)
-        return f'{self.residente} - Año: {grupo_residente.año} - Aspecto positivo: {self.aspecto_positivo} - Aspecto negativo: {self.aspecto_negativo} - Nota: {self.nota} - Fecha de evaluación: {self.fecha} - evaluador: {self.evaluador}'
+        return f'{self.residente} - Aspecto positivo: {self.aspecto_positivo} - Aspecto negativo: {self.aspecto_negativo} - Nota: {self.nota} - Fecha de evaluación: {self.fecha} - evaluador: {self.evaluador}'
 
 # Otros modelos a organizar. 
 
