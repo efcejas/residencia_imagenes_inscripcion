@@ -123,9 +123,9 @@ class GruposResidentes(models.Model):
         ('R4', 'Cuarto año'),
     ]
        
-    residente = models.ForeignKey(Residente, on_delete=models.CASCADE)
-    residencia = models.CharField('Residencia', max_length=20, choices=OPCIONES_RESIDENCIAS)
-    año = models.CharField('Año', max_length=20, choices=OPCIONES_AÑO)
+    residente = models.ForeignKey(Residente, on_delete=models.CASCADE, help_text='Seleccione al residente que quiere asignar a un grupo')
+    residencia = models.CharField('Residencia', max_length=20, choices=OPCIONES_RESIDENCIAS, help_text='Seleccione la residencia a la que pertenece el residente')
+    año = models.CharField('Año', max_length=20, choices=OPCIONES_AÑO, help_text='Seleccione el año en el que se encuentra el residente')
 
     class Meta:
         verbose_name = 'Residentes'
@@ -134,6 +134,38 @@ class GruposResidentes(models.Model):
     def __str__(self):
         return f'{self.residente} - {self.residencia} - {self.año}'
         
+# Modelos relacionados con la evaluación de los residentes
+
+class EvaluacionPeriodica(models.Model):
+    OPCION_NOTA = [
+        (0, '0'),
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+        (6, '6'),
+        (7, '7'),
+        (8, '8'),
+        (9, '9'),
+        (10, '10'),
+    ]
+
+    residente = models.ForeignKey(Residente, on_delete=models.CASCADE, verbose_name='Residente')
+    evaluador = models.ForeignKey(Usuario, on_delete=models.CASCADE, verbose_name='Evaluador')
+    aspecto_positivo = models.TextField('Aspecto positivo', blank=True, max_length=600)
+    aspecto_negativo = models.TextField('Aspecto negativo', blank=True, max_length=600)
+    nota = models.IntegerField('Nota', choices=OPCION_NOTA)
+    fecha = models.DateField('Fecha', default=timezone.now)
+
+    class Meta:
+        verbose_name = 'Evaluación periódica'
+        verbose_name_plural = 'Evaluaciones periódicas'
+    
+    def __str__(self):
+        grupo_residente = GruposResidentes.objects.get(residente=self.residente)
+        return f'{self.residente} - Año: {grupo_residente.año} - Aspecto positivo: {self.aspecto_positivo} - Aspecto negativo: {self.aspecto_negativo} - Nota: {self.nota} - Fecha de evaluación: {self.fecha} - evaluador: {self.evaluador}'
+
 # Otros modelos a organizar. 
 
 class Sedes(models.Model):
@@ -178,3 +210,56 @@ class Aulas(models.Model):
     
     def __str__(self):
         return f'{self.nombre_aula} - {self.sede} - {self.sede.direccion}'
+
+""" class CalendarioActividadesAcademicas(models.Model):
+    OPCIONES_ACTIVIDADES = [
+        ('Ateneo', 'Ateneo')
+        ('Clase', 'Clase'),
+        ('Examen', 'Examen'),
+        ('Entrega', 'Entrega de trabajos'),
+        ('Otro', 'Otro'),
+    ]
+
+    OPCIONES_DIAS = [
+        ('Lunes', 'Lunes'),
+        ('Martes', 'Martes'),
+        ('Miércoles', 'Miércoles'),
+        ('Jueves', 'Jueves'),
+        ('Viernes', 'Viernes'),
+        ('Sábado', 'Sábado'),
+        ('Domingo', 'Domingo'),
+    ]
+
+    OPCIONES_HORAS = [
+        ('07:00', '07:00'),
+        ('08:00', '08:00'),
+        ('09:00', '09:00'),
+        ('10:00', '10:00'),
+        ('11:00', '11:00'),
+        ('12:00', '12:00'),
+        ('13:00', '13:00'),
+        ('14:00', '14:00'),
+        ('15:00', '15:00'),
+        ('16:00', '16:00'),
+        ('17:00', '17:00'),
+        ('18:00', '18:00'),
+        ('19:00', '19:00'),
+        ('20:00', '20:00'),
+        ('21:00', '21:00'),
+        ('22:00', '22:00'),
+    ]
+
+    aula = models.ForeignKey(Aulas, on_delete=models.CASCADE)
+    actividad = models.CharField('Actividad', max_length=20, choices=OPCIONES_ACTIVIDADES)
+    dia = models.CharField('Día', max_length=20, choices=OPCIONES_DIAS)
+    hora = models.CharField('Hora', max_length=20, choices=OPCIONES_HORAS)
+    fecha = models.DateField('Fecha', default=timezone.now)
+    descripcion = models.TextField('Descripción', max_length=200)
+
+    class Meta:
+        verbose_name = 'Actividad académica'
+        verbose_name_plural = 'Calendario de actividades académicas'
+
+    def __str__(self):
+        return f'{self.actividad} - {self.dia} - {self.hora} - {self.fecha}'
+ """
