@@ -11,7 +11,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, TemplateView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from datetime import datetime
 
 # Librerías de terceros
@@ -20,8 +20,8 @@ from django.db.models import Q, Max # Para hacer consultas más complejas
 
 # Local imports
 from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo,
-                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm)
-from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo
+                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm)
+from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo, GruposResidentes, EvaluacionPeriodica
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
@@ -281,6 +281,31 @@ class RegistroAsistenciaFiltradoListView(LoginRequiredMixin, UserPassesTestMixin
 
     def handle_no_permission(self):
         # redirige a la página de inicio o a una página de error si el usuario no tiene permiso
+        return redirect('home')
+
+# Vistas relacionadas con la evaluación periódica
+
+class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
+    model = EvaluacionPeriodica
+    form_class = EvaluacionPeriodicaForm
+    template_name = 'presentes/evaluacion_periodica_form.html'
+    success_url = reverse_lazy('home')
+    success_message = '¡La evaluación periódica se ha creado exitosamente!'
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if self.request.method == 'POST':
+            return render(self.request, self.template_name, {'form': form})
+        return response
+
+    def form_valid(self, form):
+        form.instance.evaluador = self.request.user  # Asigna el usuario actual como evaluador
+        return super().form_valid(form)
+
+    def test_func(self):
+        return hasattr(self.request.user, 'docente_profile') or self.request.user.is_superuser
+
+    def handle_no_permission(self):
         return redirect('home')
 
 # Vistas relacionadas con la gestión de usuarios residentes
