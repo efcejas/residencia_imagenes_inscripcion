@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas
+from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas, EvaluacionPeriodica
 
 class UsuarioAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
@@ -83,6 +83,10 @@ class AulasAdmin(admin.ModelAdmin):
         return obj.sede.direccion  # Retorna la direccion de la sede
     get_direccion_sede.short_description = 'Dirección'  # Etiqueta para la columna
 
+class EvaluacionPeriodicaAdmin(admin.ModelAdmin):
+    list_display = ('residente', 'aspecto_positivo', 'aspecto_negativo', 'nota', 'fecha', 'evaluador')
+    ordering = ('residente', 'fecha', 'evaluador',)
+
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Docente, DocenteAdmin)
 admin.site.register(Residente, ResidenteAdmin)
@@ -91,6 +95,7 @@ admin.site.register(RegistroAsistencia, RegistroAsistenciaAdmin)
 admin.site.register(Sedes, SedesAdmin)
 admin.site.register(GruposResidentes, GruposResidentesAdmin)
 admin.site.register(Aulas, AulasAdmin)
+admin.site.register(EvaluacionPeriodica, EvaluacionPeriodicaAdmin)
 
 
 

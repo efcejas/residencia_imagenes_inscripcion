@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Usuario, Residente, Docente, Administrativo, RegistroAsistencia, Sedes
+from .models import Usuario, Residente, Docente, Administrativo, RegistroAsistencia, Sedes, EvaluacionPeriodica
 
 class RegistroFormUsuario(UserCreationForm):
     password1 = forms.CharField(
@@ -41,11 +41,37 @@ class RegistroFormAdministrativo(forms.ModelForm):
         model = Administrativo
         fields = ['telefono']
 
+# Formularios relacionados con la asistencia
+
 class RegistroAsistenciaForm(forms.ModelForm):
     class Meta:
         model = RegistroAsistencia
         fields = ('latitud', 'longitud')
+
+# Formularios relacionados con la evaluación periódica
+
+class EvaluacionPeriodicaForm(forms.ModelForm):
+    class Meta:
+        model = EvaluacionPeriodica
+        fields = ['residente', 'aspecto_positivo', 'aspecto_negativo', 'nota']
+        labels = {
+            'aspecto_positivo': 'Aspecto positivo',
+            'aspecto_negativo': 'Aspecto negativo',
+            'nota': 'Nota',
+        }
+        exclude = ['evaluador', 'fecha']
+        help_texts = {
+            'aspecto_positivo': 'Ingrese un aspecto positivo del residente.',
+            'aspecto_negativo': 'Ingrese un aspecto negativo del residente.',
+            'nota': 'Ingrese una nota del 0 al 10.',
+        }
+        widgets = {
+            'aspecto_positivo': forms.Textarea(attrs={'rows': 3}),
+            'aspecto_negativo': forms.Textarea(attrs={'rows': 3}),
+        }
         
+# Formularios relacionados con la gestión de residentes
+
 # Formularios relacionados con herramientas útiles para los residentes
 
 class WashoutSuprarrenalForm(forms.Form):
