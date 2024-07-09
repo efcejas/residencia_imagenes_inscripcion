@@ -5,12 +5,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import CharField, Value as V
 from django.db.models.functions import Concat, TruncMonth
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, QueryDict, JsonResponse
 from django.shortcuts import get_list_or_404, redirect, render, reverse
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, TemplateView, CreateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from datetime import datetime
 
@@ -20,7 +20,7 @@ from django.db.models import Q, Max # Para hacer consultas más complejas
 
 # Local imports
 from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo,
-                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm)
+                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm, SeleccionarAnoForm)
 from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo, GruposResidentes, EvaluacionPeriodica
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
@@ -290,20 +290,88 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
     form_class = EvaluacionPeriodicaForm
     template_name = 'presentes/evaluacion_periodica_form.html'
     success_url = reverse_lazy('home')
-    success_message = '¡La evaluación periódica se ha creado exitosamente!'
 
-    def form_invalid(self, form):
-        response = super().form_invalid(form)
-        if self.request.method == 'POST':
-            return render(self.request, self.template_name, {'form': form})
-        return response
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['seleccionar_ano_form'] = SeleccionarAnoForm(self.request.GET or None)
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        año_seleccionado = self.request.GET.get('año')
+        if año_seleccionado:
+            kwargs['initial'] = kwargs.get('initial', {})
+            kwargs['initial']['año'] = año_seleccionado
+        return kwargs
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        año_seleccionado = self.request.GET.get('año')
+        evaluados_ids = EvaluacionPeriodica.objects.filter(
+            evaluador=self.request.user,
+            fecha=timezone.now().date()
+        ).values_list('residente_id', flat=True)
+        
+        user_profile = getattr(self.request.user, 'docente_profile', None)
+        user_year = None
+        if user_profile is None and hasattr(self.request.user, 'resident_profile'):
+            user_year = self.request.user.resident_profile.gruposresidentes_set.first().año
+        
+        if año_seleccionado:
+            queryset = Residente.objects.filter(
+                gruposresidentes__año=año_seleccionado,
+                gruposresidentes__residencia='DM'
+            ).exclude(id__in=evaluados_ids).distinct()
+        else:
+            queryset = Residente.objects.filter(
+                gruposresidentes__residencia='DM'
+            ).exclude(id__in=evaluados_ids).distinct()
+
+        # Filtrar residentes basados en el perfil del usuario logeado
+        if user_profile:
+            # Docente o superusuario puede evaluar a todos
+            pass
+        elif user_year in [1, 2]:
+            # Residentes de primero y segundo año pueden evaluar al año siguiente
+            queryset = queryset.filter(gruposresidentes__año=user_year + 1)
+        elif user_year in [3, 4]:
+            # Residentes de tercero y cuarto año pueden evaluar a su propio año y al año anterior
+            queryset = queryset.filter(gruposresidentes__año__in=[user_year, user_year - 1])
+
+        if not queryset.exists():
+            form.fields['residente'].queryset = Residente.objects.none()
+            messages.warning(self.request, 'No hay residentes disponibles para evaluar según su perfil.')
+        else:
+            form.fields['residente'].queryset = queryset
+
+        return form
 
     def form_valid(self, form):
-        form.instance.evaluador = self.request.user  # Asigna el usuario actual como evaluador
-        return super().form_valid(form)
+        form.instance.evaluador = self.request.user
+        response = super().form_valid(form)
+
+        # Crear mensaje de éxito específico para el residente evaluado
+        messages.success(self.request, f'{form.instance.residente} ha sido evaluado exitosamente.')
+
+        if "continuar" in self.request.POST:
+            año_seleccionado = self.request.GET.get('año', '')
+            return redirect(f'{self.request.path}?año={año_seleccionado}')
+
+        return response
 
     def test_func(self):
-        return hasattr(self.request.user, 'docente_profile') or self.request.user.is_superuser
+        user = self.request.user
+        if user.is_superuser or hasattr(user, 'docente_profile'):
+            return True
+        if hasattr(user, 'resident_profile'):
+            user_year = user.resident_profile.gruposresidentes_set.first().año
+            # Residentes de primer y segundo año pueden evaluar al año siguiente
+            if user_year in [1, 2]:
+                return True
+            # Residentes de tercer y cuarto año pueden evaluar a su propio año y al año anterior
+            if user_year in [3, 4]:
+                return True
+        return False
 
     def handle_no_permission(self):
         return redirect('home')

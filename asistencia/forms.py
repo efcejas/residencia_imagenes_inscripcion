@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Usuario, Residente, Docente, Administrativo, RegistroAsistencia, Sedes, EvaluacionPeriodica
+from .models import Usuario, Residente, Docente, Administrativo, RegistroAsistencia, Sedes, EvaluacionPeriodica, GruposResidentes
 
 class RegistroFormUsuario(UserCreationForm):
     password1 = forms.CharField(
@@ -50,6 +50,10 @@ class RegistroAsistenciaForm(forms.ModelForm):
 
 # Formularios relacionados con la evaluación periódica
 
+class SeleccionarAnoForm(forms.Form):
+    OPCIONES_AÑO_CON_DEFECTO = [('', 'Seleccione un año')] + GruposResidentes.OPCIONES_AÑO
+    año = forms.ChoiceField(choices=OPCIONES_AÑO_CON_DEFECTO, required=False, label='Año')
+
 class EvaluacionPeriodicaForm(forms.ModelForm):
     class Meta:
         model = EvaluacionPeriodica
@@ -59,18 +63,19 @@ class EvaluacionPeriodicaForm(forms.ModelForm):
             'aspecto_negativo': 'Aspecto negativo',
             'nota': 'Nota',
         }
-        exclude = ['evaluador', 'fecha']
-        help_texts = {
-            'aspecto_positivo': 'Ingrese un aspecto positivo del residente.',
-            'aspecto_negativo': 'Ingrese un aspecto negativo del residente.',
-            'nota': 'Ingrese una nota del 0 al 10.',
-        }
         widgets = {
             'aspecto_positivo': forms.Textarea(attrs={'rows': 3}),
             'aspecto_negativo': forms.Textarea(attrs={'rows': 3}),
         }
-        
+
 # Formularios relacionados con la gestión de residentes
+
+class GruposResidentesForm(forms.ModelForm):
+    año = forms.ChoiceField(choices=GruposResidentes.OPCIONES_AÑO, label='Año', widget=forms.Select())
+
+    class Meta:
+        model = GruposResidentes
+        fields = ['residente', 'residencia', 'año']
 
 # Formularios relacionados con herramientas útiles para los residentes
 

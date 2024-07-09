@@ -161,6 +161,7 @@ class EvaluacionPeriodica(models.Model):
     class Meta:
         verbose_name = 'Evaluación periódica'
         verbose_name_plural = 'Evaluaciones periódicas'
+        unique_together = ['residente', 'evaluador', 'fecha']
     
     def __str__(self):
         return f'{self.residente} - Aspecto positivo: {self.aspecto_positivo} - Aspecto negativo: {self.aspecto_negativo} - Nota: {self.nota} - Fecha de evaluación: {self.fecha} - evaluador: {self.evaluador}'
