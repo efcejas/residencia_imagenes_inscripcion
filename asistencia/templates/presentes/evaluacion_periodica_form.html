@@ -1,9 +1,25 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
 {% block content %}
-<h1>Evaluación periódica de residentes</h1>
-<form method="post">
+  <h2>Evaluación Periódica</h2>
+
+  <form method="get">
+    {{ seleccionar_ano_form.as_p }}
+    <button type="submit">Filtrar</button>
+  </form>
+
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Guardar</button>
-</form>
+    <button type="submit" name="continuar">Evaluar y continuar</button>
+    <button type="submit" name="finalizar">Evaluar y finalizar</button>
+  </form>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}
