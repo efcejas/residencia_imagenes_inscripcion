@@ -331,12 +331,12 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
         if user_profile:
             # Docente o superusuario puede evaluar a todos
             pass
-        elif user_year in [1, 2]:
-            # Residentes de primero y segundo año pueden evaluar al año siguiente
-            queryset = queryset.filter(gruposresidentes__año=user_year + 1)
-        elif user_year in [3, 4]:
-            # Residentes de tercero y cuarto año pueden evaluar a su propio año y al año anterior
-            queryset = queryset.filter(gruposresidentes__año__in=[user_year, user_year - 1])
+        elif user_year == 1:
+            # Residentes de primer año pueden evaluar a residentes de segundo año
+            queryset = queryset.filter(gruposresidentes__año=2)
+        elif user_year == 2:
+            # Residentes de segundo año pueden evaluar a residentes de primer año
+            queryset = queryset.filter(gruposresidentes__año=1)
 
         if not queryset.exists():
             form.fields['residente'].queryset = Residente.objects.none()
@@ -365,11 +365,8 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
             return True
         if hasattr(user, 'resident_profile'):
             user_year = user.resident_profile.gruposresidentes_set.first().año
-            # Residentes de primer y segundo año pueden evaluar al año siguiente
+            # Residentes de primer y segundo año pueden acceder
             if user_year in [1, 2]:
-                return True
-            # Residentes de tercer y cuarto año pueden evaluar a su propio año y al año anterior
-            if user_year in [3, 4]:
                 return True
         return False
 
