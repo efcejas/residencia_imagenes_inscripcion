@@ -311,12 +311,14 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
             evaluador=self.request.user,
             fecha=timezone.now().date()
         ).values_list('residente_id', flat=True)
-        
+
         user_profile = getattr(self.request.user, 'docente_profile', None)
         user_year = None
-        if user_profile is None and hasattr(self.request.user, 'resident_profile'):
-            user_year = self.request.user.resident_profile.gruposresidentes_set.first().año
-        
+        if user_profile is None and hasattr(self.request.user, 'residente_profile'):
+            resident_profile = self.request.user.residente_profile
+            if resident_profile.gruposresidentes_set.exists():
+                user_year = resident_profile.gruposresidentes_set.first().año
+
         if año_seleccionado:
             queryset = Residente.objects.filter(
                 gruposresidentes__año=año_seleccionado,
@@ -327,16 +329,16 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
                 gruposresidentes__residencia='DM'
             ).exclude(id__in=evaluados_ids).distinct()
 
-        # Filtrar residentes basados en el perfil del usuario logeado
+        # Filtrar residentes basados en el perfil del usuario logueado
         if user_profile:
             # Docente o superusuario puede evaluar a todos
             pass
-        elif user_year == 1:
+        elif user_year == 'R1':
             # Residentes de primer año pueden evaluar a residentes de segundo año
-            queryset = queryset.filter(gruposresidentes__año=2)
-        elif user_year == 2:
+            queryset = queryset.filter(gruposresidentes__año='R2')
+        elif user_year == 'R2':
             # Residentes de segundo año pueden evaluar a residentes de primer año
-            queryset = queryset.filter(gruposresidentes__año=1)
+            queryset = queryset.filter(gruposresidentes__año='R1')
 
         if not queryset.exists():
             form.fields['residente'].queryset = Residente.objects.none()
@@ -363,11 +365,13 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
         user = self.request.user
         if user.is_superuser or hasattr(user, 'docente_profile'):
             return True
-        if hasattr(user, 'resident_profile'):
-            user_year = user.resident_profile.gruposresidentes_set.first().año
-            # Residentes de primer y segundo año pueden acceder
-            if user_year in [1, 2]:
-                return True
+        if hasattr(user, 'residente_profile'):
+            resident_profile = user.residente_profile
+            if resident_profile.gruposresidentes_set.exists():
+                user_year = resident_profile.gruposresidentes_set.first().año
+                # Residentes de primer y segundo año pueden acceder
+                if user_year in ['R1', 'R2']:
+                    return True
         return False
 
     def handle_no_permission(self):
