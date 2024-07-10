@@ -294,6 +294,13 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['seleccionar_ano_form'] = SeleccionarAnoForm(self.request.GET or None)
+        user = self.request.user
+        user_year = None
+        if hasattr(user, 'residente_profile'):
+            resident_profile = user.residente_profile
+            if resident_profile.gruposresidentes_set.exists():
+                user_year = resident_profile.gruposresidentes_set.first().año
+        context['user_year'] = user_year
         return context
 
     def get_form_kwargs(self):
@@ -307,10 +314,9 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         año_seleccionado = self.request.GET.get('año')
-        evaluados_ids = EvaluacionPeriodica.objects.filter(
-            evaluador=self.request.user,
-            fecha=timezone.now().date()
-        ).values_list('residente_id', flat=True)
+        
+        # Obtener los residentes evaluados de la sesión
+        evaluados_ids = self.request.session.get('evaluados_ids', [])
 
         user_profile = getattr(self.request.user, 'docente_profile', None)
         user_year = None
@@ -340,17 +346,18 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
             # Residentes de segundo año pueden evaluar a residentes de primer año
             queryset = queryset.filter(gruposresidentes__año='R1')
 
-        if not queryset.exists():
-            form.fields['residente'].queryset = Residente.objects.none()
-            messages.warning(self.request, 'No hay residentes disponibles para evaluar según su perfil.')
-        else:
-            form.fields['residente'].queryset = queryset
+        form.fields['residente'].queryset = queryset
 
         return form
 
     def form_valid(self, form):
         form.instance.evaluador = self.request.user
         response = super().form_valid(form)
+
+        # Añadir el residente evaluado a la sesión
+        evaluados_ids = self.request.session.get('evaluados_ids', [])
+        evaluados_ids.append(form.instance.residente.id)
+        self.request.session['evaluados_ids'] = evaluados_ids
 
         # Crear mensaje de éxito específico para el residente evaluado
         messages.success(self.request, f'{form.instance.residente} ha sido evaluado exitosamente.')
@@ -359,6 +366,8 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
             año_seleccionado = self.request.GET.get('año', '')
             return redirect(f'{self.request.path}?año={año_seleccionado}')
 
+        # Limpiar la sesión al finalizar
+        self.request.session['evaluados_ids'] = []
         return response
 
     def test_func(self):
