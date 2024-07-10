@@ -294,13 +294,6 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['seleccionar_ano_form'] = SeleccionarAnoForm(self.request.GET or None)
-        user = self.request.user
-        user_year = None
-        if hasattr(user, 'residente_profile'):
-            resident_profile = user.residente_profile
-            if resident_profile.gruposresidentes_set.exists():
-                user_year = resident_profile.gruposresidentes_set.first().año
-        context['user_year'] = user_year
         return context
 
     def get_form_kwargs(self):
@@ -383,7 +376,6 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
 
     def handle_no_permission(self):
         return redirect('home')
-
 
 # Vistas relacionadas con la gestión de usuarios residentes
 
