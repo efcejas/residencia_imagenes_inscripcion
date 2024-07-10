@@ -283,7 +283,7 @@ class RegistroAsistenciaFiltradoListView(LoginRequiredMixin, UserPassesTestMixin
         # redirige a la página de inicio o a una página de error si el usuario no tiene permiso
         return redirect('home')
 
-# Vistas relacionadas con la evaluación periódica
+# Vistas relacionadas con la evaluación periódica de los residentes
 
 class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = EvaluacionPeriodica
@@ -294,6 +294,12 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['seleccionar_ano_form'] = SeleccionarAnoForm(self.request.GET or None)
+        user = self.request.user
+        if hasattr(user, 'residente_profile'):
+            resident_profile = user.residente_profile
+            if resident_profile.gruposresidentes_set.exists():
+                user_year = resident_profile.gruposresidentes_set.first().año
+                context['user_year'] = user_year
         return context
 
     def get_form_kwargs(self):
