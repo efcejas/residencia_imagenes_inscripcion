@@ -3,12 +3,10 @@
 {% block content %}
   <h2>Evaluación Periódica</h2>
 
-  {% if user_year not in "R1R2" %}
-    <form method="get">
-      {{ seleccionar_ano_form.as_p }}
-      <button type="submit">Filtrar</button>
-    </form>
-  {% endif %}
+  <form method="get">
+    {{ seleccionar_ano_form.as_p }}
+    <button type="submit">Filtrar</button>
+  </form>
 
   <form method="post">
     {% csrf_token %}
