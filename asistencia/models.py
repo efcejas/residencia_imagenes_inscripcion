@@ -168,9 +168,58 @@ class EvaluacionPeriodica(models.Model):
 
 # Modelos relacionados con material de estudio y actividades académicas
 
+from django.db import models
+from django.utils import timezone
+
+class DisertantesClases(models.Model):
+    nombre_disertante = models.CharField('Nombre del disertante', max_length=100)
+    apellido_disertante = models.CharField('Apellido del disertante', max_length=100)
+
+    class Meta:
+        verbose_name = 'Disertante'
+        verbose_name_plural = 'Disertantes'
+
+    def __str__(self):
+        return self.get_full_name()
+
+    def get_full_name(self):
+        return f"{self.nombre_disertante} {self.apellido_disertante}"
+
+class ClasificacionTematica(models.Model):
+    OPCION_SECCIONES = [
+        ('A', 'Abdomen'),
+        ('CV', 'Cardiovascular'),
+        ('MSK', 'Musculoesquelético'),
+        ('N', 'Neuroradiología'),
+        ('O', 'Obstetricia'),
+        ('IP', 'Imágenes pediátricas'),
+        ('UR', 'Uroradiología y genitales masculinos'),
+        ('IM', 'Imágenes mamarias'),
+        ('CC', 'Cabeza y cuello'),
+        ('T', 'Tórax'),
+        ('OR', 'Oncoloradiología'),
+        ('IR', 'Intervencionismo'),
+        ('N', 'Nuclear'),
+        ('GIN', 'Ginecología'),
+        ('OT', 'Otras temáticas'),
+    ]
+
+    seccion = models.CharField('Sección', max_length=20, choices=OPCION_SECCIONES, unique=True, error_messages={'unique': 'Esa sección ya está registrada.'})
+
+    class Meta:
+        verbose_name = 'Clasificación temática'
+        verbose_name_plural = 'Clasificaciones temáticas'
+
+    def __str__(self):
+        return self.get_seccion_display()
+
 class ClasesVideos(models.Model):
     titulo = models.CharField('Título', max_length=100)
+    disertante = models.ForeignKey(DisertantesClases, on_delete=models.CASCADE, related_name='videos')
     vimeo_url = models.URLField('URL de Vimeo', max_length=200)
+    fecha_publicacion = models.DateField('Fecha de publicación', default=timezone.now)
+    descripcion = models.TextField('Descripción', max_length=200)
+    clasificaciones_tematicas = models.ManyToManyField(ClasificacionTematica, related_name='videos')
 
     class Meta:
         verbose_name = 'Clase'
