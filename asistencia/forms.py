@@ -51,8 +51,14 @@ class RegistroAsistenciaForm(forms.ModelForm):
 # Formularios relacionados con la evaluación periódica
 
 class SeleccionarAnoForm(forms.Form):
-    OPCIONES_AÑO_CON_DEFECTO = [('', 'Seleccione un año')] + GruposResidentes.OPCIONES_AÑO
-    año = forms.ChoiceField(choices=OPCIONES_AÑO_CON_DEFECTO, required=False, label='Año')
+    OPCIONES_AÑO_CON_DEFECTO = [('', 'Todos')] + GruposResidentes.OPCIONES_AÑO
+    año = forms.ChoiceField(
+        choices=OPCIONES_AÑO_CON_DEFECTO, 
+        required=False, 
+        label='Año',
+        help_text='Seleccione el año que desea evaluar.',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
 
 class EvaluacionPeriodicaForm(forms.ModelForm):
     class Meta:
@@ -64,8 +70,10 @@ class EvaluacionPeriodicaForm(forms.ModelForm):
             'nota': 'Nota',
         }
         widgets = {
-            'aspecto_positivo': forms.Textarea(attrs={'rows': 3}),
-            'aspecto_negativo': forms.Textarea(attrs={'rows': 3}),
+            'residente': forms.Select(attrs={'class': 'form-select'}),
+            'aspecto_positivo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'aspecto_negativo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'nota': forms.Select(attrs={'class': 'form-select'}),
         }
 
 # Formularios relacionados con la gestión de residentes
