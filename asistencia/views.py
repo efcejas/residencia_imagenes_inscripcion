@@ -21,7 +21,7 @@ from django.db.models import Q, Max # Para hacer consultas más complejas
 # Local imports
 from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo,
                     RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm, SeleccionarAnoForm)
-from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo, GruposResidentes, EvaluacionPeriodica
+from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo, GruposResidentes, EvaluacionPeriodica, ClasesVideos
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
@@ -476,6 +476,13 @@ class SedeDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
+
+# Vistas relacionadas con clases y material académico
+
+class ClasesVideosListView(ListView):
+    model = ClasesVideos
+    template_name = 'presentes/clases_videos_list.html'
+    context_object_name = 'clases_videos'
 
 # Vistas relacionadas con herramientas útiles para los residentes
 
