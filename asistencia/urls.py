@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from .views import RegistroAsistenciaView, ListaAsistenciaView, SedesCreateView, SedesListView, SedeUpdateView, SedeDeleteView, ResidentesListView, CalcularWashoutView, PerfilView, RegistroAsistenciaFiltradoListView, EvaluacionPeriodicaCreateView
+from .views import RegistroAsistenciaView, ListaAsistenciaView, SedesCreateView, SedesListView, SedeUpdateView, SedeDeleteView, ResidentesListView, CalcularWashoutView, PerfilView, RegistroAsistenciaFiltradoListView, EvaluacionPeriodicaCreateView, ClasesVideosListView
 from . import views
 
 app_name = "asistencia"
@@ -13,6 +13,9 @@ urlpatterns = [
     # Rutas relacionadas con los residentes
     path('residentes/', ResidentesListView.as_view(), name='residentes_list'),  # Vista para listar todos los residentes
     path('evaluacion_periodica/crear/', EvaluacionPeriodicaCreateView.as_view(), name='evaluacion_periodica_crear'),  # Vista para crear una evaluación periódica
+
+    # Rutas relacionadas con clases y material de estudio
+    path('clases_videos/', ClasesVideosListView.as_view(), name='clases_videos'),  # Vista para listar las clases
 
     # Rutas relacionadas con herramientas utiles para los residentes
     path('washout_suprarrenal/', CalcularWashoutView.as_view(), name='washout_suprarrenal'),  # Vista para calcular el washout suprarrenal
