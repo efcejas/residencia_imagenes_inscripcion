@@ -1,25 +1,68 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Evaluación Periódica</h2>
 
-  <form method="get">
-    {{ seleccionar_ano_form.as_p }}
-    <button type="submit">Filtrar</button>
-  </form>
-
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" name="continuar">Evaluar y continuar</button>
-    <button type="submit" name="finalizar">Evaluar y finalizar</button>
-  </form>
-
+<div class="container">
+  
   {% if messages %}
-    <ul class="messages">
+  <div class="d-flex justify-content-center">
+    <div id="liveAlertPlaceholder" class="col-12 col-md-auto mt-3 text-center">
       {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
       {% endfor %}
-    </ul>
+    </div>
+  </div>
   {% endif %}
+  
+  <div class="row row-cols row-cols-md-1 row-cols-lg-2">
+    <div class="col">
+      <form method="get">
+        <div class="row justify-content-center justify-content-md-end py-3">
+          <div class="col-auto">
+            {{ seleccionar_ano_form.año }}
+            <small class="form-text text-muted">{{ seleccionar_ano_form.año.help_text }}</small>
+          </div>
+          <div class="col-auto align-self-center">
+            <button type="submit" class="btn btn-secondary">Filtrar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <form method="post" class="py-3">
+      {% csrf_token %}
+      <div class="col">
+        <div class="mb-3">
+          <label for="{{ form.residente.id_for_label }}" class="form-label">{{ form.residente.label }}</label>
+          {{ form.residente}}
+        </div>
+      </div>
+      <div class="col">
+        <div class="mb-3">
+          <label for="{{ form.aspecto_positivo.id_for_label }}" class="form-label">{{ form.aspecto_positivo.label }}</label>
+          {{ form.aspecto_positivo}}
+        </div>
+        <div class="mb-3">
+          <label for="{{ form.aspecto_negativo.id_for_label }}" class="form-label">{{ form.aspecto_negativo.label }}</label>
+          {{ form.aspecto_negativo}}
+        </div>
+        <div class="mb-3">
+          <div class="col-3">
+            <label for="{{ form.nota.id_for_label }}" class="form-label">{{ form.nota.label }}</label>
+            {{ form.nota }}
+          </div>
+        </div>
+      </div>
+      <div class="container col">
+        <div class="row justify-content-center justify-content-md-end py-3">
+          <button type="submit" class="col-auto btn btn-success me-2" name="continuar">Evaluar y continuar</button>
+          <button type="submit" class="col-auto btn btn-danger" name="finalizar">Evaluar y finalizar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 {% endblock %}
