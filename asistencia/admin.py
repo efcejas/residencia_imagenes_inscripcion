@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas, EvaluacionPeriodica
+from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas, EvaluacionPeriodica, ClasesVideos
 
 class UsuarioAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
@@ -87,6 +87,11 @@ class EvaluacionPeriodicaAdmin(admin.ModelAdmin):
     list_display = ('residente', 'aspecto_positivo', 'aspecto_negativo', 'nota', 'fecha', 'evaluador')
     ordering = ('residente', 'fecha', 'evaluador',)
 
+# Registro de los modelos relacionados con material de estudio y actividades académicas
+class ClasesVideosAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'vimeo_url')
+    ordering = ('titulo',)
+
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Docente, DocenteAdmin)
 admin.site.register(Residente, ResidenteAdmin)
@@ -96,6 +101,7 @@ admin.site.register(Sedes, SedesAdmin)
 admin.site.register(GruposResidentes, GruposResidentesAdmin)
 admin.site.register(Aulas, AulasAdmin)
 admin.site.register(EvaluacionPeriodica, EvaluacionPeriodicaAdmin)
+admin.site.register(ClasesVideos, ClasesVideosAdmin)
 
 
 

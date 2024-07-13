@@ -166,6 +166,22 @@ class EvaluacionPeriodica(models.Model):
     def __str__(self):
         return f'{self.residente} - Aspecto positivo: {self.aspecto_positivo} - Aspecto negativo: {self.aspecto_negativo} - Nota: {self.nota} - Fecha de evaluación: {self.fecha} - evaluador: {self.evaluador}'
 
+# Modelos relacionados con material de estudio y actividades académicas
+
+class ClasesVideos(models.Model):
+    titulo = models.CharField('Título', max_length=100)
+    vimeo_url = models.URLField('URL de Vimeo', max_length=200)
+
+    class Meta:
+        verbose_name = 'Clase'
+        verbose_name_plural = 'Videos de clases'
+
+    def __str__(self):
+        return self.titulo
+
+    def embed_url(self):
+        return self.vimeo_url.replace('https://vimeo.com/', 'https://player.vimeo.com/video/')
+
 # Otros modelos a organizar. 
 
 class Sedes(models.Model):
