@@ -4,10 +4,13 @@
 
 {% block content %}
 <div class="container py-3">
+  <h1 class="text-center">Clases</h1>
+</div>
+<div class="container py-3">
     {% for video in clases_videos %}
       <div class="col-md-6 mb-4">
         <div class="card">
-          <div class="card-body">
+          <div class="card-body text-center">
             <h5 class="card-title">{{ video.titulo }}</h5>
             <div class="embed-responsive embed-responsive-16by9">
               <iframe class="embed-responsive-item" src="{{ video.embed_url }}" allow="autoplay; fullscreen" allowfullscreen></iframe>
