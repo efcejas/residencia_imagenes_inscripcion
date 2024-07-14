@@ -11,6 +11,42 @@
     <p class="text-center text-md-start">En esta sección encontrarás las clases y videos disponibles para visualizar.</p>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-12 mb-4">
+    <form method="get" class="form-inline">
+      <div class="row">
+        <div class="col col-md-2 mb-2">
+          {{ filter_form.fecha_desde.label_tag }}
+          {{ filter_form.fecha_desde }}
+        </div>
+        <div class="col col-md-2 mb-2">
+          {{ filter_form.fecha_hasta.label_tag }}
+          {{ filter_form.fecha_hasta }}
+        </div>
+        <div class="col mb-2">
+          {{ filter_form.disertante.label_tag }}
+          {{ filter_form.disertante }}
+        </div>
+        <div class="col col-md-auto mb-2">
+          {{ filter_form.clasificacion_tematica.label_tag }}
+          {{ filter_form.clasificacion_tematica }}
+        </div>
+      </div>
+      <div>
+        <p class="text-center text-md-start mb-0 fw-light lh-sm">
+          <small>Puedes filtrar por fecha de publicación, disertante y área temática si lo deseas. No es necesario completar todos los campos.</small>
+        </p>
+      </div>
+      <div class="row">
+        <div class="col-12 d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary mt-0">Filtrar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="row">
   {% for video in clases_videos %}
     <div class="col-sm-12 col-md-4 mb-4"> <!-- Cambiado de col-md-6 a col-md-4 -->
