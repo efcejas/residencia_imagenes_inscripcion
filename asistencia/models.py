@@ -201,7 +201,7 @@ class ClasificacionTematica(models.Model):
         ('IR', 'Intervencionismo'),
         ('N', 'Nuclear'),
         ('GIN', 'Ginecología'),
-        ('OT', 'Otras temáticas'),
+        ('OT', 'Otras'),
     ]
 
     seccion = models.CharField('Sección', max_length=20, choices=OPCION_SECCIONES, unique=True, error_messages={'unique': 'Esa sección ya está registrada.'})
@@ -216,7 +216,7 @@ class ClasificacionTematica(models.Model):
 class ClasesVideos(models.Model):
     titulo = models.CharField('Título', max_length=100)
     disertante = models.ForeignKey(DisertantesClases, on_delete=models.CASCADE, null=True, blank=True, related_name='videos')
-    vimeo_url = models.URLField('URL de Vimeo', max_length=200)
+    vimeo_url = models.URLField('URL de Vimeo', max_length=200, unique=True, error_messages={'unique': 'Ese video ya está registrado.'})
     fecha_publicacion = models.DateField('Fecha de publicación', default=timezone.now)
     descripcion = models.TextField('Descripción', null=True, blank=True, max_length=200)
     clasificaciones_tematicas = models.ManyToManyField(ClasificacionTematica, related_name='videos')
