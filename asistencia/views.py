@@ -509,6 +509,12 @@ class ClasesVideosListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['filter_form'] = VideoFilterForm(self.request.GET or None)
         return context
+
+    def test_func(self):
+        return (hasattr(self.request.user, 'docente_profile') or
+                self.request.user.is_superuser or
+                hasattr(self.request.user, 'residente_profile') or
+                hasattr(self.request.user, 'administrativo_profile'))
         
 # Vistas relacionadas con herramientas útiles para los residentes
 
