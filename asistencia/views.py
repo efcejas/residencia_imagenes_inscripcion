@@ -19,8 +19,10 @@ import qrcode
 from django.db.models import Q, Max # Para hacer consultas más complejas
 
 # Local imports
-from .forms import (RegistroAsistenciaForm, RegistroFormAdministrativo,
-                    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm, SeleccionarAnoForm)
+from .forms import (
+    RegistroAsistenciaForm, RegistroFormAdministrativo,
+    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm, SeleccionarAnoForm, VideoFilterForm
+)
 from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo, GruposResidentes, EvaluacionPeriodica, ClasesVideos
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
@@ -483,7 +485,31 @@ class ClasesVideosListView(ListView):
     model = ClasesVideos
     template_name = 'presentes/clases_videos_list.html'
     context_object_name = 'clases_videos'
+    ordering = ['-fecha_publicacion']
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        fecha_desde = self.request.GET.get('fecha_desde')
+        fecha_hasta = self.request.GET.get('fecha_hasta')
+        disertante = self.request.GET.get('disertante')
+        clasificacion_tematica = self.request.GET.get('clasificacion_tematica')
+
+        if fecha_desde:
+            queryset = queryset.filter(fecha_publicacion__gte=fecha_desde)
+        if fecha_hasta:
+            queryset = queryset.filter(fecha_publicacion__lte=fecha_hasta)
+        if disertante:
+            queryset = queryset.filter(disertante_id=disertante)
+        if clasificacion_tematica:
+            queryset = queryset.filter(clasificaciones_tematicas=clasificacion_tematica)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter_form'] = VideoFilterForm(self.request.GET or None)
+        return context
+        
 # Vistas relacionadas con herramientas útiles para los residentes
 
 class CalcularWashoutView(View):
