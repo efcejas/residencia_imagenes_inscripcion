@@ -187,7 +187,7 @@ class ClasificacionTematica(models.Model):
         ('A', 'Abdomen'),
         ('CV', 'Cardiovascular'),
         ('MSK', 'Musculoesquelético'),
-        ('N', 'Neuroradiología'),
+        ('NR', 'Neuroradiología'),
         ('O', 'Obstetricia'),
         ('IP', 'Imágenes pediátricas'),
         ('UR', 'Uroradiología y genitales masculinos'),
@@ -196,7 +196,7 @@ class ClasificacionTematica(models.Model):
         ('T', 'Tórax'),
         ('OR', 'Oncoloradiología'),
         ('IR', 'Intervencionismo'),
-        ('N', 'Nuclear'),
+        ('NU', 'Nuclear'),
         ('GIN', 'Ginecología'),
         ('OT', 'Otras'),
     ]
