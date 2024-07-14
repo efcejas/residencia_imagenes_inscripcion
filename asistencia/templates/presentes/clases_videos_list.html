@@ -3,21 +3,33 @@
 {% block title %}Clases y Videos{% endblock %}
 
 {% block content %}
-<div class="container py-3">
-  <h1 class="text-center">Clases</h1>
-</div>
-<div class="container py-3">
+  <h2 class="my-4">Videos de Clases</h2>
+  <div class="row">
     {% for video in clases_videos %}
-      <div class="col-md-6 mb-4">
+      <div class="col-md-12 mb-4">
         <div class="card">
-          <div class="card-body text-center">
-            <h5 class="card-title">{{ video.titulo }}</h5>
-            <div class="embed-responsive embed-responsive-16by9">
-              <iframe class="embed-responsive-item" src="{{ video.embed_url }}" allow="autoplay; fullscreen" allowfullscreen></iframe>
+          <div class="row no-gutters">
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ video.titulo }}</h5>
+                <p class="card-text"><strong>Disertante:</strong> {{ video.disertante.get_full_name }}</p>
+                <p class="card-text"><strong>Área Temática:</strong>
+                  {% for clasificacion in video.clasificaciones_tematicas.all %}
+                    {{ clasificacion.get_seccion_display }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </p>
+                <p class="card-text"><strong>Fecha de Publicación:</strong> {{ video.fecha_publicacion }}</p>
+                <p class="card-text">{{ video.descripcion }}</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="{{ video.embed_url }}" allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
             </div>
           </div>
         </div>
       </div>
     {% endfor %}
-</div>
+  </div>
 {% endblock %}

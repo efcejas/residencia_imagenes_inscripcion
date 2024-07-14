@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas, EvaluacionPeriodica, ClasesVideos
+from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas, EvaluacionPeriodica, ClasesVideos, DisertantesClases, ClasificacionTematica
 
 class UsuarioAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
@@ -72,7 +72,7 @@ class GruposResidentesAdmin(admin.ModelAdmin):
     ordering = ('residente__user__first_name', 'residente__user__last_name')  # El orden en que quieres mostrar los registros
 
 class AulasAdmin(admin.ModelAdmin):
-    list_display = ('nombre_aula', 'get_nombre_sede', 'get_direccion_sede')
+    list_display = ('nombre_aula', 'get_nombre_sede', 'get_direccion_sede',)
     ordering = ('nombre_aula',)
 
     def get_nombre_sede(self, obj):
@@ -84,12 +84,21 @@ class AulasAdmin(admin.ModelAdmin):
     get_direccion_sede.short_description = 'Dirección'  # Etiqueta para la columna
 
 class EvaluacionPeriodicaAdmin(admin.ModelAdmin):
-    list_display = ('residente', 'aspecto_positivo', 'aspecto_negativo', 'nota', 'fecha', 'evaluador')
+    list_display = ('residente', 'aspecto_positivo', 'aspecto_negativo', 'nota', 'fecha', 'evaluador',)
     ordering = ('residente', 'fecha', 'evaluador',)
 
 # Registro de los modelos relacionados con material de estudio y actividades académicas
+
+class DisertantesClasesAdmin(admin.ModelAdmin):
+    list_display = ('nombre_disertante', 'apellido_disertante',)
+    ordering = ('nombre_disertante', 'apellido_disertante',)
+
+class ClasificacionTematicaAdmin(admin.ModelAdmin):
+    list_display = ('seccion',)
+    ordering = ('seccion',)
+
 class ClasesVideosAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'vimeo_url')
+    list_display = ('titulo', 'vimeo_url',)
     ordering = ('titulo',)
 
 admin.site.register(Usuario, UsuarioAdmin)
@@ -102,6 +111,8 @@ admin.site.register(GruposResidentes, GruposResidentesAdmin)
 admin.site.register(Aulas, AulasAdmin)
 admin.site.register(EvaluacionPeriodica, EvaluacionPeriodicaAdmin)
 admin.site.register(ClasesVideos, ClasesVideosAdmin)
+admin.site.register(DisertantesClases, DisertantesClasesAdmin)
+admin.site.register(ClasificacionTematica, ClasificacionTematicaAdmin)
 
 
 
