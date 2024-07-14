@@ -481,7 +481,7 @@ class SedeDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
 
 # Vistas relacionadas con clases y material académico
 
-class ClasesVideosListView(ListView):
+class ClasesVideosListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = ClasesVideos
     template_name = 'presentes/clases_videos_list.html'
     context_object_name = 'clases_videos'
