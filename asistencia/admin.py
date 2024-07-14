@@ -98,8 +98,11 @@ class ClasificacionTematicaAdmin(admin.ModelAdmin):
     ordering = ('seccion',)
 
 class ClasesVideosAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'vimeo_url',)
+    list_display = ('titulo', 'vimeo_url', 'disertante', 'clasificacion_tematica',)
     ordering = ('titulo',)
+    list_filter = ('disertante', 'clasificacion_tematica',)
+    search_fields = ('titulo', 'disertante__nombre_disertante', 'disertante__apellido_disertante', 'clasificacion_tematica__seccion',)
+    filter_horizontal = ('disertante', 'clasificacion_tematica',)
 
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Docente, DocenteAdmin)
