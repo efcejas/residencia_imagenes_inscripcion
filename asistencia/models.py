@@ -168,9 +168,6 @@ class EvaluacionPeriodica(models.Model):
 
 # Modelos relacionados con material de estudio y actividades académicas
 
-from django.db import models
-from django.utils import timezone
-
 class DisertantesClases(models.Model):
     nombre_disertante = models.CharField('Nombre del disertante', max_length=100)
     apellido_disertante = models.CharField('Apellido del disertante', max_length=100)
