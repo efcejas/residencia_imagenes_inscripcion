@@ -59,6 +59,9 @@
                                 <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:asistencias_registradas' %}" class="nav-link">Ver asistencias registradas</a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:clases_videos' %}" class="nav-link">Clases</a>
+                                </li>
                                 {% endif %}
                                 {% if user.docente_profile or user.administrativo_profile %}
                                 <li>
@@ -69,10 +72,10 @@
                                     <a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}"
                                         class="nav-link">Control de asistencias</a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:evaluacion_periodica_crear' %}"
                                         class="nav-link">Evaluación periódica</a>
-                                </li>
+                                </li> -->
                                 {% endif %}
                                 {% if user.administrativo_profile %}
                                 <li>

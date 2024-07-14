@@ -18,6 +18,12 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:control_asistencia' %}">Control de asistencias</a>
         </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="{% url 'asistencia:evaluacion_periodica_crear' %}">Evaluación periódica</a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'asistencia:clases_videos' %}">Clases</a>
+        </li>
         {% endif %}
         {% if user.administrativo_profile %}
         <li class="nav-item">
@@ -25,9 +31,6 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:residentes_list' %}">Gestión de residentes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:evaluacion_periodica_crear' %}">Evaluación periódica</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Gestión de sedes</a>
