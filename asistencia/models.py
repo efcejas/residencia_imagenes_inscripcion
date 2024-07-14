@@ -215,10 +215,10 @@ class ClasificacionTematica(models.Model):
 
 class ClasesVideos(models.Model):
     titulo = models.CharField('Título', max_length=100)
-    disertante = models.ForeignKey(DisertantesClases, on_delete=models.CASCADE, related_name='videos')
+    disertante = models.ForeignKey(DisertantesClases, on_delete=models.CASCADE, null=True, blank=True, related_name='videos')
     vimeo_url = models.URLField('URL de Vimeo', max_length=200)
     fecha_publicacion = models.DateField('Fecha de publicación', default=timezone.now)
-    descripcion = models.TextField('Descripción', max_length=200)
+    descripcion = models.TextField('Descripción', null=True, blank=True, max_length=200)
     clasificaciones_tematicas = models.ManyToManyField(ClasificacionTematica, related_name='videos')
 
     class Meta:
