@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Usuario, Residente, Docente, Administrativo, RegistroAsistencia, Sedes, EvaluacionPeriodica, GruposResidentes
+from .models import Usuario, Residente, Docente, Administrativo, RegistroAsistencia, Sedes, EvaluacionPeriodica, GruposResidentes, DisertantesClases, ClasificacionTematica
 
 class RegistroFormUsuario(UserCreationForm):
     password1 = forms.CharField(
@@ -75,6 +75,44 @@ class EvaluacionPeriodicaForm(forms.ModelForm):
             'aspecto_negativo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'nota': forms.Select(attrs={'class': 'form-select'}),
         }
+
+# Formularios relacionados con el manejo de videos de clases
+
+class VideoFilterForm(forms.Form):
+    fecha_desde = forms.DateField(
+        label='Desde',
+        required=False,
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control'
+        })
+    )
+    fecha_hasta = forms.DateField(
+        label='Hasta',
+        required=False,
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control'
+        })
+    )
+    disertante = forms.ModelChoiceField(
+        queryset=DisertantesClases.objects.all(),
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        })
+    )
+    clasificacion_tematica = forms.ModelChoiceField(
+        queryset=ClasificacionTematica.objects.all(),
+        label='Área temática',
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        })
+    )
+
+    class Meta:
+        fields = ['fecha_desde', 'fecha_hasta', 'disertante', 'clasificacion_tematica']
 
 # Formularios relacionados con la gestión de residentes
 
