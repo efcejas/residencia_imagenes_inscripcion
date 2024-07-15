@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas, EvaluacionPeriodica, ClasesVideos, DisertantesClases, ClasificacionTematica
+from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas, EvaluacionPeriodica, ClasesVideos, DisertantesClases, ClasificacionTematica, ConteoVisitaPagina, ConteoVisualizacionVideo
 
 class UsuarioAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
@@ -104,6 +104,14 @@ class ClasesVideosAdmin(admin.ModelAdmin):
     search_fields = ('titulo', 'disertante__nombre_disertante', 'disertante__apellido_disertante', 'clasificaciones_tematicas__seccion')
     filter_horizontal = ('clasificaciones_tematicas',)  # Esto permite selección múltiple
 
+class ConteoVisitaPaginaAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'fecha_visita')
+    ordering = ('usuario' , '-fecha_visita')
+
+class ConteoVisualizacionVideoAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'video', 'fecha_visualizacion')
+    ordering = ('usuario' , '-fecha_visualizacion')
+
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Docente, DocenteAdmin)
 admin.site.register(Residente, ResidenteAdmin)
@@ -116,6 +124,8 @@ admin.site.register(EvaluacionPeriodica, EvaluacionPeriodicaAdmin)
 admin.site.register(ClasesVideos, ClasesVideosAdmin)
 admin.site.register(DisertantesClases, DisertantesClasesAdmin)
 admin.site.register(ClasificacionTematica, ClasificacionTematicaAdmin)
+admin.site.register(ConteoVisitaPagina, ConteoVisitaPaginaAdmin)
+admin.site.register(ConteoVisualizacionVideo, ConteoVisualizacionVideoAdmin)
 
 
 
