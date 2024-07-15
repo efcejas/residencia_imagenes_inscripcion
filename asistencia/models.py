@@ -228,6 +228,29 @@ class ClasesVideos(models.Model):
     def embed_url(self):
         return self.vimeo_url.replace('https://vimeo.com/', 'https://player.vimeo.com/video/')
 
+class ConteoVisitaPagina(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    fecha_visita = models.DateField('Fecha de visita', default=timezone.now)
+
+    class Meta:
+        verbose_name = 'Conteo de visita'
+        verbose_name_plural = 'Conteo de visitas'
+
+    def __str__(self):
+        return f'{self.usuario} - {self.fecha_visita}'
+
+class ConteoVisualizacionVideo(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    video = models.ForeignKey(ClasesVideos, on_delete=models.CASCADE)
+    fecha_visualizacion = models.DateField('Fecha de visualización', default=timezone.now)
+
+    class Meta:
+        verbose_name = 'Conteo de visualización'
+        verbose_name_plural = 'Conteo de visualizaciones'
+
+    def __str__(self):
+        return f'{self.usuario} - {self.video} - {self.fecha_visualizacion}'
+
 # Otros modelos a organizar. 
 
 class Sedes(models.Model):
