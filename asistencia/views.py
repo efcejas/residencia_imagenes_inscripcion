@@ -23,7 +23,7 @@ from .forms import (
     RegistroAsistenciaForm, RegistroFormAdministrativo,
     RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm, SeleccionarAnoForm, VideoFilterForm
 )
-from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo, GruposResidentes, EvaluacionPeriodica, ClasesVideos
+from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo, GruposResidentes, EvaluacionPeriodica, ClasesVideos, ConteoVisitaPagina, ConteoVisualizacionVideo
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
@@ -503,11 +503,17 @@ class ClasesVideosListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         if clasificacion_tematica:
             queryset = queryset.filter(clasificaciones_tematicas=clasificacion_tematica)
 
+        # Debo ver si poner acá la funcion para las veces que fue visualizado un video de la lista
+
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter_form'] = VideoFilterForm(self.request.GET or None)
+
+        # Registrar la visita a la página
+        ConteoVisitaPagina.objects.create(usuario=self.request.user)
+
         return context
 
     def test_func(self):
