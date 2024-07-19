@@ -3,6 +3,23 @@
 {% block title %}Control de asistencia{% endblock %}
 
 {% block content %}
+
+<!-- <div class="container-fluid" style="background-color: blueviolet;">
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <h1 class="titulo_registro">Control de asistencias</h1>
+        </div>
+    </div>
+    <div class="row" style="background-color: chartreuse;">
+        <div class="col d-flex justify-content-center">
+            <h1 class="titulo_registro">Control de asistencias</h1>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <h1 class="titulo_registro">Control de asistencias</h1>
+        </div>
+    </div>
+</div> -->
+
 <div class="container d-flex flex-column flex-md-row justify-content-center py-3">
     <div class="container col-12 col-md-4 text-center text-md-start">
         <h5 class="titulo_registro">Control de asistencias</h5>
@@ -16,11 +33,6 @@
             </div>
             <button type="submit" class="btn btn-primary">Filtrar</button>
         </form>
-        {% if dia %}
-        <div class="d-flex justify-content-center justify-content-md-end">
-            <h6 class="text-center text-md-start fs-5 fs-md-3">Asistencias registradas del día {{ dia|date:"d/m/Y" }}</h6>
-        </div>
-        {% endif %}
         <!-- Botón para seleccionar al azar -->
         <div class="d-flex justify-content-center justify-content-md-end">
             <button onclick="selectRandomResident()" class="btn btn-info">Elegir Residente</button>
@@ -29,6 +41,11 @@
 </div>
 
 <div class="container col-12 col-md-8 mb-5">
+    {% if dia %}
+    <div class="d-flex justify-content-center">
+        <h6 class="text-center text-md-start fs-5 fs-md-3">Asistencias registradas del día {{ dia|date:"d/m/Y" }}</h6>
+    </div>
+    {% endif %}
     <table class="table text-center" id="attendanceTable">
         <thead class="table-secondary">
             <tr>
@@ -40,7 +57,8 @@
         </thead>
         <tbody>
             {% for registro in control_asistencia %}
-            <tr data-resident-id="{{ registro.residente.id }}" class="{% if registro.llegada_tarde %}table-danger{% else %}table-success{% endif %}">
+            <tr data-resident-id="{{ registro.residente.id }}"
+                class="{% if registro.llegada_tarde %}table-danger{% else %}table-success{% endif %}">
                 <td class="p-1">{{ registro.residente }}</td>
                 <td class="p-1">{{ registro.residente.gruposresidentes_set.first.año }}</td>
                 <td class="p-1">{{ registro.hora|time:"H:i" }}</td>
@@ -51,12 +69,13 @@
                 <td colspan="4">No hay registros de asistencia para el día seleccionado.</td>
             </tr>
             {% endfor %}
-        </tbody>        
+        </tbody>
     </table>
 </div>
 
 <!-- Modal para mostrar el nombre del residente seleccionado -->
-<div class="modal fade" id="randomResidentModal" tabindex="-1" aria-labelledby="randomResidentModalLabel" aria-hidden="true">
+<div class="modal fade" id="randomResidentModal" tabindex="-1" aria-labelledby="randomResidentModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -77,32 +96,32 @@
     // Array para almacenar los IDs de los residentes ya seleccionados
     let selectedResidents = [];
     let allResidents = [];
-    
-    document.addEventListener('DOMContentLoaded', function() {
+
+    document.addEventListener('DOMContentLoaded', function () {
         const rows = document.getElementById('attendanceTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
         allResidents = Array.from(rows).map(row => ({
             id: row.dataset.residentId, // Asegúrate de añadir este data attribute a cada fila en el servidor
             name: row.cells[0].textContent
         }));
     });
-    
+
     function selectRandomResident() {
         // Filtrar para obtener residentes que no han sido seleccionados todavía
         const availableResidents = allResidents.filter(resident => !selectedResidents.includes(resident.id));
-    
+
         if (availableResidents.length === 0) {
             // Si todos los residentes han sido seleccionados, reiniciar la lista
             selectedResidents = [];
             alert('Todos los residentes han sido seleccionados. Reiniciando la lista...');
             return selectRandomResident(); // Recursivamente seleccionar otro residente
         }
-    
+
         const randomIndex = Math.floor(Math.random() * availableResidents.length);
         const selectedResident = availableResidents[randomIndex];
         selectedResidents.push(selectedResident.id); // Guardar el ID del residente seleccionado
-    
+
         document.getElementById('selectedResidentName').innerText = 'El residente seleccionado es: ' + selectedResident.name;
         $('#randomResidentModal').modal('show');
     }
-    </script>    
+</script>
 {% endblock %}
