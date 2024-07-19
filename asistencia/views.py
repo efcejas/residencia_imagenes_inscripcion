@@ -291,7 +291,6 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
     model = EvaluacionPeriodica
     form_class = EvaluacionPeriodicaForm
     template_name = 'presentes/evaluacion_periodica_form.html'
-    success_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -316,7 +315,7 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         año_seleccionado = self.request.GET.get('año')
-        
+
         # Obtener los residentes evaluados de la sesión
         evaluados_ids = self.request.session.get('evaluados_ids', [])
 
@@ -370,7 +369,7 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
 
         # Limpiar la sesión al finalizar
         self.request.session['evaluados_ids'] = []
-        return response
+        return redirect('evaluacion_exitosa')
 
     def test_func(self):
         user = self.request.user

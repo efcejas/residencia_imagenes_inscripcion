@@ -13,6 +13,8 @@ urlpatterns = [
     # Rutas relacionadas con los residentes
     path('residentes/', ResidentesListView.as_view(), name='residentes_list'),  # Vista para listar todos los residentes
     path('evaluacion_periodica/crear/', EvaluacionPeriodicaCreateView.as_view(), name='evaluacion_periodica_crear'),  # Vista para crear una evaluación periódica
+    path('evaluacion_periodica/exito/', TemplateView.as_view(template_name='presentes/evaluacion_periodica_exito.html'), name='evaluacion_exitosa'),  # Vista para mostrar un mensaje de éxito al crear una evaluación periódica
+
 
     # Rutas relacionadas con clases y material de estudio
     path('clases_videos/', ClasesVideosListView.as_view(), name='clases_videos'),  # Vista para listar las clases
