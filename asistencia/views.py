@@ -315,7 +315,7 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         año_seleccionado = self.request.GET.get('año')
-
+        
         # Obtener los residentes evaluados de la sesión
         evaluados_ids = self.request.session.get('evaluados_ids', [])
 
@@ -370,6 +370,9 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
         # Limpiar la sesión al finalizar
         self.request.session['evaluados_ids'] = []
         return redirect('evaluacion_exitosa')
+
+    def get_success_url(self):
+        return None
 
     def test_func(self):
         user = self.request.user
