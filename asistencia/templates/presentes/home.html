@@ -81,17 +81,17 @@
 </nav>
 {% if user.is_authenticated and user.residente_profile %}
 <div class="row row-cols-1 d-flex justify-content-center">
-  <div class="col-auto py-3">
+  <!-- <div class="col-auto py-3">
     <div class="card border-success">
       <div class="card-body text-success">
         <h5 class="card-title">Evaluación periódica</h5>
         <p class="card-text">Los residentes de primer y segundo año deben completar la evaluación periódica en el siguiente botón:</p>
-        <div class="text-end"> <!-- Envuelve el botón en un div con la clase text-end -->
+        <div class="text-end"> 
           <a href="{% url 'asistencia:evaluacion_periodica_crear' %}" class="btn btn-success">Iniciar evaluación</a>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <div class="col">
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-center text-center pt-3">
       <p class="text-md-start lead mb-3 mb-md-0 pe-md-2">Para registrar tu asistencia, hacé clic en la siguiente imagen:</p>
