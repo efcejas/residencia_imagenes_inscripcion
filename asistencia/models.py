@@ -194,7 +194,7 @@ class ClasificacionTematica(models.Model):
         ('IM', 'Imágenes mamarias'),
         ('CC', 'Cabeza y cuello'),
         ('T', 'Tórax'),
-        ('OR', 'Oncoloradiología'),
+        ('OR', 'Oncoimágenes'),
         ('IR', 'Intervencionismo'),
         ('NU', 'Nuclear'),
         ('GIN', 'Ginecología'),
