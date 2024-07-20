@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, TemplateView, CreateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Librerías de terceros
 import qrcode
@@ -287,6 +287,17 @@ class RegistroAsistenciaFiltradoListView(LoginRequiredMixin, UserPassesTestMixin
 
 # Vistas relacionadas con la evaluación periódica de los residentes
 
+def obtener_periodo_actual():
+    ahora = datetime.now()
+    # Suponiendo que los periodos son cada seis meses empezando en enero y julio
+    if ahora.month <= 6:
+        inicio = datetime(ahora.year, 1, 1)
+        fin = datetime(ahora.year, 6, 30)
+    else:
+        inicio = datetime(ahora.year, 7, 1)
+        fin = datetime(ahora.year, 12, 31)
+    return inicio, fin
+
 class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = EvaluacionPeriodica
     form_class = EvaluacionPeriodicaForm
@@ -319,6 +330,19 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
         # Obtener los residentes evaluados de la sesión
         evaluados_ids = self.request.session.get('evaluados_ids', [])
 
+        # Obtener el periodo de evaluación actual
+        inicio_periodo, fin_periodo = obtener_periodo_actual()
+
+        # Consultar las evaluaciones existentes en el periodo actual
+        evaluaciones_existentes = EvaluacionPeriodica.objects.filter(
+            evaluador=self.request.user,
+            fecha__range=(inicio_periodo, fin_periodo)
+        ).values_list('residente_id', flat=True)
+        
+        # Combinar las listas de residentes evaluados en la sesión y en el periodo actual
+        evaluados_ids.extend(evaluaciones_existentes)
+        evaluados_ids = list(set(evaluados_ids))  # Eliminar duplicados
+
         user_profile = getattr(self.request.user, 'docente_profile', None)
         user_year = None
         if user_profile is None and hasattr(self.request.user, 'residente_profile'):
@@ -326,15 +350,13 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
             if resident_profile.gruposresidentes_set.exists():
                 user_year = resident_profile.gruposresidentes_set.first().año
 
+        # Construir el queryset siempre excluyendo los residentes ya evaluados
+        queryset = Residente.objects.filter(
+            gruposresidentes__residencia='DM'
+        ).exclude(id__in=evaluados_ids).distinct()
+
         if año_seleccionado:
-            queryset = Residente.objects.filter(
-                gruposresidentes__año=año_seleccionado,
-                gruposresidentes__residencia='DM'
-            ).exclude(id__in=evaluados_ids).distinct()
-        else:
-            queryset = Residente.objects.filter(
-                gruposresidentes__residencia='DM'
-            ).exclude(id__in=evaluados_ids).distinct()
+            queryset = queryset.filter(gruposresidentes__año=año_seleccionado)
 
         # Filtrar residentes basados en el perfil del usuario logueado
         if user_profile:
@@ -349,12 +371,21 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
 
         # Si no hay más residentes para evaluar
         if not queryset.exists():
+            if not self.request.session.get('mensaje_mostrado', False):
+                messages.warning(self.request, 'No hay residentes disponibles para evaluar según su perfil.')
+                self.request.session['mensaje_mostrado'] = True
             self.request.session['ultimo_residente'] = True
-            messages.warning(self.request, 'No hay residentes disponibles para evaluar según su perfil.')
         else:
             self.request.session['ultimo_residente'] = False
+            self.request.session['mensaje_mostrado'] = False  # Resetear la bandera si hay residentes disponibles
             form.fields['residente'].queryset = queryset
-        
+
+            # Preseleccionar el siguiente residente si es necesario
+            if self.request.GET.get('continuar'):
+                siguiente_residente = queryset.first()
+                if siguiente_residente:
+                    form.fields['residente'].initial = siguiente_residente
+
         return form
 
     def form_valid(self, form):
@@ -374,13 +405,15 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
             self.request.session['evaluados_ids'] = []
             return redirect('asistencia:evaluacion_exitosa')
 
-        # Verificar qué botón fue presionado
+        # Continuar con el siguiente residente
         if "continuar" in self.request.POST:
             año_seleccionado = self.request.GET.get('año', '')
-            return redirect(f'{self.request.path}?año={año_seleccionado}')
+            return redirect(f'{self.request.path}?año={año_seleccionado}&continuar=1')
         else:
             self.request.session['evaluados_ids'] = []
             return redirect('asistencia:evaluacion_exitosa')
+
+        return response
 
     def get_success_url(self):
         return None

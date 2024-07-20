@@ -9,7 +9,7 @@
       <h2 class="titulo_registro">Evaluación periódica</h2>
       <p class="fw-normal lh-sm"><small>En este formulario se evaluará el desempeño de los residentes en el periodo actual.</small></p>
     </div>
-    <div class="col">
+    <!-- <div class="col">
       <form method="get">
         <div class="row justify-content-center justify-content-md-end py-3">
           <div class="col-auto">
@@ -21,7 +21,7 @@
           </div>
         </div>
       </form>
-    </div>
+    </div> -->
   </div>
   
   {% if messages %}
@@ -67,9 +67,9 @@
       </div>
       <div class="container col">
         <div class="row justify-content-center justify-content-md-end py-3">
-          <button type="submit" class="col-auto btn btn-success me-2" name="continuar">Evaluar y continuar</button>
-          <button type="submit" class="col-auto btn btn-primary me-2" name="finalizar">Finalizar Evaluación</button>
-          <a href="{% url 'home' %}" class="col-auto btn btn-danger">Salir sin Evaluar</a>
+          <button type="submit" class="col-auto btn btn-success me-2 mb-3" name="continuar">Evaluar y continuar</button>
+          <button type="submit" class="col-auto btn btn-primary me-2 mb-3" name="finalizar">Finalizar Evaluación</button>
+          <a href="{% url 'home' %}" class="col-auto btn btn-danger mb-3">Salir sin Evaluar</a>
         </div>
       </div>
     </form>
