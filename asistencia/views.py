@@ -347,9 +347,15 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
             # Residentes de segundo año pueden evaluar a residentes de primer año
             queryset = queryset.filter(gruposresidentes__año='R1')
 
-        form.fields['residente'].queryset = queryset
-
-        return form
+        # Si no hay más residentes para evaluar
+        if not queryset.exists():
+            self.request.session['ultimo_residente'] = True
+            messages.warning(self.request, 'No hay residentes disponibles para evaluar según su perfil.')
+            return None  # Retornar None si no hay más residentes
+        else:
+            self.request.session['ultimo_residente'] = False
+            form.fields['residente'].queryset = queryset
+            return form
 
     def form_valid(self, form):
         form.instance.evaluador = self.request.user
@@ -363,13 +369,18 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
         # Crear mensaje de éxito específico para el residente evaluado
         messages.success(self.request, f'{form.instance.residente} ha sido evaluado exitosamente.')
 
+        # Verificar si es el último residente
+        if self.request.session.get('ultimo_residente'):
+            self.request.session['evaluados_ids'] = []
+            return redirect('asistencia:evaluacion_exitosa')
+
+        # Verificar qué botón fue presionado
         if "continuar" in self.request.POST:
             año_seleccionado = self.request.GET.get('año', '')
             return redirect(f'{self.request.path}?año={año_seleccionado}')
-
-        # Limpiar la sesión al finalizar
-        self.request.session['evaluados_ids'] = []
-        return redirect('evaluacion_exitosa')
+        else:
+            self.request.session['evaluados_ids'] = []
+            return redirect('asistencia:evaluacion_exitosa')
 
     def get_success_url(self):
         return None
