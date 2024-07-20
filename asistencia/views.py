@@ -351,11 +351,11 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
         if not queryset.exists():
             self.request.session['ultimo_residente'] = True
             messages.warning(self.request, 'No hay residentes disponibles para evaluar según su perfil.')
-            return None  # Retornar None si no hay más residentes
         else:
             self.request.session['ultimo_residente'] = False
             form.fields['residente'].queryset = queryset
-            return form
+        
+        return form
 
     def form_valid(self, form):
         form.instance.evaluador = self.request.user
