@@ -18,6 +18,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:control_asistencia' %}">Control de asistencias</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'asistencia:evaluados' %}">Residentes evaluados</a>
+        </li>
         <!-- <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:evaluacion_periodica_crear' %}">Evaluación periódica</a>
         </li> -->
@@ -31,6 +34,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:residentes_list' %}">Gestión de residentes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'asistencia:evaluados' %}">Residentes evaluados</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Gestión de sedes</a>
@@ -51,8 +57,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:residentes_list' %}">Gestión de residentes</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:evaluacion_periodica_crear' %}">Evaluación periódica</a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'asistencia:evaluados' %}">Residentes evaluados</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:clases_videos' %}">Clases</a>
@@ -80,7 +89,7 @@
   </div>
 </nav>
 {% if user.is_authenticated and user.residente_profile %}
-<div class="row row-cols-1 d-flex justify-content-center">
+<!-- <div class="row row-cols-1 d-flex justify-content-center">
   <div class="col-auto py-3">
     <div class="card border-success">
       <div class="card-body text-success">
@@ -91,7 +100,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <div class="col">
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-center text-center pt-3">
       <p class="text-md-start lead mb-3 mb-md-0 pe-md-2">Para registrar tu asistencia, hacé clic en la siguiente imagen:</p>

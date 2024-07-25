@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Lista de Evaluados{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+    <div class="row row-cols-1">
+        <div class="col">
+            <h2 class="titulo_registro text-center text-md-start">Resultados de la evaluación periódica</h2>
+        </div>
+        <div class="col-12">
+            <div class="row row-cols-1">
+                <p class="col fw-normal lh-sm mb-0"><small>Se detalla a continuación las listas de residentes evaluados en el periodo actual, divididos por año. Los residentes de primer año evaluaron a los de segundo, y viceversa.</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion mb-3" id="accordionEvaluados">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingPrimerAno">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrimerAno"
+                aria-expanded="true" aria-controls="collapsePrimerAno">
+                Primer Año
+            </button>
+        </h2>
+        <div id="collapsePrimerAno" class="accordion-collapse collapse show" aria-labelledby="headingPrimerAno"
+            data-bs-parent="#accordionEvaluados">
+            <div class="accordion-body">
+                <ul class="list-group">
+                    {% for residente in evaluados_primer_ano %}
+                    <li class="list-group-item">
+                        <a href="{% url 'asistencia:evaluado_detail' residente.id %}">
+                            {{ residente.user.first_name }} {{ residente.user.last_name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingSegundoAno">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseSegundoAno" aria-expanded="false" aria-controls="collapseSegundoAno">
+                Segundo Año
+            </button>
+        </h2>
+        <div id="collapseSegundoAno" class="accordion-collapse collapse" aria-labelledby="headingSegundoAno"
+            data-bs-parent="#accordionEvaluados">
+            <div class="accordion-body">
+                <ul class="list-group">
+                    {% for residente in evaluados_segundo_ano %}
+                    <li class="list-group-item">
+                        <a href="{% url 'asistencia:evaluado_detail' residente.id %}">
+                            {{ residente.user.first_name }} {{ residente.user.last_name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

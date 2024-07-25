@@ -104,6 +104,8 @@ class ClasesVideosAdmin(admin.ModelAdmin):
     search_fields = ('titulo', 'disertante__nombre_disertante', 'disertante__apellido_disertante', 'clasificaciones_tematicas__seccion')
     filter_horizontal = ('clasificaciones_tematicas',)  # Esto permite selección múltiple
 
+# Registro de los modelos relacionados con el conteo de visitas y visualizaciones
+
 class ConteoVisitaPaginaAdmin(admin.ModelAdmin):
     list_display = ('usuario', 'fecha_visita')
     ordering = ('usuario' , '-fecha_visita')
