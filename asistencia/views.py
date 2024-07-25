@@ -6,17 +6,17 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import CharField, Value as V
 from django.db.models.functions import Concat, TruncMonth
 from django.http import HttpResponse, HttpResponseRedirect, QueryDict, JsonResponse
-from django.shortcuts import get_list_or_404, redirect, render, reverse
+from django.shortcuts import get_list_or_404, redirect, render, reverse, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
-from django.views.generic import ListView, TemplateView, CreateView
+from django.views.generic import ListView, TemplateView, CreateView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from datetime import datetime, timedelta
 
 # Librerías de terceros
 import qrcode
-from django.db.models import Q, Max # Para hacer consultas más complejas
+from django.db.models import Q, Max, Avg # Para hacer consultas más complejas
 
 # Local imports
 from .forms import (
@@ -430,6 +430,58 @@ class EvaluacionPeriodicaCreateView(LoginRequiredMixin, UserPassesTestMixin, Suc
                 if user_year in ['R1', 'R2']:
                     return True
         return False
+
+    def handle_no_permission(self):
+        return redirect('home')
+
+class EvaluadosListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = EvaluacionPeriodica
+    template_name = 'presentes/evaluados_list.html'
+    context_object_name = 'evaluados'
+    
+    def get_queryset(self):
+        # Obtener todos los residentes que han sido evaluados
+        evaluaciones = EvaluacionPeriodica.objects.select_related('residente').order_by('residente__user__first_name', 'residente__user__last_name')
+        # Usar distinct para obtener una lista única de residentes evaluados
+        residentes_ids = evaluaciones.values_list('residente', flat=True).distinct()
+        return Residente.objects.filter(id__in=residentes_ids).order_by('user__first_name', 'user__last_name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        evaluados = self.get_queryset()
+        # Filtrar los residentes evaluados por año
+        evaluados_primer_ano = evaluados.filter(gruposresidentes__año='R1')
+        evaluados_segundo_ano = evaluados.filter(gruposresidentes__año='R2')
+        # Agregar las listas filtradas al contexto
+        context['evaluados_primer_ano'] = evaluados_primer_ano
+        context['evaluados_segundo_ano'] = evaluados_segundo_ano
+        return context
+
+    def test_func(self):
+        return self.request.user.is_superuser or hasattr(self.request.user, 'docente_profile')
+
+    def handle_no_permission(self):
+        return redirect('home')
+
+class EvaluadosDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = Residente
+    template_name = 'presentes/evaluado_detail.html'
+    context_object_name = 'residente'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Residente, id=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        residente = self.get_object()
+        evaluaciones = EvaluacionPeriodica.objects.filter(residente=residente)
+        promedio = evaluaciones.aggregate(Avg('nota'))['nota__avg']
+        context['evaluaciones'] = evaluaciones
+        context['promedio'] = promedio
+        return context
+
+    def test_func(self):
+        return self.request.user.is_superuser or hasattr(self.request.user, 'docente_profile')
 
     def handle_no_permission(self):
         return redirect('home')
