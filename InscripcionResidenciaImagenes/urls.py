@@ -36,6 +36,9 @@ urlpatterns = [
     # Rutas de la aplicación 'asistencia'
     path('asistencia/', include(('asistencia.urls', 'asistencia'), namespace='asistencia')),
 
+    # Rutas de la aplicación de la base de datos de casos interesantes
+    path('casos_interesantes_db/', include(('casos_interesantes_db.urls', 'casos_interesantes_db'), namespace='casos_interesantes_db')),
+
     # Rutas de administración
     path('admin/', admin.site.urls),
 ]

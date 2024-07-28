@@ -103,8 +103,9 @@ main.container {
 /* Estilos - de los formularios de registro */
 .titulo_registro {
     color: #1C58A6;
-    font-family: nimbus-sans, sans-serif;
-    font-size: bold;
+-    font-family: "eurostile-condensed", sans-serif;
+    font-weight: 800;
+    font-style: normal;
 }
 
 #registroForm .errorlist {
