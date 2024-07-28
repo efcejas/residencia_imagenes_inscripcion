@@ -48,6 +48,25 @@ class RegistroAsistenciaForm(forms.ModelForm):
         model = RegistroAsistencia
         fields = ('latitud', 'longitud')
 
+class AsistenciaFiltroForm(forms.Form):
+    dia = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        required=False,
+        label='Seleccionar'
+    )
+    año = forms.ChoiceField(
+        choices=[
+            ('', 'Todos'),
+            ('R1', 'R1'),
+            ('R2', 'R2'),
+            ('R3', 'R3'),
+            ('R4', 'R4'),
+        ],
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False,
+        label='Año'
+    )
+
 # Formularios relacionados con la evaluación periódica
 
 class SeleccionarAnoForm(forms.Form):

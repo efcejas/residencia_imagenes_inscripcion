@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # ADVERTENCIA DE SEGURIDAD: ¡no ejecute con la depuración activada en producción!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'residentes-dm-9833103dde7d.herokuapp.com']
 
@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Mis aplicaciones
     'asistencia.apps.AsistenciaConfig', # Se pone .apps.AsistenciaConfig para que sepa que es una aplicacion y cumpla con el estandar de Django
+    'casos_interesantes_db.apps.CasosInteresantesDbConfig',
+    # Aplicaciones de terceros
+    'taggit',
 ]
 
 MIDDLEWARE = [
