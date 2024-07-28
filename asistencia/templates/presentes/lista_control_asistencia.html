@@ -3,95 +3,114 @@
 {% block title %}Control de asistencia{% endblock %}
 
 {% block content %}
-
-<!-- <div class="container-fluid" style="background-color: blueviolet;">
+<div class="container-fluid py-3">
     <div class="row">
-        <div class="col d-flex justify-content-center">
-            <h1 class="titulo_registro">Control de asistencias</h1>
+        <div class="col d-flex justify-content-center justify-content-md-start">
+            <h5 class="titulo_registro">Control de asistencias</h5>
         </div>
     </div>
-    <div class="row" style="background-color: chartreuse;">
-        <div class="col d-flex justify-content-center">
-            <h1 class="titulo_registro">Control de asistencias</h1>
-        </div>
-        <div class="col d-flex justify-content-center">
-            <h1 class="titulo_registro">Control de asistencias</h1>
-        </div>
-    </div>
-</div> -->
-
-<div class="container d-flex flex-column flex-md-row justify-content-center py-3">
-    <div class="container col-12 col-md-4 text-center text-md-start">
-        <h5 class="titulo_registro">Control de asistencias</h5>
-        <p class="fw-normal lh-sm"><small>Aquí se gestionará el seguimiento de las asistencias de los residentes.</small></p>
-    </div>
-    <div class="container-fluid text-end col-12 col-md-8">
-        <form method="GET" class="d-flex align-items-end justify-content-center justify-content-md-end mb-2">
-            <label for="dia" class="me-2 align-self-center">Seleccionar</label>
-            <div class="form-group me-2">
-                <input type="date" class="form-control" id="dia" name="dia" value="{{ dia }}">
+    <div class="row row-cols-1 row-cols-lg-2">
+        <div class="col-lg-5 d-flex flex-column justify-content-start">
+            <div class="text-center text-md-start mb-2">
+                <p class="fw-normal lh-sm">
+                    <small>Acá se podrán visualizar las asistencias registradas por los residentes en las actividades
+                        presenciales.</small>
+                </p>
             </div>
-            <button type="submit" class="btn btn-primary">Filtrar</button>
-        </form>
-        <!-- Botón para seleccionar al azar -->
-        <div class="d-flex justify-content-center justify-content-md-end">
-            <button onclick="selectRandomResident()" class="btn btn-info">Elegir Residente</button>
-        </div>
-    </div>
-</div>
-
-<div class="container col-12 col-md-8 mb-5">
-    {% if dia %}
-    <div class="d-flex justify-content-center">
-        <h6 class="text-center text-md-start fs-5 fs-md-3">Asistencias registradas del día {{ dia|date:"d/m/Y" }}</h6>
-    </div>
-    {% endif %}
-    <table class="table text-center" id="attendanceTable">
-        <thead class="table-secondary">
-            <tr>
-                <th scope="col">Residente</th>
-                <th scope="col">Año</th>
-                <th scope="col">Hora</th>
-                <th scope="col">Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for registro in control_asistencia %}
-            <tr data-resident-id="{{ registro.residente.id }}"
-                class="{% if registro.llegada_tarde %}table-danger{% else %}table-success{% endif %}">
-                <td class="p-1">{{ registro.residente }}</td>
-                <td class="p-1">{{ registro.residente.gruposresidentes_set.first.año }}</td>
-                <td class="p-1">{{ registro.hora|time:"H:i" }}</td>
-                <td class="p-1">{% if registro.llegada_tarde %}Llegada tarde{% else %}A tiempo{% endif %}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4">No hay registros de asistencia para el día seleccionado.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-<!-- Modal para mostrar el nombre del residente seleccionado -->
-<div class="modal fade" id="randomResidentModal" tabindex="-1" aria-labelledby="randomResidentModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="randomResidentModalLabel">Residente Seleccionado</h5>
-                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-            </div>
-            <div class="modal-body">
-                <p id="selectedResidentName">Ningún residente ha sido seleccionado.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <div class="mb-2">
+                <div class="container-fluid p-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="GET" class="row g-2 align-items-end justify-content-center">
+                                <div class="col-6 text-center">
+                                    <label class="form-label" for="{{ asistencia_filtro_form.dia.id_for_label }}">
+                                        {{ asistencia_filtro_form.dia.label }}
+                                    </label>
+                                    {{ asistencia_filtro_form.dia }}
+                                </div>
+                                <div class="col-3 text-center">
+                                    <label class="form-label" for="{{ asistencia_filtro_form.año.id_for_label }}">
+                                        {{ asistencia_filtro_form.año.label }}
+                                    </label>
+                                    {{ asistencia_filtro_form.año }}
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center text-center gap-2">
+                                <div class="col">
+                                    <small>Puede seleccionar a un residente al azar para hacerle una pregunta.</small>
+                                </div>
+                                <div class="col-auto">
+                                    <button onclick="selectRandomResident()" class="btn btn-info">Elegir Residente</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+        <div class="col-lg-7 d-flex justify-content-center">
+            <div class="container col col-md-12 mb-5 p-0">
+                <div class="card">
+                    <div class="card-body">
+                        {% if dia %}
+                        <div class="d-flex justify-content-center">
+                            <h6 class="text-center text-md-start fs-5 fs-md-3">Asistencias registradas del día {{ dia|date:"d/m/Y" }}</h6>
+                        </div>
+                        {% endif %}
 
+                        <table class="table text-center" id="attendanceTable">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th scope="col">Residente</th>
+                                    <th scope="col">Año</th>
+                                    <th scope="col">Hora</th>
+                                    <th scope="col">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for registro in control_asistencia %}
+                                <tr data-resident-id="{{ registro.residente.id }}"
+                                    class="{% if registro.llegada_tarde %}table-danger{% else %}table-success{% endif %}">
+                                    <td class="p-1">{{ registro.residente }}</td>
+                                    <td class="p-1">{{ registro.residente.gruposresidentes_set.first.año }}</td>
+                                    <td class="p-1">{{ registro.hora|time:"H:i" }}</td>
+                                    <td class="p-1">{% if registro.llegada_tarde %}Llegada tarde{% else %}A tiempo{% endif %}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4">No hay registros de asistencia para el día seleccionado.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para mostrar el nombre del residente seleccionado -->
+        <div class="modal fade" id="randomResidentModal" tabindex="-1" aria-labelledby="randomResidentModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="randomResidentModalLabel">Residente Seleccionado</h5>
+                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                    </div>
+                    <div class="modal-body">
+                        <p id="selectedResidentName">Ningún residente ha sido seleccionado.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 <script>
     // Array para almacenar los IDs de los residentes ya seleccionados
     let selectedResidents = [];

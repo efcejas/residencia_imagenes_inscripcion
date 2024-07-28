@@ -21,7 +21,7 @@ from django.db.models import Q, Max, Avg # Para hacer consultas más complejas
 # Local imports
 from .forms import (
     RegistroAsistenciaForm, RegistroFormAdministrativo,
-    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm, SeleccionarAnoForm, VideoFilterForm
+    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm, SeleccionarAnoForm, VideoFilterForm, AsistenciaFiltroForm
 )
 from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo, GruposResidentes, EvaluacionPeriodica, ClasesVideos, ConteoVisitaPagina, ConteoVisualizacionVideo
 
@@ -241,48 +241,52 @@ class RegistroAsistenciaFiltradoListView(LoginRequiredMixin, UserPassesTestMixin
     context_object_name = 'control_asistencia'
 
     def get_queryset(self):
-        # Obtiene el queryset base
-        queryset = RegistroAsistencia.objects.all()
+        queryset = RegistroAsistencia.objects.all().order_by('-fecha', '-hora')
 
-        # Filtra por día si se proporciona el parámetro 'dia'
         dia = self.request.GET.get('dia')
+        año = self.request.GET.get('año')
+        
         if dia:
-            queryset = queryset.filter(fecha=dia)
+            try:
+                fecha_filtrada = datetime.strptime(dia, "%Y-%m-%d").date()
+                queryset = queryset.filter(fecha=fecha_filtrada)
+            except ValueError:
+                queryset = queryset.none()
         else:
-            # Si no se proporciona un parámetro 'dia', muestra los registros del día más reciente
             fecha_mas_reciente = queryset.aggregate(Max('fecha'))['fecha__max']
             if fecha_mas_reciente:
                 queryset = queryset.filter(fecha=fecha_mas_reciente)
+
+        if año:
+            queryset = queryset.filter(residente__gruposresidentes__año=año)
 
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # Obtiene el queryset base
-        queryset = RegistroAsistencia.objects.all()
-
-        # Filtra por día si se proporciona el parámetro 'dia'
         dia = self.request.GET.get('dia')
-        if dia:
-            dia = datetime.strptime(dia, "%Y-%m-%d").date()  # Convierte el string a fecha
-            queryset = queryset.filter(fecha=dia)
-        else:
-            # Si no se proporciona un parámetro 'dia', muestra los registros del día más reciente
-            fecha_mas_reciente = queryset.aggregate(Max('fecha'))['fecha__max']
-            if fecha_mas_reciente:
-                queryset = queryset.filter(fecha=fecha_mas_reciente)
-                dia = fecha_mas_reciente  # Usa la fecha más reciente
+        año = self.request.GET.get('año')
 
-        context['control_asistencia'] = queryset
-        context['dia'] = dia  # Añade la fecha al contexto
+        if not dia:
+            # Obtener la fecha del registro más reciente si 'dia' no está definido
+            registro_mas_reciente = RegistroAsistencia.objects.order_by('-fecha').first()
+            if registro_mas_reciente:
+                dia = registro_mas_reciente.fecha
+
+        context['dia'] = dia
+        context['año'] = año
+
+        context['asistencia_filtro_form'] = AsistenciaFiltroForm(self.request.GET or None)
+
         return context
 
     def test_func(self):
-        return hasattr(self.request.user, 'docente_profile') or hasattr(self.request.user, 'administrativo_profile') or self.request.user.is_superuser
+        user = self.request.user
+        return (hasattr(user, 'docente_profile') or 
+                hasattr(user, 'administrativo_profile') or 
+                user.is_superuser)
 
     def handle_no_permission(self):
-        # redirige a la página de inicio o a una página de error si el usuario no tiene permiso
         return redirect('home')
 
 # Vistas relacionadas con la evaluación periódica de los residentes
