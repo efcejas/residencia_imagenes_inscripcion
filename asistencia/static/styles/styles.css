@@ -30,12 +30,10 @@ main.container {
 .bienvenida {
     color: #1C58A6;
     font-family: nimbus-sans, sans-serif;
-    font-size: bold;
+    font-weight: bold; /* Cambiado de font-size a font-weight */
 }
 
-
 /* Estilos de la cabecera en pantallas pequeñas */
-
 @media (max-width: 768px) {
     header h1 {
         font-size: 3.5vw;
@@ -56,7 +54,6 @@ main.container {
 }
 
 /* Estilos de la barra del usuario */
-
 .barra-usuario {
     background-color: #F2F2F2;
     padding-top: 10px;
@@ -64,7 +61,6 @@ main.container {
 }
 
 /* Estilos del pie de página */
-
 #spinner {
     display: none;
 }
@@ -74,13 +70,12 @@ main.container {
 }
 
 /* Estilos - lista de registros */
-
 .lista-registro {
-    max-height: 250px; width: 100%;
+    max-height: 250px; 
+    width: 100%;
 }
 
 /* Estilos - listas de residentes */
-
 #myTable_length, #myTable_filter, #myTable_info, #myTable_paginate {
    font-size: 0.8em;
    padding: 10px;
@@ -103,7 +98,7 @@ main.container {
 /* Estilos - de los formularios de registro */
 .titulo_registro {
     color: #1C58A6;
--    font-family: "eurostile-condensed", sans-serif;
+    font-family: "eurostile-condensed", sans-serif;
     font-weight: 800;
     font-style: normal;
 }
