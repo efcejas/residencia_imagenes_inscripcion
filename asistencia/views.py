@@ -242,7 +242,6 @@ class RegistroAsistenciaFiltradoListView(LoginRequiredMixin, UserPassesTestMixin
 
     def get_queryset(self):
         queryset = RegistroAsistencia.objects.all().order_by('-fecha', '-hora')
-
         dia = self.request.GET.get('dia')
         año = self.request.GET.get('año')
         
@@ -267,16 +266,22 @@ class RegistroAsistenciaFiltradoListView(LoginRequiredMixin, UserPassesTestMixin
         dia = self.request.GET.get('dia')
         año = self.request.GET.get('año')
 
+        # Asegurar que `dia` se establezca correctamente incluso si es una cadena vacía o formato incorrecto
+        if dia:
+            try:
+                dia = datetime.strptime(dia, "%Y-%m-%d").date()
+            except ValueError:
+                dia = None
+
         if not dia:
-            # Obtener la fecha del registro más reciente si 'dia' no está definido
+            # Si `dia` aún no está establecido, buscar la fecha más reciente
             registro_mas_reciente = RegistroAsistencia.objects.order_by('-fecha').first()
             if registro_mas_reciente:
                 dia = registro_mas_reciente.fecha
 
         context['dia'] = dia
         context['año'] = año
-
-        context['asistencia_filtro_form'] = AsistenciaFiltroForm(self.request.GET or None)
+        context['asistencia_filtro_form'] = AsistenciaFiltroForm(initial={'dia': dia, 'año': año})
 
         return context
 
