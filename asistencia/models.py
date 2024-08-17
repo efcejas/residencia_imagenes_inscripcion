@@ -136,6 +136,27 @@ class GruposResidentes(models.Model):
         
 # Modelos relacionados con la evaluación de los residentes
 
+class AteneoEvaluacion(models.Model):
+    user = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    ateneo_fecha = models.DateField('Fecha del ateneo', default=timezone.now)
+    importancia_tema = models.IntegerField(choices=[(i, str(i)) for i in range(0, 11)], help_text='¿Qué tan importante te resultó el tema propuesto?')
+    puntaje_contenido_cientifico = models.IntegerField(choices=[(i, str(i)) for i in range(0, 11)], help_text='¿Qué puntaje le darias a la presentación,  teniendo en cuenta el contenido cientifico de la misma?')
+    puntaje_calidad_presentacion = models.IntegerField(choices=[(i, str(i)) for i in range(0, 11)], help_text='¿Qué puntaje le darias a la presentación,  teniendo en cuenta la calidad del contenido y la forma de presentación?')
+    puntaje_calidad_texto = models.IntegerField(choices=[(i, str(i)) for i in range(0, 11)], help_text='¿Qué puntaje le darias a la calidad del texto de la presentación,  teniendo en cuenta la claridad de la informacion y la ortografía?')
+    claridad_presentacion_oral = models.IntegerField(choices=[(i, str(i)) for i in range(0, 11)], help_text='¿Qué tan clara fue la presentación oral?')
+    puntaje_bibliografia = models.IntegerField(choices=[(i, str(i)) for i in range(0, 11)], help_text='¿Qué puntaje le darias al tipo de bibliografía elegida?')
+    uso_tiempo = models.IntegerField(choices=[(i, str(i)) for i in range(0, 11)], help_text='¿Como calificaría el uso del tiempo en la presentación?')
+    cumplimiento_objetivos = models.IntegerField(choices=[(i, str(i)) for i in range(0, 11)], help_text='¿Que tanto se cumplieron los objetivos de aprendizaje?')
+    nota_general = models.IntegerField(choices=[(i, str(i)) for i in range(0, 11)], help_text='¿Qué nota general le darias a la presentación?')
+    comentario_aprendizaje = models.TextField(help_text='Comenta brevemente que aprendiste con la presentación.', max_length=600)
+
+    class Meta:
+        verbose_name = 'Evaluación de ateneo'
+        verbose_name_plural = 'Evaluaciones de ateneo'
+
+    def __str__(self):
+        return f"Evaluación de {self.user.username}"
+
 class EvaluacionPeriodica(models.Model):
     OPCION_NOTA = [
         (0, '0'),

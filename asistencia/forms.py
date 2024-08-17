@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Usuario, Residente, Docente, Administrativo, RegistroAsistencia, Sedes, EvaluacionPeriodica, GruposResidentes, DisertantesClases, ClasificacionTematica
+from .models import Usuario, Residente, Docente, Administrativo, RegistroAsistencia, Sedes, EvaluacionPeriodica, GruposResidentes, DisertantesClases, ClasificacionTematica, AteneoEvaluacion
 
 class RegistroFormUsuario(UserCreationForm):
     password1 = forms.CharField(
@@ -93,6 +93,34 @@ class EvaluacionPeriodicaForm(forms.ModelForm):
             'aspecto_positivo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'aspecto_negativo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'nota': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+class AteneoEvaluacionForm(forms.ModelForm):
+    class Meta:
+        model = AteneoEvaluacion
+        fields = [
+            'importancia_tema',
+            'puntaje_contenido_cientifico',
+            'puntaje_calidad_presentacion',
+            'puntaje_calidad_texto',
+            'claridad_presentacion_oral',
+            'puntaje_bibliografia',
+            'uso_tiempo',
+            'cumplimiento_objetivos',
+            'nota_general',
+            'comentario_aprendizaje'
+        ]
+        widgets = {
+            'importancia_tema': forms.Select(attrs={'class': 'form-select'}),
+            'puntaje_contenido_cientifico': forms.Select(attrs={'class': 'form-select'}),
+            'puntaje_calidad_presentacion': forms.Select(attrs={'class': 'form-select'}),
+            'puntaje_calidad_texto': forms.Select(attrs={'class': 'form-select'}),
+            'claridad_presentacion_oral': forms.Select(attrs={'class': 'form-select'}),
+            'puntaje_bibliografia': forms.Select(attrs={'class': 'form-select'}),
+            'uso_tiempo': forms.Select(attrs={'class': 'form-select'}),
+            'cumplimiento_objetivos': forms.Select(attrs={'class': 'form-select'}),
+            'nota_general': forms.Select(attrs={'class': 'form-select'}),
+            'comentario_aprendizaje': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
 
 # Formularios relacionados con el manejo de videos de clases

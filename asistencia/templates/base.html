@@ -56,6 +56,7 @@
                                     <a class="dropdown-item" href="{% url 'home' %}" class="nav-link">Inicio</a>
                                 </li>
                                 {% if user.residente_profile %}
+                                <!--  Este bloque se muestra si el usuario es residente -->
                                 <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:asistencias_registradas' %}" class="nav-link">Ver asistencias registradas</a>
                                 </li>
@@ -64,6 +65,7 @@
                                 </li>
                                 {% endif %}
                                 {% if user.docente_profile or user.administrativo_profile %}
+                                <!--  Este bloque se muestra si el usuario es docente o administrativo -->
                                 <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}"
                                         class="nav-link">Gestión de residentes</a>
@@ -73,21 +75,27 @@
                                         class="nav-link">Control de asistencias</a>
                                 </li>
                                 <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:ateneo_evaluacion_list' %}"
+                                        class="nav-link">Evaluación de ateneos</a>
+                                </li>
+                                <!-- <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:evaluados' %}"
                                         class="nav-link">Residentes evaluados</a>
-                                </li>
+                                </li> -->
                                 <!-- <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:evaluacion_periodica_crear' %}"
                                         class="nav-link">Evaluación periódica</a>
                                 </li> -->
                                 {% endif %}
                                 {% if user.administrativo_profile %}
+                                <!--  Este bloque se muestra si el usuario es administrativo -->
                                 <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}"
                                         class="nav-link">Gestión de sedes</a>
                                 </li>
                                 {% endif %}
                                 {% if user.is_superuser %}
+                                <!--  Este bloque se muestra si el usuario es superusuario -->
                                 <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}"
                                         class="nav-link">Gestión de residentes</a>
@@ -96,14 +104,18 @@
                                     <a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}"
                                         class="nav-link">Control de asistencias</a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'asistencia:ateneo_evaluacion_list' %}"
+                                        class="nav-link">Evaluación de ateneos</a>
+                                </li>
                                 <!-- <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:evaluacion_periodica_crear' %}"
                                         class="nav-link">Evaluación periódica</a>
                                 </li> -->
-                                <li>
+                                <!-- <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:evaluados' %}"
                                         class="nav-link">Residentes evaluados</a>
-                                </li>
+                                </li> -->
                                 <li>
                                     <a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}"
                                         class="nav-link">Gestión de sedes</a>
@@ -112,6 +124,7 @@
                             </ul>
                         </li>
                         {% if user.residente_profile or user.docente_profile or user.is_superuser %}
+                        <!--  Este bloque se muestra si el usuario es residente, docente o superusuario. El administrativo no tiene acceso a esta opción -->
                         <li class="nav-item dropdown">
                             <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Herramientas</button>
                             <ul class="dropdown-menu dropdown-menu-lg-end">
@@ -122,6 +135,7 @@
                             </ul>
                         </li>
                         {% endif %}
+                        <!--  Este bloque se muestra si el usuario está autenticado, no importa el perfil -->
                         <li class="nav-item dropdown">
                             <button class="btn dropdown-toggle" data-bs-toggle="dropdown"
                                 aria-expanded="false">Cuenta</button>

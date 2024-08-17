@@ -150,6 +150,7 @@ class CasoInteresante(models.Model):
         "Contraste", default=False, help_text="¿Se utilizó contraste endovenoso en el estudio?")
     contraste_or = models.BooleanField(
         "Contraste oral", default=False, help_text="¿Se utilizó contraste oral en el estudio?")
+    # portal_de_estudio = models.CharField("Portal de estudio", max_length=100, help_text="Ingrese el portal de estudio donde se encuentra cargado el estudio.")
     region_anatomica = models.ForeignKey(Region, on_delete=models.CASCADE, related_name='casos_interesantes', verbose_name="Región anatómica", help_text="Seleccione la región anatómica donde se encuentra la patología.")
     sistema = models.ForeignKey(Sistema, on_delete=models.CASCADE, related_name='casos_interesantes', help_text="Seleccione el sistema relacionado con la patología.")
     organo = models.ForeignKey(Organo, on_delete=models.CASCADE, related_name='casos_interesantes', help_text="Seleccione el órgano donde se encuentra la patología, si corresponde.")
@@ -159,7 +160,6 @@ class CasoInteresante(models.Model):
     hallazgos = models.ForeignKey(Patologia, on_delete=models.CASCADE, related_name='casos_interesantes', verbose_name="Hallazgos", help_text="Seleccione la patología que se encontró en el estudio.")
     fregmento_informe = models.TextField(
         "Fragmento del informe", help_text="Ingrese un fragmento del informe que menciona el hallazgo de interés o en el que se menciona el diagnóstico definitivo.")
-    # imagenes_clave = models.ImageField("Imagen del caso", upload_to='casos_interesantes/', blank=True, null=True)
     etiquetas = TaggableManager("Etiquetas", help_text="Puede agregar etiquetas para facilitar la búsqueda de este caso. Separe las etiquetas con comas. Por ejemplo: neumonía, COVID-19, pulmón.", blank=True)
 
     class Meta:
@@ -169,3 +169,10 @@ class CasoInteresante(models.Model):
 
     def __str__(self):
         return f"Caso de {self.paciente} - {self.fecha}"
+
+class ImagenCasoInteresante(models.Model):
+    """
+    Modelo que representa una imagen de un caso interesante.
+    """
+    caso = models.ForeignKey(CasoInteresante, on_delete=models.CASCADE, related_name='imagenes')
+    imagen = models.ImageField("Imagen del caso", upload_to='casos_interesantes/')

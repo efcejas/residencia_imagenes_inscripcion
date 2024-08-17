@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ateneo Evaluación{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h4 class="text-center titulo_registro">Evaluación del Ateneo</h4>
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-group row d-flex align-items-center">
+                            <label for="{{ form.importancia_tema.id_for_label }}" class="col-9 col-form-label"><p class="small mb-0">{{ form.importancia_tema.help_text }}</p></label>
+                            <div class="col-3">
+                                {{ form.importancia_tema }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-group row d-flex align-items-center">
+                            <label for="{{ form.puntaje_contenido_cientifico.id_for_label }}" class="col-9 col-form-label"><p class="small mb-0">{{ form.puntaje_contenido_cientifico.help_text }}</p></label>
+                            <div class="col-3">
+                                {{ form.puntaje_contenido_cientifico }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-group row d-flex align-items-center">
+                            <label for="{{ form.puntaje_calidad_presentacion.id_for_label }}" class="col-9 col-form-label"><p class="small mb-0">{{ form.puntaje_calidad_presentacion.help_text }}</p></label>
+                            <div class="col-3">
+                                {{ form.puntaje_calidad_presentacion }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-group row d-flex align-items-center">
+                            <label for="{{ form.puntaje_calidad_texto.id_for_label }}" class="col-9 col-form-label"><p class="small mb-0">{{ form.puntaje_calidad_texto.help_text }}</p></label>
+                            <div class="col-3">
+                                {{ form.puntaje_calidad_texto }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-group row d-flex align-items-center">
+                            <label for="{{ form.claridad_presentacion_oral.id_for_label }}" class="col-9 col-form-label"><p class="small mb-0">{{ form.claridad_presentacion_oral.help_text }}</p></label>
+                            <div class="col-3">
+                                {{ form.claridad_presentacion_oral }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-group row d-flex align-items-center">
+                            <label for="{{ form.puntaje_bibliografia.id_for_label }}" class="col-9 col-form-label"><p class="small mb-0">{{ form.puntaje_bibliografia.help_text }}</p></label>
+                            <div class="col-3">
+                                {{ form.puntaje_bibliografia }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-group row d-flex align-items-center">
+                            <label for="{{ form.uso_tiempo.id_for_label }}" class="col-9 col-form-label"><p class="small mb-0">{{ form.uso_tiempo.help_text }}</p></label>
+                            <div class="col-3">
+                                {{ form.uso_tiempo }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-group row d-flex align-items-center">
+                            <label for="{{ form.cumplimiento_objetivos.id_for_label }}" class="col-9 col-form-label"><p class="small mb-0">{{ form.cumplimiento_objetivos.help_text }}</p></label>
+                            <div class="col-3">
+                                {{ form.cumplimiento_objetivos }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-group row d-flex align-items-center">
+                            <label for="{{ form.nota_general.id_for_label }}" class="col-9 col-form-label"><p class="small mb-0">{{ form.nota_general.help_text }}</p></label>
+                            <div class="col-3">
+                                {{ form.nota_general }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="{{ form.comentario_aprendizaje.id_for_label }}" class="mb-2 mt-md-2 text-center text-md-start"><p class="small mb-0">{{ form.comentario_aprendizaje.help_text }}</p></label>
+                            {{ form.comentario_aprendizaje }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+{% endblock %}
