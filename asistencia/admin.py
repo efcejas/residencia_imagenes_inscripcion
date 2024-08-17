@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas, EvaluacionPeriodica, ClasesVideos, DisertantesClases, ClasificacionTematica, ConteoVisitaPagina, ConteoVisualizacionVideo
+from .models import Docente, Residente, Usuario, Administrativo, RegistroAsistencia, Sedes, GruposResidentes, Aulas, EvaluacionPeriodica, ClasesVideos, DisertantesClases, ClasificacionTematica, ConteoVisitaPagina, ConteoVisualizacionVideo, AteneoEvaluacion
 
 class UsuarioAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
@@ -83,6 +83,12 @@ class AulasAdmin(admin.ModelAdmin):
         return obj.sede.direccion  # Retorna la direccion de la sede
     get_direccion_sede.short_description = 'Dirección'  # Etiqueta para la columna
 
+# Registro de los modelos relacionados con evaluaciones
+
+class AteneoEvaluacionAdmin(admin.ModelAdmin):
+    list_display = ('ateneo_fecha', 'user', 'nota_general', 'comentario_aprendizaje',)
+    ordering = ('ateneo_fecha', 'user',) 
+
 class EvaluacionPeriodicaAdmin(admin.ModelAdmin):
     list_display = ('residente', 'aspecto_positivo', 'aspecto_negativo', 'nota', 'fecha', 'evaluador',)
     ordering = ('residente', 'fecha', 'evaluador',)
@@ -128,6 +134,7 @@ admin.site.register(DisertantesClases, DisertantesClasesAdmin)
 admin.site.register(ClasificacionTematica, ClasificacionTematicaAdmin)
 admin.site.register(ConteoVisitaPagina, ConteoVisitaPaginaAdmin)
 admin.site.register(ConteoVisualizacionVideo, ConteoVisualizacionVideoAdmin)
+admin.site.register(AteneoEvaluacion, AteneoEvaluacionAdmin)
 
 
 

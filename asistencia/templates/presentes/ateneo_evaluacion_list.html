@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Ateneo Evaluación{% endblock %}
+{% block content %}
+<div class="container-fluid py-3">
+    <div class="row">
+        <div class="col text-center text-md-start">
+            <h4 class="titulo_registro">Evaluaciones de los ateneos</h4>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-lg-2">
+        <div class="col-lg-5 d-flex flex-column justify-content-start">
+            <div class="text-center text-md-start mb-2">
+                <p class="fw-normal lh-sm">
+                    <small>Acá se podrán visualizar las asistencias registradas por los residentes en las actividades
+                        presenciales.</small>
+                </p>
+            </div>
+            <!-- <div class="mb-2">
+                <div class="container-fluid p-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="text-center">Texto de relleno</p>
+                        </div>
+                        <div class="card-footer">
+                            <p class="small mb-0">Texto de relleno</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <div class="col-lg-7 d-flex justify-content-center">
+            <div class="container col-md-12 mb-5 p-0">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="text-center text-md-start fs-5 fs-md-3">
+                            Evaluaciones para el ateneo del día {{ ultima_fecha_evaluacion|date:"l j \d\e F \d\e Y" }}
+                        </h6>
+                        <div class="row row-cols-1">
+                            <div class="accordion" id="evaluacionesAccordion">
+                                {% for evaluacion in evaluaciones_ateneos %}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+                                            {{ user.get_full_name }}
+                                        </button>
+                                    </h2>
+                                    <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#evaluacionesAccordion">
+                                        <div class="accordion-body">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item">
+                                                    <strong>Importancia del Tema:</strong> {{ evaluacion.importancia_tema }}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <strong>Puntaje Contenido Científico:</strong> {{ evaluacion.puntaje_contenido_cientifico }}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <strong>Puntaje Calidad Presentación:</strong> {{ evaluacion.puntaje_calidad_presentacion }}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <strong>Puntaje Calidad Texto:</strong> {{ evaluacion.puntaje_calidad_texto }}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <strong>Claridad Presentación Oral:</strong> {{ evaluacion.claridad_presentacion_oral }}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <strong>Puntaje Bibliografía:</strong> {{ evaluacion.puntaje_bibliografia }}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <strong>Uso del Tiempo:</strong> {{ evaluacion.uso_tiempo }}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <strong>Cumplimiento de Objetivos:</strong> {{ evaluacion.cumplimiento_objetivos }}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <strong>Nota General:</strong> {{ evaluacion.nota_general }}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <strong>Comentario de Aprendizaje:</strong> {{ evaluacion.comentario_aprendizaje }}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>                        
+                        {% if not evaluaciones_ateneos %}
+                        <p class="alert alert-warning">No hay evaluaciones de ateneos disponibles.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+{% endblock %}

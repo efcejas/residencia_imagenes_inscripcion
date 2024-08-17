@@ -18,9 +18,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:control_asistencia' %}">Control de asistencias</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:evaluados' %}">Residentes evaluados</a>
-        </li>
+        </li> -->
         <!-- <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:evaluacion_periodica_crear' %}">Evaluación periódica</a>
         </li> -->
@@ -35,11 +35,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:residentes_list' %}">Gestión de residentes</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:evaluados' %}">Residentes evaluados</a>
-        </li>
+        </li> -->
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Gestión de sedes</a>
+          <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Sedes</a>
         </li>
         {% endif %}
         {% if user.residente_profile %}
@@ -60,14 +60,14 @@
         <!-- <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:evaluacion_periodica_crear' %}">Evaluación periódica</a>
         </li> -->
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:evaluados' %}">Residentes evaluados</a>
-        </li>
+        </li> -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'asistencia:clases_videos' %}">Clases</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Gestión de sedes</a>
+          <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Sedes</a>
         </li>
         {% endif %}
         <li class="nav-item">

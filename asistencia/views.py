@@ -21,9 +21,9 @@ from django.db.models import Q, Max, Avg # Para hacer consultas más complejas
 # Local imports
 from .forms import (
     RegistroAsistenciaForm, RegistroFormAdministrativo,
-    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm, SeleccionarAnoForm, VideoFilterForm, AsistenciaFiltroForm
+    RegistroFormDocente, RegistroFormResidente, RegistroFormUsuario, SedeForm, WashoutSuprarrenalForm, EvaluacionPeriodicaForm, SeleccionarAnoForm, VideoFilterForm, AsistenciaFiltroForm, AteneoEvaluacionForm
 )
-from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo, GruposResidentes, EvaluacionPeriodica, ClasesVideos, ConteoVisitaPagina, ConteoVisualizacionVideo
+from .models import RegistroAsistencia, Residente, Usuario, Sedes, Docente, Administrativo, GruposResidentes, EvaluacionPeriodica, ClasesVideos, ConteoVisitaPagina, ConteoVisualizacionVideo, AteneoEvaluacion
 
 # Vistas relacionadas con el registro, login y logout de usuarios, además de la autenticación.abs
 
@@ -491,6 +491,39 @@ class EvaluadosDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def test_func(self):
         return self.request.user.is_superuser or hasattr(self.request.user, 'docente_profile')
+
+    def handle_no_permission(self):
+        return redirect('home')
+
+# Vistas relacionadas con la evalauación de los ateneos
+
+class AteneoEvaluacionCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
+    model = AteneoEvaluacion
+    form_class = AteneoEvaluacionForm
+    template_name = 'presentes/ateneo_evaluacion_form.html'
+    success_url = reverse_lazy('asistencia:asistencias_registradas')
+    success_message = '¡La evaluación del ateneo se ha registrado exitosamente!'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user  # Asigna el usuario actual al campo user
+        return super().form_valid(form)
+
+    def test_func(self):
+        return hasattr(self.request.user, 'residente_profile') or self.request.user.is_superuser
+
+class AteneoEvaluacionListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = AteneoEvaluacion
+    template_name = 'presentes/ateneo_evaluacion_list.html'
+    context_object_name = 'evaluaciones_ateneos'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ultima_fecha_evaluacion = AteneoEvaluacion.objects.aggregate(Max('ateneo_fecha'))['ateneo_fecha__max']
+        context['ultima_fecha_evaluacion'] = ultima_fecha_evaluacion
+        return context
+
+    def test_func(self):
+        return hasattr(self.request.user, 'docente_profile') or self.request.user.is_superuser
 
     def handle_no_permission(self):
         return redirect('home')

@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from .views import RegistroAsistenciaView, ListaAsistenciaView, SedesCreateView, SedesListView, SedeUpdateView, SedeDeleteView, ResidentesListView, CalcularWashoutView, PerfilView, RegistroAsistenciaFiltradoListView, EvaluacionPeriodicaCreateView, ClasesVideosListView, EvaluadosListView, EvaluadosDetailView
+from .views import RegistroAsistenciaView, ListaAsistenciaView, SedesCreateView, SedesListView, SedeUpdateView, SedeDeleteView, ResidentesListView, CalcularWashoutView, PerfilView, RegistroAsistenciaFiltradoListView, EvaluacionPeriodicaCreateView, ClasesVideosListView, EvaluadosListView, EvaluadosDetailView, AteneoEvaluacionCreateView, AteneoEvaluacionListView
 from . import views
 
 app_name = "asistencia"
@@ -16,6 +16,8 @@ urlpatterns = [
     path('evaluacion_periodica/exito/', TemplateView.as_view(template_name='presentes/evaluacion_periodica_exito.html'), name='evaluacion_exitosa'),  # Vista para mostrar un mensaje de éxito al crear una evaluación periódica
     path('evaluados/', EvaluadosListView.as_view(), name='evaluados'),  # Vista para listar los residentes que han sido evaluados
     path('evaluados/<int:pk>/', EvaluadosDetailView.as_view(), name='evaluado_detail'),  # Vista para ver el detalle de un residente evaluado
+    path('ateneo_evaluacion/crear/', AteneoEvaluacionCreateView.as_view(), name='ateneo_evaluacion_crear'),  # Vista para crear una evaluación del ateneo
+    path('ateneo_evaluacion/', AteneoEvaluacionListView.as_view(), name='ateneo_evaluacion_list'),  # Vista para listar las evaluaciones del ateneo
 
     # Rutas relacionadas con clases y material de estudio
     path('clases_videos/', ClasesVideosListView.as_view(), name='clases_videos'),  # Vista para listar las clases

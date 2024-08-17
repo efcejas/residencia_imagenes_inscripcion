@@ -20,7 +20,7 @@
             <div class="container mb-3">
                 <div class="row align-items-center justify-content-center justify-content-md-center">
                     <div class="col-12 col-md-auto text-center text-md-left mb-md-0">
-                        <p class="lead mb-md-0">Para registrar asistencia:</p>
+                        <p class="lead mb-md-0">Para un nuevo registro de asistencia:</p>
                     </div>
                     <div class="col-12 col-md-auto text-center text-md-left">
                         <a href="{% url 'asistencia:registro_asistencia' %}" class="btn btn-primary">Click aquí</a>
@@ -49,6 +49,14 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="container py-3">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <p class="lead mb-3">Para evaluar el ateneo del día de hoy:</p>
+                <a href="{% url 'asistencia:ateneo_evaluacion_crear' %}" class="btn btn-secondary">Click aquí</a>
+            </div>
         </div>
     </div>
 </div>
