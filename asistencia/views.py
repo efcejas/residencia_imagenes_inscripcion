@@ -516,16 +516,24 @@ class AteneoEvaluacionListView(LoginRequiredMixin, UserPassesTestMixin, ListView
     template_name = 'presentes/ateneo_evaluacion_list.html'
     context_object_name = 'evaluaciones_ateneos'
 
+    def get_queryset(self):
+        # Calcular la última fecha de evaluación solo una vez y reutilizarla
+        self.ultima_fecha_evaluacion = AteneoEvaluacion.objects.aggregate(Max('ateneo_fecha'))['ateneo_fecha__max']
+        # Filtrar las evaluaciones por la última fecha de evaluación
+        return AteneoEvaluacion.objects.filter(ateneo_fecha=self.ultima_fecha_evaluacion)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        ultima_fecha_evaluacion = AteneoEvaluacion.objects.aggregate(Max('ateneo_fecha'))['ateneo_fecha__max']
-        context['ultima_fecha_evaluacion'] = ultima_fecha_evaluacion
+        # Añadir la última fecha de evaluación al contexto
+        context['ultima_fecha_evaluacion'] = self.ultima_fecha_evaluacion
         return context
 
     def test_func(self):
+        # Verifica que el usuario tenga el perfil de docente o sea un superusuario
         return hasattr(self.request.user, 'docente_profile') or self.request.user.is_superuser
 
     def handle_no_permission(self):
+        # Redirige a la página de inicio si el usuario no tiene permiso
         return redirect('home')
 
 # Vistas relacionadas con la gestión de usuarios residentes

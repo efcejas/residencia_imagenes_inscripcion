@@ -33,16 +33,20 @@
             <div class="container col-md-12 mb-5 p-0">
                 <div class="card">
                     <div class="card-body">
+                        {% if ultima_fecha_evaluacion %}
                         <h6 class="text-center text-md-start fs-5 fs-md-3">
                             Evaluaciones para el ateneo del día {{ ultima_fecha_evaluacion|date:"l j \d\e F \d\e Y" }}
                         </h6>
+                        {% else %}
+                        <p class="alert alert-warning text-center mb-0">No hay evaluaciones disponibles.</p>
+                        {% endif %}
                         <div class="row row-cols-1">
                             <div class="accordion" id="evaluacionesAccordion">
                                 {% for evaluacion in evaluaciones_ateneos %}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="heading{{ forloop.counter }}">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
-                                            {{ user.get_full_name }}
+                                            Evaluación de {{ evaluacion.user.get_full_name }} 
                                         </button>
                                     </h2>
                                     <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#evaluacionesAccordion">
@@ -85,9 +89,6 @@
                                 {% endfor %}
                             </div>
                         </div>                        
-                        {% if not evaluaciones_ateneos %}
-                        <p class="alert alert-warning">No hay evaluaciones de ateneos disponibles.</p>
-                        {% endif %}
                     </div>
                 </div>
             </div>
