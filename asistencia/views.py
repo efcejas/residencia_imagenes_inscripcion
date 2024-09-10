@@ -545,7 +545,8 @@ class ResidentesListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['total_residentes'] = Residente.objects.count()
+        # Filtrar solo los residentes que son usuarios activos
+        context['total_residentes'] = Residente.objects.filter(user__is_active=True).count()
         return context
 
     def test_func(self):
