@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # ADVERTENCIA DE SEGURIDAD: ¡no ejecute con la depuración activada en producción!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'residentes-dm-9833103dde7d.herokuapp.com']
 
@@ -127,6 +127,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'asistencia', 'static'),
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Archivos de medios
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Tipo de campo de clave principal predeterminado
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
