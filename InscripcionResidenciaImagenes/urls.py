@@ -1,24 +1,26 @@
 """
-URL configuration for InscripcionResidenciaImagenes project.
+Configuración de URL para el proyecto InscripcionResidenciaImagenes.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
+La lista `urlpatterns` dirige las URL a las vistas. Para obtener más información, consulte:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+Ejemplos:
+Vistas de funciones
+    1. Agregue una importación: desde las vistas de importación de my_app
+    2. Agregue una URL a urlpatterns: ruta('', views.home, nombre='home')
+Vistas basadas en clases
+    1. Agregue una importación: desde other_app.views import Inicio
+    2. Agregue una URL a urlpatterns: ruta('', Home.as_view(), nombre='home')
+Incluyendo otra URLconf
+    1. Importe la función include(): desde django.urls importe include, ruta
+    2. Agregue una URL a urlpatterns: ruta('blog/', include('blog.urls'))
 """
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
 from asistencia.views import SuccessView, RegistroView
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # Rutas de la página principal
@@ -42,3 +44,7 @@ urlpatterns = [
     # Rutas de administración
     path('admin/', admin.site.urls),
 ]
+
+# Configuración para servir archivos estáticos en desarrollo
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

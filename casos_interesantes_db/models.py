@@ -6,7 +6,7 @@ from django.urls import reverse  # Para obtener URLs de tus vistas
 # Importa el modelo de etiquetas de la librería taggit
 from taggit.managers import TaggableManager
 # Importa el modelo de Sedes para relacionar con el modelo de Residentes
-from asistencia.models import Sedes
+from asistencia.models import Sedes, Usuario
 
 # Crea tus modelos aquí.
 
@@ -107,24 +107,6 @@ class Especialidad(models.Model):
         self.nombre = self.nombre.capitalize()
         return super().save(*args, **kwargs)
 
-class Patologia(models.Model):
-    """
-    Modelo que representa una patología.
-    """
-    nombre = models.CharField("Nombre de la patología", max_length=50, unique=True)
-
-    class Meta:
-        verbose_name = "Patología"
-        verbose_name_plural = "Patologías"
-        ordering = ['nombre']
-
-    def __str__(self):
-        return self.nombre
-
-    def save(self, *args, **kwargs):
-        self.nombre = self.nombre.capitalize()
-        return super().save(*args, **kwargs)
-
 class CasoInteresante(models.Model):
     """
     Modelo que representa un caso interesante.
@@ -157,7 +139,10 @@ class CasoInteresante(models.Model):
     especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE, related_name='casos_interesantes', help_text="Selecciona a que subespecialidad pertenece el caso.")
     descripcion = models.TextField(
         "Descripción del caso", help_text="Ingrese una breve descripción del caso.")
-    hallazgos = models.ForeignKey(Patologia, on_delete=models.CASCADE, related_name='casos_interesantes', verbose_name="Hallazgos", help_text="Seleccione la patología que se encontró en el estudio.")
+    hallazgos = models.TextField(
+        "Hallazgos", 
+        help_text="Ingrese los hallazgos más relevantes del caso. Por ejemplo: Tumor en lóbulo superior derecho, Colangiocarcinoma, Neumonía bilateral, etc."
+    )
     fregmento_informe = models.TextField(
         "Fragmento del informe", help_text="Ingrese un fragmento del informe que menciona el hallazgo de interés o en el que se menciona el diagnóstico definitivo.")
     etiquetas = TaggableManager("Etiquetas", help_text="Puede agregar etiquetas para facilitar la búsqueda de este caso. Separe las etiquetas con comas. Por ejemplo: neumonía, COVID-19, pulmón.", blank=True)
@@ -175,4 +160,4 @@ class ImagenCasoInteresante(models.Model):
     Modelo que representa una imagen de un caso interesante.
     """
     caso = models.ForeignKey(CasoInteresante, on_delete=models.CASCADE, related_name='imagenes')
-    imagen = models.ImageField("Imagen del caso", upload_to='casos_interesantes/')
+    imagen = models.ImageField("Imagen del caso", upload_to='casos_interesantes/', help_text="Cargue una o más imágenes relacionadas con el caso.")

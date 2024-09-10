@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='casointeresante',
             name='Hallazgos',
-            field=models.TextField(default='', help_text='Ingrese los hallazgos encontrados en el estudio.', verbose_name=casos_interesantes_db.models.Patologia),
+            field=models.TextField(default='', help_text='Ingrese los hallazgos encontrados en el estudio.', verbose_name='Hallazgos'),
         ),
         migrations.AlterField(
             model_name='casointeresante',

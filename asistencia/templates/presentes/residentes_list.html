@@ -39,6 +39,7 @@
                     </thead>
                     <tbody class="text-center">
                         {% for residente in residentes %}
+                            {% if residente.user.is_active %}
                                 <tr>
                                     <td>{{ residente.user.first_name }}</td>
                                     <td>{{ residente.user.last_name }}</td>
@@ -59,6 +60,7 @@
                                     <td>{{ residente.telefono }}</td>
                                     <td>{{ residente.fecha_de_ingreso }}</td>
                                 </tr>
+                            {% endif %}
                         {% endfor %}
                     </tbody>                    
                 </table>
