@@ -39,26 +39,26 @@
                     </thead>
                     <tbody class="text-center">
                         {% for residente in residentes %}
-                        <tr>
-                            <td>{{ residente.user.first_name }}</td>
-                            <td>{{ residente.user.last_name }}</td>
-                            <td>
-                                {% if residente.gruposresidentes_set.exists %}
-                                    {{ residente.gruposresidentes_set.first.año }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if residente.gruposresidentes_set.exists %}
-                                    {{ residente.gruposresidentes_set.first.residencia }}
-                                {% endif %}
-                            </td>
-                            <td>{{ residente.user.email }}</td>
-                            <td>{{ residente.dni }}</td>
-                            <td>{{ residente.fecha_nacimiento }}</td>
-                            <td>{{ residente.matricula }}</td>
-                            <td>{{ residente.telefono }}</td>
-                            <td>{{ residente.fecha_de_ingreso }}</td>
-                        </tr>
+                                <tr>
+                                    <td>{{ residente.user.first_name }}</td>
+                                    <td>{{ residente.user.last_name }}</td>
+                                    <td>
+                                        {% if residente.gruposresidentes_set.exists %}
+                                            {{ residente.gruposresidentes_set.first.año }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if residente.gruposresidentes_set.exists %}
+                                            {{ residente.gruposresidentes_set.first.residencia }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ residente.user.email }}</td>
+                                    <td>{{ residente.dni }}</td>
+                                    <td>{{ residente.fecha_nacimiento }}</td>
+                                    <td>{{ residente.matricula }}</td>
+                                    <td>{{ residente.telefono }}</td>
+                                    <td>{{ residente.fecha_de_ingreso }}</td>
+                                </tr>
                         {% endfor %}
                     </tbody>                    
                 </table>
