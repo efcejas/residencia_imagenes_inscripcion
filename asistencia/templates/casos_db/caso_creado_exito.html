@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Caso Creado Exitosamente{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card text-center"> <!-- Añadido text-center para centrar el texto -->
+                <div class="card-header bg-success text-white">
+                    <h3 class="card-title mb-0">Caso Creado Exitosamente</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Se ha creado exitosamente el caso relacionado con el paciente: <strong>{{ paciente.nombre }} {{ paciente.apellido }}</strong></p>
+                    <p class="card-text">Con los siguientes hallazgos: <strong>{{ caso.hallazgos }}</strong></p>
+                    <div class="mt-4">
+                        <p class="card-text">¿Qué deseas hacer a continuación?</p>
+                        <a href="{% url 'casos_interesantes_db:detalle_caso_interesante' caso.id %}" class="btn btn-info">Ver detalles del caso</a>
+                        <a href="{% url 'casos_interesantes_db:lista_casos_interesantes' %}" class="btn btn-secondary">Ir a los casos almacenados</a>
+                        <a href="{% url 'casos_interesantes_db:crear_caso_interesante' paciente.id %}" class="btn btn-primary">Agregar un nuevo caso</a>
+                        <a href="{% url 'home' %}" class="btn btn-success">Volver al Inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

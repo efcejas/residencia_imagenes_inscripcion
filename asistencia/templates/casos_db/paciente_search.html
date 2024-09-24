@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Buscar Paciente{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0 text-center">Buscar Paciente</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <div class="input-group">
+                                {{ form.dni }}
+                                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Buscar</button>
+                            </div>
+                            {% if form.dni.help_text %}
+                                <div class="form-text">{{ form.dni.help_text }}</div>
+                            {% endif %}
+                            {% for error in form.dni.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

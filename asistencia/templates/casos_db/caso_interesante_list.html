@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block title %}Lista de casos{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5 p-0">
+    <div class="row justify-content-center">
+        <!-- Filtro de búsqueda para pantallas pequeñas y medianas -->
+        <div class="col-12 mb-4 d-lg-none">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+                            Filtros de búsqueda
+                        </button>
+                    </h5>
+                </div>
+                <div id="filterCollapse" class="collapse">
+                    <div class="card-body">
+                        <form method="get" class="form-inline">
+                            <div class="row g-3">
+                                <div class="col-md-6 col-lg-2">
+                                    {{ filter_form.fecha_desde.label_tag }}
+                                    {{ filter_form.fecha_desde }}
+                                </div>
+                                <div class="col-md-6 col-lg-2">
+                                    {{ filter_form.fecha_hasta.label_tag }}
+                                    {{ filter_form.fecha_hasta }}
+                                </div>
+                                <div class="col-md-6 col-lg-2">
+                                    {{ filter_form.especialidad.label_tag }}
+                                    {{ filter_form.especialidad }}
+                                </div>
+                                <div class="col-md-6 col-lg-2">
+                                    {{ filter_form.patologia.label_tag }}
+                                    {{ filter_form.patologia }}
+                                </div>
+                                <div class="col-md-6 col-lg-2">
+                                    {{ filter_form.region_anatomica.label_tag }}
+                                    {{ filter_form.region_anatomica }}
+                                </div>
+                                <div class="col-md-6 col-lg-2">
+                                    {{ filter_form.sistema.label_tag }}
+                                    {{ filter_form.sistema }}
+                                </div>
+                                <div class="col-md-6 col-lg-2">
+                                    {{ filter_form.organo.label_tag }}
+                                    {{ filter_form.organo }}
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    {{ filter_form.etiqueta.label_tag }}
+                                    {{ filter_form.etiqueta}}
+                                </div>
+                                <div class="col-md-6 col-lg-2 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary btn-sm w-100">Filtrar</button>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <p class="text-center mb-0 fw-light lh-sm">
+                                    <small>Puedes filtrar por fecha, patología, órgano, etc. No es necesario completar todos los campos.</small>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Filtro de búsqueda para pantallas grandes -->
+        <div class="col-12 mb-4 d-none d-lg-block">
+            <div class="card">
+                <div class="card-body">
+                    <form method="get" class="form-inline">
+                        <div class="row g-3">
+                            <div class="col-md-6 col-lg-2">
+                                {{ filter_form.fecha_desde.label_tag }}
+                                {{ filter_form.fecha_desde }}
+                            </div>
+                            <div class="col-md-6 col-lg-2">
+                                {{ filter_form.fecha_hasta.label_tag }}
+                                {{ filter_form.fecha_hasta }}
+                            </div>
+                            <div class="col-md-6 col-lg-2">
+                                {{ filter_form.especialidad.label_tag }}
+                                {{ filter_form.especialidad }}
+                            </div>
+                            <div class="col-md-6 col-lg-2">
+                                {{ filter_form.patologia.label_tag }}
+                                {{ filter_form.patologia }}
+                            </div>
+                            <div class="col-md-6 col-lg-2">
+                                {{ filter_form.region_anatomica.label_tag }}
+                                {{ filter_form.region_anatomica }}
+                            </div>
+                            <div class="col-md-6 col-lg-2">
+                                {{ filter_form.sistema.label_tag }}
+                                {{ filter_form.sistema }}
+                            </div>
+                            <div class="col-md-6 col-lg-2">
+                                {{ filter_form.organo.label_tag }}
+                                {{ filter_form.organo }}
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                {{ filter_form.etiqueta.label_tag }}
+                                {{ filter_form.etiqueta}}
+                            </div>
+                            <div class="col-md-6 col-lg-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary">Filtrar</button>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <p class="text-center mb-0 fw-light lh-sm">
+                                <small>Puedes filtrar por fecha, patología, órgano, etc. No es necesario completar todos los campos.</small>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Lista de casos -->
+        <div class="col">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0 text-center">Lista de casos</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        {% if casos %}
+                            <table class="table table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Hallazgos</th>
+                                        <th scope="col">Estudio</th>
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Paciente</th>
+                                        <th scope="col">DNI</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for caso in casos %}
+                                        <tr>
+                                            <td>{{ caso.hallazgos }}</td>
+                                            <td>{{ caso.get_tipo_estudio_display }}</td>
+                                            <td>{{ caso.fecha|date:"d/m/y" }}</td>
+                                            <td>{{ caso.paciente.apellido }} {{ caso.paciente.nombre }}</td>
+                                            <td>{{ caso.paciente.dni }}</td>
+                                            <td>
+                                                <a href="{% url 'casos_interesantes_db:detalle_caso_interesante' caso.id %}" class="btn btn-info btn-sm">Ver</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <!-- Paginación -->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    {% if page_obj.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link" aria-hidden="true">&laquo;</span>
+                                        </li>
+                                    {% endif %}
+                                    {% for num in page_obj.paginator.page_range %}
+                                        {% if page_obj.number == num %}
+                                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                            <li class="page-item"><a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ num }}">{{ num }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if page_obj.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link" aria-hidden="true">&raquo;</span>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        {% else %}
+                            <p class="text-center">No se encontraron coincidencias para tu búsqueda.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Botones de acción -->
+    <div class="col-12 mt-4 d-flex justify-content-end">
+        <a href="{% url 'casos_interesantes_db:buscar_paciente' %}" class="btn btn-success btn-sm me-2">Crear nuevo caso</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Ir a Inicio</a>
+    </div>
+</div>
+{% endblock %}

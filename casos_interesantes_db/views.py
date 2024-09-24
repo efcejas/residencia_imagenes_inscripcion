@@ -1,75 +1,114 @@
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse, reverse_lazy
+from django.views.generic import FormView, CreateView, View, ListView, DetailView
 from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .models import CasoInteresante, ImagenCasoInteresante, Paciente
-from .forms import CasoInteresanteForm, PacienteForm, ImagenCasoInteresanteForm
+from .models import Paciente, CasoInteresante, ImagenCasoInteresante
+from .forms import PacienteSearchForm, PacienteForm, CasoInteresanteForm, ImagenCasoInteresanteForm, CasoInteresanteFilterForm
 
-class CrearCasoInteresanteView(CreateView):
-    model = CasoInteresante
-    form_class = CasoInteresanteForm
-    template_name = 'casos_db/crear_caso_interesante.html'
-    success_url = reverse_lazy('casos_interesantes_db:crear_caso_interesante')
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        if self.request.POST:
-            data['paciente_form'] = PacienteForm(self.request.POST)
-            data['imagen_form'] = ImagenCasoInteresanteForm(self.request.POST, self.request.FILES)
-        else:
-            data['paciente_form'] = PacienteForm()
-            data['imagen_form'] = ImagenCasoInteresanteForm()
-        return data
+class PacienteSearchView(LoginRequiredMixin, FormView):
+    template_name = 'casos_db/paciente_search.html'
+    form_class = PacienteSearchForm
 
     def form_valid(self, form):
-        context = self.get_context_data()
-        paciente_form = context['paciente_form']
-        imagen_form = context['imagen_form']
+        dni = form.cleaned_data['dni']
+        try:
+            paciente = Paciente.objects.get(dni=dni)
+            return redirect('casos_interesantes_db:crear_caso_interesante', paciente_id=paciente.id)
+        except Paciente.DoesNotExist:
+            return redirect(f'{reverse_lazy("casos_interesantes_db:crear_paciente")}?dni={dni}')
 
-        if paciente_form.is_valid() and imagen_form.is_valid():
-            dni = paciente_form.cleaned_data.get('dni')
-            paciente, created = Paciente.objects.get_or_create(
-                dni=dni,
-                defaults={
-                    'nombre': paciente_form.cleaned_data.get('nombre'),
-                    'apellido': paciente_form.cleaned_data.get('apellido')
-                }
-            )
 
-            # Si el paciente ya existe, actualizar sus datos
-            if not created:
-                paciente.nombre = paciente_form.cleaned_data.get('nombre')
-                paciente.apellido = paciente_form.cleaned_data.get('apellido')
-                paciente.save()
+class PacienteCreateView(LoginRequiredMixin, CreateView):
+    model = Paciente
+    form_class = PacienteForm
+    template_name = 'casos_db/paciente_form.html'
+    success_url = reverse_lazy('casos_interesantes_db:en_construccion')
 
-            # Asignar el paciente al caso interesante
-            form.instance.paciente = paciente
-            response = super().form_valid(form)
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['dni'] = self.request.GET.get('dni', '')
+        return initial
 
-            # Guardar la imagen del caso interesante
-            if imagen_form.cleaned_data.get('imagen'):
-                imagen = ImagenCasoInteresante(caso=self.object, imagen=imagen_form.cleaned_data['imagen'])
-                imagen.save()
+    def form_valid(self, form):
+        self.object = form.save()
+        return redirect('casos_interesantes_db:crear_caso_interesante', paciente_id=self.object.id)
 
-            return response
+
+class CasoInteresanteCreateView(LoginRequiredMixin, CreateView):
+    model = CasoInteresante
+    form_class = CasoInteresanteForm
+    template_name = 'casos_db/caso_interesante_create.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        paciente = get_object_or_404(Paciente, id=self.kwargs['paciente_id'])
+        context['paciente'] = paciente
+        if self.request.POST:
+            context['imagen_form'] = ImagenCasoInteresanteForm(self.request.POST, self.request.FILES)
         else:
-            return self.form_invalid(form)
+            context['imagen_form'] = ImagenCasoInteresanteForm()
+        return context
+
+    def form_valid(self, form):
+        form.instance.usuario_carga = self.request.user  # Asigna el usuario logueado
+        form.instance.paciente = get_object_or_404(Paciente, id=self.kwargs['paciente_id'])
+        context = self.get_context_data()
+        imagen_form = context['imagen_form']
+        if imagen_form.is_valid():
+            self.object = form.save()
+            for imagen in self.request.FILES.getlist('imagenes'):
+                ImagenCasoInteresante.objects.create(caso=self.object, imagen=imagen)
+            return redirect(reverse('casos_interesantes_db:caso_creado_exito', kwargs={'pk': self.object.pk}))
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
+        context['imagen_form'] = ImagenCasoInteresanteForm(self.request.POST, self.request.FILES)
         return self.render_to_response(context)
 
-class BuscarPacienteView(View):
+
+class CasoCreadoExitoView(LoginRequiredMixin, View):
+    template_name = 'casos_db/caso_creado_exito.html'
+
     def get(self, request, *args, **kwargs):
-        dni = request.GET.get('dni', None)
-        if dni:
-            try:
-                paciente = Paciente.objects.get(dni=dni)
-                data = {
-                    'nombre': paciente.nombre,
-                    'apellido': paciente.apellido,
-                }
-                return JsonResponse(data)
-            except Paciente.DoesNotExist:
-                return JsonResponse({'error': 'Paciente no encontrado'}, status=404)
-        return JsonResponse({'error': 'DNI no proporcionado'}, status=400)
+        caso = get_object_or_404(CasoInteresante, pk=kwargs['pk'])
+        paciente = caso.paciente
+        return render(request, self.template_name, {'caso': caso, 'paciente': paciente})
+
+class CasoInteresanteListView(LoginRequiredMixin, ListView):
+    model = CasoInteresante
+    template_name = 'casos_db/caso_interesante_list.html'
+    context_object_name = 'casos'
+    paginate_by = 10  # Opcional: para paginar la lista de casos
+
+    def get_queryset(self):
+        queryset = CasoInteresante.objects.all().order_by('-fecha')
+        form = self.filter_form()
+        if form.is_valid():
+            if form.cleaned_data['fecha_desde']:
+                queryset = queryset.filter(fecha__gte=form.cleaned_data['fecha_desde'])
+            if form.cleaned_data['fecha_hasta']:
+                queryset = queryset.filter(fecha__lte=form.cleaned_data['fecha_hasta'])
+            if form.cleaned_data['patologia']:
+                queryset = queryset.filter(hallazgos__icontains=form.cleaned_data['patologia'])
+            if form.cleaned_data['organo']:
+                queryset = queryset.filter(organo=form.cleaned_data['organo'])
+            if form.cleaned_data['etiqueta']:
+                queryset = queryset.filter(etiquetas__name__icontains=form.cleaned_data['etiqueta'])
+        return queryset
+
+    def filter_form(self):
+        return CasoInteresanteFilterForm(self.request.GET)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter_form'] = self.filter_form()
+        return context
+
+class CasoInteresanteDetailView(LoginRequiredMixin, DetailView):
+    model = CasoInteresante
+    template_name = 'casos_db/caso_interesante_detail.html'
+    context_object_name = 'caso'

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Detalles del Caso{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0 text-center">Detalles del Caso</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5 class="card-title">{{ caso.paciente.nombre }} {{ caso.paciente.apellido }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>DNI:</strong> {{ caso.paciente.dni }}</p>
+                                    <!-- Añade otros campos relevantes del paciente aquí -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <p><strong>ID Estudio:</strong> {{ caso.id_estudio }}</p>
+                                    <p><strong>Sede:</strong> {{ caso.sede }}</p>
+                                    <p><strong>Fecha:</strong> {{ caso.fecha|date:"d/m/y" }}</p>
+                                    <p><strong>Tipo de Estudio:</strong>
+                                        {% if caso.tipo_estudio == "RX" or caso.tipo_estudio == "US" %}
+                                            {{ caso.get_tipo_estudio_display }}
+                                        {% elif caso.tipo_estudio == "RM" %}
+                                            {% if caso.contraste_ev %}
+                                                {{ caso.get_tipo_estudio_display }} con contraste endovenoso.
+                                            {% else %}
+                                                {{ caso.get_tipo_estudio_display }} sin contraste.
+                                            {% endif %}
+                                        {% else %}
+                                            {% if caso.contraste_ev and caso.contraste_or %}
+                                                {{ caso.get_tipo_estudio_display }} con contraste endovenoso y oral.
+                                            {% elif caso.contraste_ev %}
+                                                {{ caso.get_tipo_estudio_display }} con contraste endovenoso.
+                                            {% elif caso.contraste_or %}
+                                                {{ caso.get_tipo_estudio_display }} con contraste oral.
+                                            {% else %}
+                                                {{ caso.get_tipo_estudio_display }} sin contraste.
+                                            {% endif %}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <p><strong>Región Anatómica:</strong> {{ caso.region_anatomica }}</p>
+                                    <p><strong>Sistema:</strong> {{ caso.sistema }}</p>
+                                    <p><strong>Órgano:</strong> {{ caso.organo }}</p>
+                                    <p><strong>Especialidad:</strong> {{ caso.especialidad }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <p><strong>Descripción:</strong> {{ caso.descripcion }}</p>
+                            <p><strong>Hallazgos:</strong> {{ caso.hallazgos }}</p>
+                            <p><strong>Fragmento del Informe:</strong> {{ caso.fregmento_informe }}</p>
+                            <p><strong>Etiquetas:</strong>
+                                {% for etiqueta in caso.etiquetas.all %}
+                                    {{ etiqueta.name }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Imágenes del Caso</h5>
+                            <div class="row">
+                                {% for imagen in caso.imagenes.all %}
+                                    <div class="col-md-4 mb-3">
+                                        <img src="{{ imagen.imagen.url }}" class="img-fluid" alt="Imagen del Caso">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-end mb-3 mt-3">
+                <a href="{% url 'casos_interesantes_db:lista_casos_interesantes' %}" class="btn btn-secondary btn-sm">Volver</a>
+                <a href="{% url 'home' %}" class="btn btn-primary btn-sm">Ir a Inicio</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Crear Paciente{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="alert alert-warning" role="alert">
+                El paciente no se encuentra en el sistema. Complete los datos a continuación para registrar al paciente y posteriormente cargar un nuevo caso.
+            </div>
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0 text-center">Crear Paciente</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <div class="input-group">
+                                {{ form.dni }}
+                            </div>
+                            {% for error in form.dni.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                {{ form.nombre }}
+                            </div>
+                            {% for error in form.nombre.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                {{ form.apellido }}
+                            </div>
+                            {% for error in form.apellido.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

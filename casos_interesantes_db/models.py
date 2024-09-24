@@ -1,15 +1,10 @@
 from django.db import models
-from django.utils import timezone  # Para trabajar con fechas y horas
-# Si necesitas relacionar tus modelos con el modelo de usuario
+from cloudinary.models import CloudinaryField
+from django.utils import timezone
 from django.contrib.auth.models import User
-from django.urls import reverse  # Para obtener URLs de tus vistas
-# Importa el modelo de etiquetas de la librería taggit
+from django.urls import reverse
 from taggit.managers import TaggableManager
-# Importa el modelo de Sedes para relacionar con el modelo de Residentes
 from asistencia.models import Sedes, Usuario
-
-# Crea tus modelos aquí.
-
 
 class Paciente(models.Model):
     """
@@ -17,8 +12,13 @@ class Paciente(models.Model):
     """
     nombre = models.CharField("Nombre del paciente", max_length=50)
     apellido = models.CharField("Apellido del paciente", max_length=50)
-    dni = models.CharField("DNI del paciente", max_length=8,
-                           unique=True, help_text="Ingrese el DNI sin puntos.")
+    dni = models.CharField(
+        "DNI del paciente", 
+        max_length=8, 
+        unique=True, 
+        help_text="Ingrese el DNI sin puntos.", 
+        error_messages={'unique': 'El DNI ingresado ya existe en la base de datos.' }
+    )
 
     class Meta:
         verbose_name = "Paciente"
@@ -29,10 +29,8 @@ class Paciente(models.Model):
         return f"{self.nombre} {self.apellido}"
 
     def save(self, *args, **kwargs):
-        self.nombre = ' '.join(word.capitalize()
-                               for word in self.nombre.split())
-        self.apellido = ' '.join(word.capitalize()
-                                 for word in self.apellido.split())
+        self.nombre = ' '.join(word.capitalize() for word in self.nombre.split())
+        self.apellido = ' '.join(word.capitalize() for word in self.apellido.split())
         return super().save(*args, **kwargs)
 
 class Sistema(models.Model):
@@ -119,33 +117,110 @@ class CasoInteresante(models.Model):
     )
 
     paciente = models.ForeignKey(
-        Paciente, on_delete=models.CASCADE, related_name='casos_interesantes')
-    id_estudio = models.CharField("ID de estudio", max_length=50, unique=True, help_text="Cada estudio cuenta con un ID único que lo identifica y es asginado por cada equipo. Ingresando este ID se evitará duplicados.", error_messages={
-                                  'unique': 'El ID de estudio ingresado ya existe en la base de datos.'})
+        Paciente, 
+        on_delete=models.CASCADE, 
+        related_name='casos_interesantes'
+    )
+    
+    id_estudio = models.CharField(
+        "ID de estudio", 
+        max_length=50, 
+        unique=True, 
+        help_text=(
+            "Cada estudio cuenta con un ID o número de acceso únicos que lo identifica y es asignado por cada equipo. "
+            "Ingresando este ID se evitará duplicados. Si el ID del estudio tiene caracteres especiales, "
+            "deben ser eliminados para que sea un número entero. Por ejemplo, 1234-567 debe convertirse en 1234567."
+        ),
+        error_messages={'unique': 'El ID de estudio ingresado ya existe en la base de datos.'}
+    )
+    
+    usuario_carga = models.ForeignKey(
+        Usuario, 
+        on_delete=models.CASCADE, 
+        related_name='casos_interesantes', 
+        verbose_name="Usuario que cargó el caso"
+    )
+    
     sede = models.ForeignKey(
-        Sedes, on_delete=models.CASCADE, related_name='casos_interesantes')
-    fecha = models.DateField("Fecha del caso", default=timezone.now,
-                             help_text="Ingrese la fecha en la que se realizó el estudio.")
-    tipo_estudio = models.CharField("Tipo de estudio", max_length=2, choices=OPCION_TIPO_ESTUDIO,
-                                    help_text="Seleccione el tipo de estudio que se realizó.")
+        Sedes, 
+        on_delete=models.CASCADE, 
+        related_name='casos_interesantes'
+    )
+    
+    fecha = models.DateField(
+        "Fecha del caso", 
+        default=timezone.now, 
+        help_text="Ingrese la fecha en la que se realizó el estudio."
+    )
+    
+    tipo_estudio = models.CharField(
+        "Tipo de estudio", 
+        max_length=2, 
+        choices=OPCION_TIPO_ESTUDIO, 
+        help_text="Seleccione el tipo de estudio que se realizó."
+    )
+    
     contraste_ev = models.BooleanField(
-        "Contraste", default=False, help_text="¿Se utilizó contraste endovenoso en el estudio?")
+        "Contraste endovenoso", 
+        default=False, 
+        help_text="¿Se utilizó contraste endovenoso en el estudio?"
+    )
+    
     contraste_or = models.BooleanField(
-        "Contraste oral", default=False, help_text="¿Se utilizó contraste oral en el estudio?")
-    # portal_de_estudio = models.CharField("Portal de estudio", max_length=100, help_text="Ingrese el portal de estudio donde se encuentra cargado el estudio.")
-    region_anatomica = models.ForeignKey(Region, on_delete=models.CASCADE, related_name='casos_interesantes', verbose_name="Región anatómica", help_text="Seleccione la región anatómica donde se encuentra la patología.")
-    sistema = models.ForeignKey(Sistema, on_delete=models.CASCADE, related_name='casos_interesantes', help_text="Seleccione el sistema relacionado con la patología.")
-    organo = models.ForeignKey(Organo, on_delete=models.CASCADE, related_name='casos_interesantes', help_text="Seleccione el órgano donde se encuentra la patología, si corresponde.")
-    especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE, related_name='casos_interesantes', help_text="Selecciona a que subespecialidad pertenece el caso.")
+        "Contraste oral", 
+        default=False, 
+        help_text="¿Se utilizó contraste oral en el estudio?"
+    )
+    
+    region_anatomica = models.ForeignKey(
+        Region, 
+        on_delete=models.CASCADE, 
+        related_name='casos_interesantes', 
+        verbose_name="Región anatómica", 
+        help_text="Seleccione la región anatómica donde se encuentra la patología."
+    )
+    
+    sistema = models.ForeignKey(
+        Sistema, 
+        on_delete=models.CASCADE, 
+        related_name='casos_interesantes', 
+        help_text="Seleccione el sistema relacionado con la patología."
+    )
+    
+    organo = models.ForeignKey(
+        Organo, 
+        on_delete=models.CASCADE, 
+        related_name='casos_interesantes', 
+        help_text="Seleccione el órgano donde se encuentra la patología, si corresponde."
+    )
+    
+    especialidad = models.ForeignKey(
+        Especialidad, 
+        on_delete=models.CASCADE, 
+        related_name='casos_interesantes', 
+        help_text="Selecciona a qué subespecialidad pertenece el caso."
+    )
+    
     descripcion = models.TextField(
-        "Descripción del caso", help_text="Ingrese una breve descripción del caso.")
+        "Descripción del caso", 
+        help_text="Ingrese una breve descripción del caso."
+    )
+    
     hallazgos = models.TextField(
         "Hallazgos", 
         help_text="Ingrese los hallazgos más relevantes del caso. Por ejemplo: Tumor en lóbulo superior derecho, Colangiocarcinoma, Neumonía bilateral, etc."
     )
+    
     fregmento_informe = models.TextField(
-        "Fragmento del informe", help_text="Ingrese un fragmento del informe que menciona el hallazgo de interés o en el que se menciona el diagnóstico definitivo.")
-    etiquetas = TaggableManager("Etiquetas", help_text="Puede agregar etiquetas para facilitar la búsqueda de este caso. Separe las etiquetas con comas. Por ejemplo: neumonía, COVID-19, pulmón.", blank=True)
+        "Fragmento del informe", 
+        help_text="Ingrese un fragmento del informe que menciona el hallazgo de interés o en el que se menciona el diagnóstico definitivo."
+    )
+    
+    etiquetas = TaggableManager(
+        "Etiquetas", 
+        help_text="Puede agregar etiquetas para facilitar la búsqueda de este caso. Separe las etiquetas con comas. Por ejemplo: neumonía, COVID-19, pulmón.", 
+        blank=True
+    )
 
     class Meta:
         verbose_name = "Caso interesante"
@@ -159,5 +234,12 @@ class ImagenCasoInteresante(models.Model):
     """
     Modelo que representa una imagen de un caso interesante.
     """
-    caso = models.ForeignKey(CasoInteresante, on_delete=models.CASCADE, related_name='imagenes')
-    imagen = models.ImageField("Imagen del caso", upload_to='casos_interesantes/', help_text="Cargue una o más imágenes relacionadas con el caso.")
+    caso = models.ForeignKey(
+        CasoInteresante, 
+        on_delete=models.CASCADE, 
+        related_name='imagenes'
+    )
+    imagen = CloudinaryField('imagen')
+
+    def __str__(self):
+        return f"Imagen de {self.caso}"
