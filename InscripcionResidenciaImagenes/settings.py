@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+import os
 from pathlib import Path
 from dotenv import load_dotenv
 from decouple import config
@@ -23,11 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Configuración de desarrollo de inicio rápido: no adecuada para producción
 # Ver https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+# Ver https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # ADVERTENCIA DE SEGURIDAD: ¡mantenga en secreto la clave secreta utilizada en la producción!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # ADVERTENCIA DE SEGURIDAD: ¡no ejecute con la depuración activada en producción!
+DEBUG = False
 DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'residentes-dm-9833103dde7d.herokuapp.com']
@@ -41,6 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Mis aplicaciones
+    'asistencia.apps.AsistenciaConfig', # Se pone .apps.AsistenciaConfig para que sepa que es una aplicacion y cumpla con el estandar de Django
+    'casos_interesantes_db.apps.CasosInteresantesDbConfig',
+    # Aplicaciones de terceros
+    'taggit',
     'asistencia.apps.AsistenciaConfig', # Se pone .apps.AsistenciaConfig para que sepa que es una aplicacion y cumpla con el estandar de Django
     'casos_interesantes_db.apps.CasosInteresantesDbConfig',
     # Aplicaciones de terceros
@@ -106,6 +114,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Configuración de correo electrónico
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 # Configuración de correo electrónico
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
 EMAIL_HOST = os.getenv('EMAIL_HOST')
