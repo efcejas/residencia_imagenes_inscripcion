@@ -150,21 +150,21 @@
         alt="Dibujo de residentes">
     </div>
   </div>
-  <!-- {% if user.is_superuser %}
-  <div class="row justify-content-center py-3">
-      <div class="col-12 col-md-8">
-        <div class="card border-info">
-          <div class="card-body text-info">
-            <h5 class="card-title">¡Tu contribución es importante!</h5>
-            <p class="card-text">Para el aprendizaje continuo, es crucial mantener actualizada la base de datos con casos interesantes. Por favor, contribuye añadiendo nuevos casos.</p>
-            <div class="text-end">
-              <a href="{% url 'casos_interesantes_db:buscar_paciente' %}" class="btn btn-info">Añadir nuevo caso</a>
+  {% if user.is_superuser or user.is_staff %}
+    <div class="row justify-content-center py-3">
+        <div class="col-12 col-md-8">
+          <div class="card border-info">
+            <div class="card-body text-info">
+              <h5 class="card-title">¡Tu contribución es importante!</h5>
+              <p class="card-text">Para el aprendizaje continuo, es crucial mantener actualizada la base de datos con casos interesantes. Por favor, contribuye añadiendo nuevos casos.</p>
+              <div class="text-end">
+                <a href="{% url 'casos_interesantes_db:buscar_paciente' %}" class="btn btn-info">Añadir nuevo caso</a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-  </div>
-  {% endif %} -->
+    </div>
+  {% endif %}
   <div class="development pb-md-3">
     <h2 class="display-6">¡En proceso de desarrollo!</h2>
     <p class="lead">Estamos trabajando para mejorar esta página. ¡Mantente atento a las actualizaciones!</p>
