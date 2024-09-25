@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .models import Paciente, CasoInteresante, ImagenCasoInteresante
 from .forms import PacienteSearchForm, PacienteForm, CasoInteresanteForm, ImagenCasoInteresanteForm, CasoInteresanteFilterForm
+import cloudinary.uploader
 
 class PacienteSearchView(LoginRequiredMixin, FormView):
     template_name = 'casos_db/paciente_search.html'
@@ -35,7 +36,6 @@ class PacienteCreateView(LoginRequiredMixin, CreateView):
         self.object = form.save()
         return redirect('casos_interesantes_db:crear_caso_interesante', paciente_id=self.object.id)
 
-
 class CasoInteresanteCreateView(LoginRequiredMixin, CreateView):
     model = CasoInteresante
     form_class = CasoInteresanteForm
@@ -59,7 +59,10 @@ class CasoInteresanteCreateView(LoginRequiredMixin, CreateView):
         if imagen_form.is_valid():
             self.object = form.save()
             for imagen in self.request.FILES.getlist('imagenes'):
-                ImagenCasoInteresante.objects.create(caso=self.object, imagen=imagen)
+                # Subir la imagen a Cloudinary
+                upload_result = cloudinary.uploader.upload(imagen)
+                # Crear la instancia de ImagenCasoInteresante con la URL de Cloudinary
+                ImagenCasoInteresante.objects.create(caso=self.object, imagen=upload_result['url'])
             return redirect(reverse('casos_interesantes_db:caso_creado_exito', kwargs={'pk': self.object.pk}))
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -68,7 +71,6 @@ class CasoInteresanteCreateView(LoginRequiredMixin, CreateView):
         context = self.get_context_data(form=form)
         context['imagen_form'] = ImagenCasoInteresanteForm(self.request.POST, self.request.FILES)
         return self.render_to_response(context)
-
 
 class CasoCreadoExitoView(LoginRequiredMixin, View):
     template_name = 'casos_db/caso_creado_exito.html'
