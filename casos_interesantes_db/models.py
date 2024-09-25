@@ -123,13 +123,13 @@ class CasoInteresante(models.Model):
     )
     
     id_estudio = models.CharField(
-        "ID de estudio", 
-        max_length=50, 
-        unique=True, 
+        "ID de estudio",
+        max_length=50,
+        unique=True,
         help_text=(
-            "Cada estudio cuenta con un ID o número de acceso únicos que lo identifica y es asignado por cada equipo. "
-            "Ingresando este ID se evitará duplicados. Si el ID del estudio tiene caracteres especiales, "
-            "deben ser eliminados para que sea un número entero. Por ejemplo, 1234-567 debe convertirse en 1234567."
+            "Cada caso debe contar con un ID único para evitar duplicados en la base de datos. "
+            "El ID debe formarse tomando la fecha del estudio y la hora. "
+            "Por ejemplo: para la fecha 12/05/2021 y la hora 14:30, el ID sería 120520211430."
         ),
         error_messages={'unique': 'El ID de estudio ingresado ya existe en la base de datos.'}
     )

@@ -10,15 +10,17 @@
                     <h3 class="card-title mb-0">Caso Creado Exitosamente</h3>
                 </div>
                 <div class="card-body">
-                    <p class="card-text">Se ha creado exitosamente el caso relacionado con el paciente: <strong>{{ paciente.nombre }} {{ paciente.apellido }}</strong></p>
+                    <p class="card-text">Se ha creado exitosamente el caso relacionado con el paciente: <strong>{{ paciente.nombre }} {{
+                            paciente.apellido }}</strong></p>
                     <p class="card-text">Con los siguientes hallazgos: <strong>{{ caso.hallazgos }}</strong></p>
-                    <div class="mt-4">
-                        <p class="card-text">¿Qué deseas hacer a continuación?</p>
-                        <a href="{% url 'casos_interesantes_db:detalle_caso_interesante' caso.id %}" class="btn btn-info">Ver detalles del caso</a>
-                        <a href="{% url 'casos_interesantes_db:lista_casos_interesantes' %}" class="btn btn-secondary">Ir a los casos almacenados</a>
-                        <a href="{% url 'casos_interesantes_db:crear_caso_interesante' paciente.id %}" class="btn btn-primary">Agregar un nuevo caso</a>
-                        <a href="{% url 'home' %}" class="btn btn-success">Volver al Inicio</a>
                 </div>
+            </div>
+            <div class="mt-4 text-center">
+                <p class="card-text">¿Qué deseas hacer a continuación?</p>
+                <a href="{% url 'casos_interesantes_db:detalle_caso_interesante' caso.id %}" class="btn btn-info mb-2">Ver detalles del caso</a>
+                <a href="{% url 'casos_interesantes_db:lista_casos_interesantes' %}" class="btn btn-secondary mb-2">Ir a los casos almacenados</a>
+                <a href="{% url 'casos_interesantes_db:crear_caso_interesante' paciente.id %}" class="btn btn-primary mb-2">Agregar un nuevo caso</a>
+                <a href="{% url 'home' %}" class="btn btn-success mb-2">Volver al Inicio</a>
             </div>
         </div>
     </div>
