@@ -16,6 +16,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -41,127 +43,78 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <h5 class="navbar-brand m-0">{{ user.get_full_name }}</h5>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
-                    aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNavDarkDropdown">
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
+    
+                        <!-- Menú principal -->
                         <li class="nav-item dropdown">
-                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">Menú</button>
+                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-list"></i> <span class="d-none d-md-inline">Menú</span>
+                            </button>
                             <ul class="dropdown-menu dropdown-menu-lg-end">
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'home' %}" class="nav-link">Inicio</a>
-                                </li>
+                                <li><a class="dropdown-item" href="{% url 'home' %}"><i class="bi bi-house"></i> Inicio</a></li>
+    
+                                <!-- Opciones para residentes -->
                                 {% if user.residente_profile %}
-                                <!--  Este bloque se muestra si el usuario es residente -->
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:asistencias_registradas' %}" class="nav-link">Ver asistencias registradas</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:clases_videos' %}" class="nav-link">Clases</a>
-                                </li>
+                                <li><a class="dropdown-item" href="{% url 'asistencia:asistencias_registradas' %}"><i class="bi bi-clipboard-check"></i> Ver asistencias</a></li>
+                                <li><a class="dropdown-item" href="{% url 'asistencia:clases_videos' %}"><i class="bi bi-film"></i> Clases</a></li>
+                                <li><a class="dropdown-item" href="{% url 'casos_interesantes_db:lista_casos_interesantes' %}"><i class="bi bi-folder2"></i> Base de datos de casos</a></li>
                                 {% endif %}
-                                {% if user.docente_profile or user.administrativo_profile %}
-                                <!--  Este bloque se muestra si el usuario es docente o administrativo -->
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}"
-                                        class="nav-link">Gestión de residentes</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}"
-                                        class="nav-link">Control de asistencias</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:ateneo_evaluacion_list' %}"
-                                        class="nav-link">Evaluación de ateneos</a>
-                                </li>
-                                <!-- <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:evaluados' %}"
-                                        class="nav-link">Residentes evaluados</a>
-                                </li> -->
-                                <!-- <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:evaluacion_periodica_crear' %}"
-                                        class="nav-link">Evaluación periódica</a>
-                                </li> -->
+    
+                                <!-- Opciones para docentes, administrativos y superusuarios -->
+                                {% if user.docente_profile or user.administrativo_profile or user.is_superuser %}
+                                <li><a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}"><i class="bi bi-people"></i> Gestión de residentes</a></li>
+                                <li><a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}"><i class="bi bi-clipboard-data"></i> Control de asistencias</a></li>
+                                <li><a class="dropdown-item" href="{% url 'asistencia:ateneo_evaluacion_list' %}"><i class="bi bi-journal-check"></i> Evaluación de ateneos</a></li>
+                                <li><a class="dropdown-item" href="{% url 'casos_interesantes_db:lista_casos_interesantes' %}"><i class="bi bi-folder2"></i> Base de datos de casos</a></li>
                                 {% endif %}
-                                {% if user.administrativo_profile %}
-                                <!--  Este bloque se muestra si el usuario es administrativo -->
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}"
-                                        class="nav-link">Gestión de sedes</a>
-                                </li>
-                                {% endif %}
-                                {% if user.is_superuser %}
-                                <!--  Este bloque se muestra si el usuario es superusuario -->
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}"
-                                        class="nav-link">Gestión de residentes</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}"
-                                        class="nav-link">Control de asistencias</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:ateneo_evaluacion_list' %}"
-                                        class="nav-link">Evaluación de ateneos</a>
-                                </li>
-                                <!-- <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:evaluacion_periodica_crear' %}"
-                                        class="nav-link">Evaluación periódica</a>
-                                </li> -->
-                                <!-- <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:evaluados' %}"
-                                        class="nav-link">Residentes evaluados</a>
-                                </li> -->
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}"
-                                        class="nav-link">Gestión de sedes</a>
-                                </li>
+    
+                                <!-- Opciones adicionales para administrativos y superusuarios -->
+                                {% if user.administrativo_profile or user.is_superuser %}
+                                <li><a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}"><i class="bi bi-building"></i> Gestión de sedes</a></li>
                                 {% endif %}
                             </ul>
                         </li>
+    
+                        <!-- Herramientas para residentes, docentes y superusuarios -->
                         {% if user.residente_profile or user.docente_profile or user.is_superuser %}
-                        <!--  Este bloque se muestra si el usuario es residente, docente o superusuario. El administrativo no tiene acceso a esta opción -->
                         <li class="nav-item dropdown">
-                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Herramientas</button>
+                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-tools"></i> <span class="d-none d-md-inline">Herramientas</span>
+                            </button>
                             <ul class="dropdown-menu dropdown-menu-lg-end">
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:washout_suprarrenal' %}" class="nav-link">Calculadora de
-                                        lavado suprarrenal</a>
-                                </li>
+                                <li><a class="dropdown-item" href="{% url 'asistencia:washout_suprarrenal' %}"><i class="bi bi-calculator"></i> Calculadora de lavado suprarrenal</a></li>
                             </ul>
                         </li>
                         {% endif %}
-                        <!--  Este bloque se muestra si el usuario está autenticado, no importa el perfil -->
+    
+                        <!-- Opciones de cuenta para todos los usuarios -->
                         <li class="nav-item dropdown">
-                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">Cuenta</button>
+                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person"></i> <span class="d-none d-md-inline">Cuenta</span>
+                            </button>
                             <ul class="dropdown-menu dropdown-menu-lg-end">
+                                <li><a class="dropdown-item" href="{% url 'asistencia:perfil' %}"><i class="bi bi-person-circle"></i> Perfil</a></li>
+                                <li><a class="dropdown-item" href="{% url 'password_change' %}"><i class="bi bi-key"></i> Cambiar contraseña</a></li>
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'asistencia:perfil' %}" class="nav-link">Perfil</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'password_change' %}" class="nav-link">Cambiar
-                                        contraseña</a>
-                                </li>
-                                <li>
-                                    <form method="post" action="{% url 'cerrar_sesion' %}"
-                                        class="dropdown-item form-inline m-0">
+                                    <form method="post" action="{% url 'cerrar_sesion' %}" class="dropdown-item form-inline m-0">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn btn-link p-0">Cerrar sesión</button>
+                                        <button type="submit" class="btn btn-link p-0"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</button>
                                     </form>
                                 </li>
                             </ul>
                         </li>
+    
                     </ul>
                 </div>
             </div>
         </nav>
         {% endif %}
-    </div>
+    </div>    
+     
     <main class="container">
         {% block content %}
         {% endblock %}

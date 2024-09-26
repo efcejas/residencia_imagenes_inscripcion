@@ -211,8 +211,9 @@
                     </div>
                 </div>
 
-                <!-- Botón de guardar -->
-                <div class="text-end mt-3">
+                 <!-- Botón de guardar y cancelar al mismo nivel -->
+                <div class="d-flex justify-content-between mt-3">
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
                     <button type="submit" class="btn btn-primary">Guardar Caso</button>
                 </div>
             </form>

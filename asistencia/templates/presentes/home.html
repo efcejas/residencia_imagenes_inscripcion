@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block content %}
-<nav class="navbar navbar-expand-md navbar-light" style="background-color: transparent;">
+<nav class="navbar navbar-expand-xxl navbar-light" style="background-color: transparent;">
   <div class="container-fluid">
     {% if user.is_authenticated %}
-    <p class="lead mb-0">¡Hola, {{ user.first_name }}!</p>
+      <p class="lead mb-0">¡Hola, {{ user.first_name }}!</p>
     {% endif %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,89 +14,66 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         {% if user.is_authenticated %}
-        {% if user.docente_profile %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:control_asistencia' %}">Control de asistencias</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:ateneo_evaluacion_list' %}">Evaluaciones de ateneos</a>
-        </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:evaluados' %}">Residentes evaluados</a>
-        </li> -->
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:evaluacion_periodica_crear' %}">Evaluación periódica</a>
-        </li> -->
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:clases_videos' %}">Clases</a>
-        </li>
-        {% endif %}
-        {% if user.administrativo_profile %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:control_asistencia' %}">Control de asistencias</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:residentes_list' %}">Gestión de residentes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:ateneo_evaluacion_list' %}">Evaluaciones de ateneos</a>
-        </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:evaluados' %}">Residentes evaluados</a>
-        </li> -->
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Sedes</a>
-        </li>
-        {% endif %}
-        {% if user.residente_profile %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:asistencias_registradas' %}">Ver asistencias</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:clases_videos' %}">Clases</a>
-        </li>
-        {% endif %}
-        {% if user.is_superuser %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:control_asistencia' %}">Control de asistencias</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:residentes_list' %}">Gestión de residentes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:ateneo_evaluacion_list' %}">Evaluaciones de ateneos</a>
-        </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:evaluacion_periodica_crear' %}">Evaluación periódica</a>
-        </li> -->
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:evaluados' %}">Residentes evaluados</a>
-        </li> -->
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:clases_videos' %}">Clases</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'asistencia:sedes_list' %}">Sedes</a>
-        </li>
-        {% endif %}
-        <li class="nav-item">
-          <form method="post" action="{% url 'cerrar_sesion' %}">
-            {% csrf_token %}
-            <button type="submit" class="nav-link">Cerrar sesión</button>
-          </form>
-        </li>
+        
+          <!-- Gestión dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownGestion" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-gear"></i>
+              <span class="d-none d-md-inline">Gestión</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-md dropdown-menu-end" aria-labelledby="navbarDropdownGestion" style="max-width: 300px;">
+              {% if user.is_superuser or user.docente_profile %}
+                <li><a class="dropdown-item" href="{% url 'asistencia:control_asistencia' %}"><i class="bi bi-clipboard-check"></i> Control de asistencias</a></li>
+                <li><a class="dropdown-item" href="{% url 'asistencia:ateneo_evaluacion_list' %}"><i class="bi bi-clipboard-data"></i> Evaluaciones de ateneos</a></li>
+                <li><a class="dropdown-item" href="{% url 'asistencia:clases_videos' %}"><i class="bi bi-film"></i> Clases</a></li>
+                <li><a class="dropdown-item" href="{% url 'casos_interesantes_db:lista_casos_interesantes' %}"><i class="bi bi-folder2"></i> Base de datos de casos</a></li>
+              {% endif %}
+              {% if user.is_superuser or user.administrativo_profile %}
+                <li><a class="dropdown-item" href="{% url 'asistencia:residentes_list' %}"><i class="bi bi-people"></i> Gestión de residentes</a></li>
+                <li><a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}"><i class="bi bi-building"></i> Sedes</a></li>
+              {% endif %}
+            </ul>
+          </li>
+          
+          <!-- Ver para residentes -->
+          {% if user.residente_profile %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownVer" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-search"></i>
+              <span class="d-none d-md-inline">Ver</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-md dropdown-menu-end" aria-labelledby="navbarDropdownVer" style="max-width: 300px;">
+              <li><a class="dropdown-item" href="{% url 'asistencia:asistencias_registradas' %}"><i class="bi bi-clipboard-check"></i> Ver asistencias</a></li>
+              <li><a class="dropdown-item" href="{% url 'asistencia:clases_videos' %}"><i class="bi bi-film"></i> Clases</a></li>
+              <li><a class="dropdown-item" href="{% url 'casos_interesantes_db:lista_casos_interesantes' %}"><i class="bi bi-folder2"></i> Base de datos de casos</a></li>
+            </ul>
+          </li>
+          {% endif %}
+          
+          <!-- Cerrar sesión -->
+          <li class="nav-item">
+            <form method="post" action="{% url 'cerrar_sesion' %}">
+              {% csrf_token %}
+              <button type="submit" class="nav-link btn btn-link"><i class="bi bi-box-arrow-right"></i> <span class="d-none d-md-inline">Cerrar sesión</span></button>
+            </form>
+          </li>
+        
         {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'seleccion_tipo_usuario' %}">Registrarse</a>
-        </li>
+        
+          <!-- Iniciar sesión / Registrarse -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right"></i> Iniciar sesión</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'seleccion_tipo_usuario' %}"><i class="bi bi-person-plus"></i> Registrarse</a>
+          </li>
+        
         {% endif %}
       </ul>
     </div>
   </div>
 </nav>
+
 {% if user.is_authenticated and user.residente_profile %}
 <!-- <div class="row row-cols-1 d-flex justify-content-center">
   <div class="col-auto py-3">
@@ -165,7 +142,7 @@
         </div>
     </div>
   {% endif %}
-  <div class="development pb-md-3">
+  <div class="development py-5">
     <h2 class="display-6">¡En proceso de desarrollo!</h2>
     <p class="lead">Estamos trabajando para mejorar esta página. ¡Mantente atento a las actualizaciones!</p>
   </div>
