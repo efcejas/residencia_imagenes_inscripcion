@@ -89,8 +89,10 @@
 
                     <!-- Descripción del caso -->
                     <div class="card mb-3 shadow-sm">
+                        <div class="card-header bg-light text-center">
+                            <h5 class="card-title mb-0"><i class="bi bi-file-earmark-text"></i> Descripción del caso</h5>
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-file-earmark-text"></i> Descripción del caso</h5>
                             <p><strong>Descripción:</strong> {{ caso.descripcion }}</p>
                             <p><strong>Hallazgos:</strong> {{ caso.hallazgos }}</p>
                             <p><strong>Fragmento del Informe:</strong> {{ caso.fragmento_informe }}</p>
@@ -104,8 +106,10 @@
 
                     <!-- Imágenes del caso -->
                     <div class="card mb-3 shadow-sm">
+                        <div class="card-header bg-light text-center">
+                            <h5 class="card-title mb-0"><i class="bi bi-images"></i> Imágenes del caso</h5>
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-images"></i> Imágenes del caso</h5>
                             <div class="row">
                                 {% for imagen in caso.imagenes.all %}
                                 <div class="col-md-4 mb-3">
