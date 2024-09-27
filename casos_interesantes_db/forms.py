@@ -113,7 +113,7 @@ class CasoInteresanteForm(forms.ModelForm):
             'especialidad',
             'descripcion',
             'hallazgos',
-            'fregmento_informe',
+            'fragmento_informe',
             'etiquetas',
         ]
         widgets = {
@@ -129,7 +129,7 @@ class CasoInteresanteForm(forms.ModelForm):
             'especialidad': forms.Select(attrs={'class': 'form-control'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'hallazgos': forms.Textarea(attrs={'class': 'form-control', 'rows': 1}),
-            'fregmento_informe': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'fragmento_informe': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'etiquetas': forms.TextInput(attrs={'class': 'form-control'}),
         }
 

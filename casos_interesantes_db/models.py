@@ -211,7 +211,7 @@ class CasoInteresante(models.Model):
         help_text="Ingrese los hallazgos más relevantes del caso. Por ejemplo: Tumor en lóbulo superior derecho, Colangiocarcinoma, Neumonía bilateral, etc."
     )
     
-    fregmento_informe = models.TextField(
+    fragmento_informe = models.TextField(
         "Fragmento del informe", 
         help_text="Ingrese un fragmento del informe que menciona el hallazgo de interés o en el que se menciona el diagnóstico definitivo."
     )
