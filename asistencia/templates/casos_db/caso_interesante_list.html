@@ -140,6 +140,7 @@
                                     <th scope="col">Hallazgos</th>
                                     <th scope="col">Estudio</th>
                                     <th scope="col">Fecha</th>
+                                    <th scope="col">Sede</th>
                                     <th scope="col">Paciente</th>
                                     <th scope="col">DNI</th>
                                     <th scope="col">Acciones</th>
@@ -151,6 +152,7 @@
                                     <td>{{ caso.hallazgos }}</td>
                                     <td>{{ caso.get_tipo_estudio_display }}</td>
                                     <td>{{ caso.fecha|date:"d/m/y" }}</td>
+                                    <td>{{ caso.sede }}</td>
                                     <td>{{ caso.paciente.apellido }} {{ caso.paciente.nombre }}</td>
                                     <td>{{ caso.paciente.dni }}</td>
                                     <td>
