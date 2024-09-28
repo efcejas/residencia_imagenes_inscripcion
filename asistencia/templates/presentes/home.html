@@ -15,7 +15,8 @@
       <ul class="navbar-nav ms-auto">
         {% if user.is_authenticated %}
         
-          <!-- Gestión dropdown -->
+          <!-- Gestión dropdown: se muestra solo si hay contenido para mostrar -->
+          {% if user.is_superuser or user.docente_profile or user.administrativo_profile %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownGestion" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-gear"></i>
@@ -34,6 +35,7 @@
               {% endif %}
             </ul>
           </li>
+          {% endif %}
           
           <!-- Ver para residentes -->
           {% if user.residente_profile %}
