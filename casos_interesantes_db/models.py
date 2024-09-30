@@ -105,17 +105,16 @@ class Especialidad(models.Model):
         self.nombre = self.nombre.capitalize()
         return super().save(*args, **kwargs)
 
+class TipoEstudio(models.Model):
+    nombre = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nombre
+
 class CasoInteresante(models.Model):
     """
     Modelo que representa un caso interesante.
     """
-    OPCION_TIPO_ESTUDIO = (
-        ('RM', 'Resonancia magnética'),
-        ('TC', 'Tomografía computada'),
-        ('US', 'Ecografía'),
-        ('RX', 'Radiografía'),
-    )
-
     paciente = models.ForeignKey(
         Paciente, 
         on_delete=models.CASCADE, 
@@ -153,11 +152,9 @@ class CasoInteresante(models.Model):
         help_text="Ingrese la fecha en la que se realizó el estudio."
     )
     
-    tipo_estudio = models.CharField(
-        "Tipo de estudio", 
-        max_length=2, 
-        choices=OPCION_TIPO_ESTUDIO, 
-        help_text="Seleccione el tipo de estudio que se realizó."
+    tipo_estudio = models.ManyToManyField(
+        TipoEstudio,
+        help_text="Seleccione el método principal del caso. Puede seleccionar más de uno si corresponde."
     )
     
     contraste_ev = models.BooleanField(

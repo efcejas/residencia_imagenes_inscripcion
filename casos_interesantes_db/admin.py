@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Paciente, Organo, Sistema, Region, Especialidad, CasoInteresante, ImagenCasoInteresante
+from .models import Paciente, Organo, Sistema, Region, Especialidad, CasoInteresante, ImagenCasoInteresante, TipoEstudio
 
 # Registra tus modelos aquí.
 class PacienteAdmin(admin.ModelAdmin):
@@ -28,6 +28,11 @@ class EspecialidadAdmin(admin.ModelAdmin):
     ordering = ('nombre',)
     search_fields = ('nombre',)
 
+class TipoEstudioAdmin(admin.ModelAdmin):
+    list_display = ('nombre',)
+    ordering = ('nombre',)
+    search_fields = ('nombre',)
+
 class CasoInteresanteAdmin(admin.ModelAdmin):
     list_display = ('paciente', 'fecha', 'sistema', 'organo', 'region_anatomica', 'especialidad')
     ordering = ('fecha',)
@@ -44,5 +49,6 @@ admin.site.register(Organo, OrganoAdmin)
 admin.site.register(Sistema, SistemaAdmin)
 admin.site.register(Region, RegionAdmin)
 admin.site.register(Especialidad, EspecialidadAdmin)
+admin.site.register(TipoEstudio, TipoEstudioAdmin)
 admin.site.register(CasoInteresante, CasoInteresanteAdmin)
 admin.site.register(ImagenCasoInteresante, ImagenCasoInteresanteAdmin)
