@@ -120,7 +120,7 @@ class CasoInteresanteForm(forms.ModelForm):
             'id_estudio': forms.NumberInput(attrs={'class': 'form-control'}),
             'sede': forms.Select(attrs={'class': 'form-control'}),
             'fecha': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'tipo_estudio': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+            'tipo_estudio': forms.CheckboxSelectMultiple(),
             'contraste_ev': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'contraste_or': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'region_anatomica': forms.Select(attrs={'class': 'form-control'}),

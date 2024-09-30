@@ -19,8 +19,7 @@
                                     <h5 class="card-title mb-0"><i class="bi bi-person"></i> Paciente</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p><strong>Nombre:</strong> {{ caso.paciente.nombre }} {{ caso.paciente.apellido }}
-                                    </p>
+                                    <p><strong>Nombre:</strong> {{ caso.paciente.nombre }} {{ caso.paciente.apellido }}</p>
                                     <p><strong>DNI:</strong> {{ caso.paciente.dni }}</p>
                                     <!-- <p><strong>Edad:</strong> {{ caso.paciente.edad }} años</p> -->
                                     <!-- Otros campos relevantes del paciente -->
@@ -39,24 +38,19 @@
                                     <p><strong>Sede:</strong> {{ caso.sede }}</p>
                                     <p><strong>Fecha:</strong> {{ caso.fecha|date:"d/m/y" }}</p>
                                     <p><strong>Tipo de Estudio:</strong>
-                                        {% if caso.tipo_estudio == "RX" or caso.tipo_estudio == "US" %}
-                                        {{ caso.get_tipo_estudio_display }}
-                                        {% elif caso.tipo_estudio == "RM" %}
-                                        {% if caso.contraste_ev %}
-                                        {{ caso.get_tipo_estudio_display }} con contraste endovenoso.
-                                        {% else %}
-                                        {{ caso.get_tipo_estudio_display }} sin contraste.
-                                        {% endif %}
-                                        {% else %}
+                                        {% for tipo in caso.tipo_estudio.all %}
+                                            {{ tipo.nombre }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </p>
+                                    <p>
                                         {% if caso.contraste_ev and caso.contraste_or %}
-                                        {{ caso.get_tipo_estudio_display }} con contraste endovenoso y oral.
+                                            Con contraste endovenoso y oral.
                                         {% elif caso.contraste_ev %}
-                                        {{ caso.get_tipo_estudio_display }} con contraste endovenoso.
+                                            Con contraste endovenoso.
                                         {% elif caso.contraste_or %}
-                                        {{ caso.get_tipo_estudio_display }} con contraste oral.
+                                            Con contraste oral.
                                         {% else %}
-                                        {{ caso.get_tipo_estudio_display }} sin contraste.
-                                        {% endif %}
+                                            Sin contraste.
                                         {% endif %}
                                     </p>
                                 </div>
@@ -98,7 +92,7 @@
                             <p><strong>Fragmento del Informe:</strong> {{ caso.fragmento_informe }}</p>
                             <p><strong>Etiquetas:</strong>
                                 {% for etiqueta in caso.etiquetas.all %}
-                                <span class="badge bg-secondary">{{ etiqueta.name }}</span>
+                                    <span class="badge bg-secondary">{{ etiqueta.name }}</span>
                                 {% endfor %}
                             </p>
                         </div>
@@ -112,14 +106,13 @@
                         <div class="card-body">
                             <div class="row">
                                 {% for imagen in caso.imagenes.all %}
-                                <div class="col-md-4 mb-3">
-                                    <div class="card">
-                                        <img src="{{ imagen.imagen.url }}" class="img-fluid rounded"
-                                            alt="Imagen del Caso">
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card">
+                                            <img src="{{ imagen.imagen.url }}" class="img-fluid rounded" alt="Imagen del Caso">
+                                        </div>
                                     </div>
-                                </div>
                                 {% empty %}
-                                <p class="text-center">No hay imágenes disponibles para este caso.</p>
+                                    <p class="text-center">No hay imágenes disponibles para este caso.</p>
                                 {% endfor %}
                             </div>
                         </div>

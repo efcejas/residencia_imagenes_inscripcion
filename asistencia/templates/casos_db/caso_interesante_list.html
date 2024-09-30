@@ -150,7 +150,11 @@
                                 {% for caso in casos %}
                                 <tr>
                                     <td>{{ caso.hallazgos }}</td>
-                                    <td>{{ caso.get_tipo_estudio_display }}</td>
+                                    <td>
+                                        {% for tipo in caso.tipo_estudio.all %}
+                                        {{ tipo.nombre }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </td>
                                     <td>{{ caso.fecha|date:"d/m/y" }}</td>
                                     <td>{{ caso.sede }}</td>
                                     <td>{{ caso.paciente.apellido }} {{ caso.paciente.nombre }}</td>
