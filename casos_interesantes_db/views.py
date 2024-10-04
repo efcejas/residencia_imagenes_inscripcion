@@ -114,3 +114,39 @@ class CasoInteresanteDetailView(LoginRequiredMixin, DetailView):
     model = CasoInteresante
     template_name = 'casos_db/caso_interesante_detail.html'
     context_object_name = 'caso'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        caso = self.get_object()
+        estudios_con_contraste = []
+        estudios_sin_contraste = []
+
+        for tipo in caso.tipo_estudio.all():
+            if tipo.nombre == "Tomografía computada":
+                if caso.contraste_ev and caso.contraste_or:
+                    estudios_con_contraste.append("Tomografía computada con contraste oral y endovenoso")
+                elif caso.contraste_ev:
+                    estudios_con_contraste.append("Tomografía computada con contraste endovenoso sin contraste oral")
+                elif caso.contraste_or:
+                    estudios_con_contraste.append("Tomografía computada sin contraste endovenoso con contraste oral")
+                else:
+                    estudios_sin_contraste.append("Tomografía computada sin contraste endovenoso ni oral")
+            elif tipo.nombre == "Resonancia magnética":
+                if caso.contraste_ev:
+                    estudios_con_contraste.append("Resonancia magnética con gadolinio")
+                else:
+                    estudios_sin_contraste.append("Resonancia magnética sin contraste")
+            elif tipo.nombre in ["Radiografía", "Ecografía"]:
+                estudios_sin_contraste.append(tipo.nombre)
+
+        def format_estudios(estudios_con_contraste, estudios_sin_contraste):
+            estudios = estudios_con_contraste + estudios_sin_contraste
+            if len(estudios) > 1:
+                return ', '.join(estudios[:-1]) + ' y ' + estudios[-1] + '.'
+            elif estudios:
+                return estudios[0] + '.'
+            else:
+                return ''
+
+        context['estudios_formateados'] = format_estudios(estudios_con_contraste, estudios_sin_contraste)
+        return context

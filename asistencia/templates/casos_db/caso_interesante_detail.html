@@ -37,22 +37,8 @@
                                     <p><strong>ID Estudio:</strong> {{ caso.id_estudio }}</p>
                                     <p><strong>Sede:</strong> {{ caso.sede }}</p>
                                     <p><strong>Fecha:</strong> {{ caso.fecha|date:"d/m/y" }}</p>
-                                    <p><strong>Tipo de Estudio:</strong>
-                                        {% for tipo in caso.tipo_estudio.all %}
-                                            {{ tipo.nombre }}{% if not forloop.last %}, {% endif %}
-                                        {% endfor %}
-                                    </p>
-                                    <p>
-                                        {% if caso.contraste_ev and caso.contraste_or %}
-                                            Con contraste endovenoso y oral.
-                                        {% elif caso.contraste_ev %}
-                                            Con contraste endovenoso.
-                                        {% elif caso.contraste_or %}
-                                            Con contraste oral.
-                                        {% else %}
-                                            Sin contraste.
-                                        {% endif %}
-                                    </p>
+                                    <!-- casos_db/caso_interesante_detail.html -->
+                                    <p><strong>Tipo de Estudio:</strong> {{ estudios_formateados }}</p>
                                 </div>
                             </div>
                         </div>
