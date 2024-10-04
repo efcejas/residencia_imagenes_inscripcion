@@ -98,6 +98,12 @@ class CasoInteresanteListView(LoginRequiredMixin, ListView):
                 queryset = queryset.filter(hallazgos__icontains=form.cleaned_data['patologia'])
             if form.cleaned_data['organo']:
                 queryset = queryset.filter(organo=form.cleaned_data['organo'])
+            if form.cleaned_data['region_anatomica']:
+                queryset = queryset.filter(region_anatomica=form.cleaned_data['region_anatomica'])
+            if form.cleaned_data['sistema']:
+                queryset = queryset.filter(sistema=form.cleaned_data['sistema'])
+            if form.cleaned_data['especialidad']:
+                queryset = queryset.filter(especialidad=form.cleaned_data['especialidad'])
             if form.cleaned_data['etiqueta']:
                 queryset = queryset.filter(etiquetas__name__icontains=form.cleaned_data['etiqueta'])
         return queryset

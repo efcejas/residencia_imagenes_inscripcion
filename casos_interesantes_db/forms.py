@@ -14,7 +14,7 @@ class CasoInteresanteFilterForm(forms.Form):
     )
     patologia = forms.ChoiceField(
         required=False,
-        choices=[('', 'Seleccione')] + [(patologia, patologia) for patologia in CasoInteresante.objects.values_list('hallazgos', flat=True).distinct()],
+        choices=[('', 'Seleccione')] + [(hallazgo, hallazgo) for hallazgo in CasoInteresante.objects.values_list('hallazgos', flat=True).distinct()],
         widget=forms.Select(attrs={'class': 'form-control'}),
         label='Patología'
     )
