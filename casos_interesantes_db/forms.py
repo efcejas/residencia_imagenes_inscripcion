@@ -1,5 +1,5 @@
 from django import forms
-from .models import CasoInteresante, ImagenCasoInteresante, Paciente, Organo, Region, Sistema, Especialidad
+from .models import CasoInteresante, ImagenCasoInteresante, Paciente, Organo, Region, Sistema, Especialidad, MetodoEstudio
 
 class CasoInteresanteFilterForm(forms.Form):
     fecha_desde = forms.DateField(
@@ -104,9 +104,7 @@ class CasoInteresanteForm(forms.ModelForm):
             'id_estudio',
             'fecha',
             'sede',
-            'tipo_estudio',
-            'contraste_ev',
-            'contraste_or',
+            'metodos_estudio',
             'region_anatomica',
             'sistema',
             'organo',
@@ -120,9 +118,7 @@ class CasoInteresanteForm(forms.ModelForm):
             'id_estudio': forms.NumberInput(attrs={'class': 'form-control'}),
             'sede': forms.Select(attrs={'class': 'form-control'}),
             'fecha': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'tipo_estudio': forms.CheckboxSelectMultiple(),
-            'contraste_ev': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'contraste_or': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'metodos_estudio': forms.CheckboxSelectMultiple(),
             'region_anatomica': forms.Select(attrs={'class': 'form-control'}),
             'sistema': forms.Select(attrs={'class': 'form-control'}),
             'organo': forms.Select(attrs={'class': 'form-control'}),

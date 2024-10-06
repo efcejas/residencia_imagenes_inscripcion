@@ -60,44 +60,14 @@
                                 {% endif %}
                             </div>
                             <div class="col-md-6 mt-3 mt-md-0">
-                                <label for="{{ form.tipo_estudio.id_for_label }}" class="form-label">{{ form.tipo_estudio.label }}</label>
-                                {{ form.tipo_estudio }}
-                                {% if form.tipo_estudio.errors %}
-                                    <div class="text-danger">{{ form.tipo_estudio.errors }}</div>
+                                <label for="{{ form.metodos_estudio.id_for_label }}" class="form-label">{{ form.metodos_estudio.label }}</label>
+                                {{ form.metodos_estudio }}
+                                {% if form.metodos_estudio.errors %}
+                                    <div class="text-danger">{{ form.metodos_estudio.errors }}</div>
                                 {% endif %}
-                                {% if form.tipo_estudio.help_text %}
-                                    <div class="form-text text-muted">{{ form.tipo_estudio.help_text }}</div>
+                                {% if form.metodos_estudio.help_text %}
+                                    <div class="form-text text-muted">{{ form.metodos_estudio.help_text }}</div>
                                 {% endif %}
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="form-check">
-                                    {{ form.contraste_ev }}
-                                    <label class="form-check-label" for="{{ form.contraste_ev.id_for_label }}">
-                                        {{ form.contraste_ev.label }}
-                                    </label>
-                                    {% if form.contraste_ev.errors %}
-                                        <div class="text-danger">{{ form.contraste_ev.errors }}</div>
-                                    {% endif %}
-                                    {% if form.contraste_ev.help_text %}
-                                        <div class="form-text text-muted">{{ form.contraste_ev.help_text }}</div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-check">
-                                    {{ form.contraste_or }}
-                                    <label class="form-check-label" for="{{ form.contraste_or.id_for_label }}">
-                                        {{ form.contraste_or.label }}
-                                    </label>
-                                    {% if form.contraste_or.errors %}
-                                        <div class="text-danger">{{ form.contraste_or.errors }}</div>
-                                    {% endif %}
-                                    {% if form.contraste_or.help_text %}
-                                        <div class="form-text text-muted">{{ form.contraste_or.help_text }}</div>
-                                    {% endif %}
-                                </div>
                             </div>
                         </div>
                         <div class="row mb-3">

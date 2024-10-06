@@ -4,7 +4,7 @@ from django.views.generic import FormView, CreateView, View, ListView, DetailVie
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .models import Paciente, CasoInteresante, ImagenCasoInteresante
+from .models import Paciente, CasoInteresante, ImagenCasoInteresante, MetodoEstudio
 from .forms import PacienteSearchForm, PacienteForm, CasoInteresanteForm, ImagenCasoInteresanteForm, CasoInteresanteFilterForm
 import cloudinary.uploader
 
@@ -127,23 +127,23 @@ class CasoInteresanteDetailView(LoginRequiredMixin, DetailView):
         estudios_con_contraste = []
         estudios_sin_contraste = []
 
-        for tipo in caso.tipo_estudio.all():
-            if tipo.nombre == "Tomografía computada":
-                if caso.contraste_ev and caso.contraste_or:
+        for metodo in caso.metodos_estudio.all():
+            if metodo.tipo_estudio.nombre == "Tomografía computada":
+                if metodo.contraste_ev and metodo.contraste_or:
                     estudios_con_contraste.append("Tomografía computada con contraste oral y endovenoso")
-                elif caso.contraste_ev:
+                elif metodo.contraste_ev:
                     estudios_con_contraste.append("Tomografía computada con contraste endovenoso sin contraste oral")
-                elif caso.contraste_or:
+                elif metodo.contraste_or:
                     estudios_con_contraste.append("Tomografía computada sin contraste endovenoso con contraste oral")
                 else:
                     estudios_sin_contraste.append("Tomografía computada sin contraste endovenoso ni oral")
-            elif tipo.nombre == "Resonancia magnética":
-                if caso.contraste_ev:
+            elif metodo.tipo_estudio.nombre == "Resonancia magnética":
+                if metodo.contraste_ev:
                     estudios_con_contraste.append("Resonancia magnética con gadolinio")
                 else:
                     estudios_sin_contraste.append("Resonancia magnética sin contraste")
-            elif tipo.nombre in ["Radiografía", "Ecografía"]:
-                estudios_sin_contraste.append(tipo.nombre)
+            elif metodo.tipo_estudio.nombre in ["Radiografía", "Ecografía"]:
+                estudios_sin_contraste.append(metodo.tipo_estudio.nombre)
 
         def format_estudios(estudios_con_contraste, estudios_sin_contraste):
             estudios = estudios_con_contraste + estudios_sin_contraste

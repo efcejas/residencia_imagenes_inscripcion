@@ -111,9 +111,32 @@ class TipoEstudio(models.Model):
     def __str__(self):
         return self.nombre
 
+class MetodoEstudio(models.Model):
+    tipo_estudio = models.ForeignKey(TipoEstudio, on_delete=models.CASCADE)
+    contraste_ev = models.BooleanField("Contraste endovenoso", default=False)
+    contraste_or = models.BooleanField("Contraste oral", default=False)
+    contraste_gadolineo = models.BooleanField("Contraste con gadolinio", default=False)
+
+    def __str__(self):
+        contrastes = []
+        if self.contraste_ev:
+            contrastes.append("Ev")
+        if self.contraste_or:
+            contrastes.append("Oral")
+        if self.contraste_gadolineo:
+            contrastes.append("Con gadolinio")
+        
+        # Verificar si el tipo de estudio es Radiografía o Ecografía
+        if self.tipo_estudio.nombre in ["Radiografía", "Ecografía"]:
+            contrastes_str = " y ".join(contrastes) if contrastes else ""
+        else:
+            contrastes_str = " y ".join(contrastes) if contrastes else "Sin contraste"
+        
+        return f"{self.tipo_estudio} ({contrastes_str})" if contrastes_str else f"{self.tipo_estudio}"
+
 class CasoInteresante(models.Model):
-    """
-    Modelo que representa un caso interesante.
+    """ 
+    Modelo que representa un caso interesante. 
     """
     paciente = models.ForeignKey(
         Paciente, 
@@ -152,21 +175,9 @@ class CasoInteresante(models.Model):
         help_text="Ingrese la fecha en la que se realizó el estudio."
     )
     
-    tipo_estudio = models.ManyToManyField(
-        TipoEstudio,
-        help_text="Seleccione el método principal del caso. Puede seleccionar más de uno si corresponde."
-    )
-    
-    contraste_ev = models.BooleanField(
-        "Contraste endovenoso", 
-        default=False, 
-        help_text="¿Se utilizó contraste endovenoso en el estudio?"
-    )
-    
-    contraste_or = models.BooleanField(
-        "Contraste oral", 
-        default=False, 
-        help_text="¿Se utilizó contraste oral en el estudio?"
+    metodos_estudio = models.ManyToManyField(
+        MetodoEstudio,
+        help_text="Seleccione el método principal de estudio utilizado para el caso. Puede seleccionar más de uno si corresponde."
     )
     
     region_anatomica = models.ForeignKey(

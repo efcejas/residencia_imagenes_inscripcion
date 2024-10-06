@@ -144,8 +144,19 @@
                                 <tr>
                                     <td>{{ caso.hallazgos }}</td>
                                     <td>
-                                        {% for tipo in caso.tipo_estudio.all %}
-                                        {{ tipo.nombre }}{% if not forloop.last %}, {% endif %}
+                                        {% for metodo in caso.metodos_estudio.all %}
+                                            {% if metodo.tipo_estudio.nombre == "Tomografía computada" %}
+                                                TC
+                                            {% elif metodo.tipo_estudio.nombre == "Resonancia magnética" %}
+                                                RM
+                                            {% elif metodo.tipo_estudio.nombre == "Radiografía" %}
+                                                Rx
+                                            {% elif metodo.tipo_estudio.nombre == "Ecografía" %}
+                                                US
+                                            {% else %}
+                                                {{ metodo.tipo_estudio.nombre }}
+                                            {% endif %}
+                                            {% if not forloop.last %}, {% endif %}
                                         {% endfor %}
                                     </td>
                                     <td>{{ caso.fecha|date:"d/m/y" }}</td>
