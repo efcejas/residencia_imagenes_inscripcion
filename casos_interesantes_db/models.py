@@ -177,6 +177,7 @@ class CasoInteresante(models.Model):
     
     metodos_estudio = models.ManyToManyField(
         MetodoEstudio,
+        verbose_name="Métodos de estudio",
         help_text="Seleccione el método principal de estudio utilizado para el caso. Puede seleccionar más de uno si corresponde."
     )
     
@@ -197,6 +198,7 @@ class CasoInteresante(models.Model):
     
     organo = models.ForeignKey(
         Organo, 
+        verbose_name="Órgano",
         on_delete=models.CASCADE, 
         related_name='casos_interesantes', 
         help_text="Seleccione el órgano donde se encuentra la patología, si corresponde."
