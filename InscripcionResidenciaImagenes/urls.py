@@ -41,6 +41,9 @@ urlpatterns = [
     # Rutas de la aplicación de la base de datos de casos interesantes
     path('casos_interesantes_db/', include(('casos_interesantes_db.urls', 'casos_interesantes_db'), namespace='casos_interesantes_db')),
 
+    # Rutas de la aplicación de facturación
+    path('facturacion/', include(('facturacion.urls', 'facturacion'), namespace='facturacion')),
+
     # Rutas de administración
     path('admin/', admin.site.urls),
 ]
