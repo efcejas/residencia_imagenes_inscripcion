@@ -41,6 +41,12 @@
             <li><a class="dropdown-item" href="{% url 'asistencia:sedes_list' %}"><i class="bi bi-building"></i>
                 Sedes</a></li>
             {% endif %}
+
+            <!-- Opción visible solo para el superusuario -->
+            {% if user.is_superuser %}
+            <li><a class="dropdown-item" href="{% url 'facturacion:inicio' %}"><i class="bi bi-file-earmark-text"></i>
+                Facturación Personal</a></li>
+            {% endif %}
           </ul>
         </li>
         {% endif %}
@@ -90,6 +96,7 @@
     </div>
   </div>
 </nav>
+
 
 {% if user.is_authenticated and user.residente_profile %}
 <!-- <div class="row row-cols-1 d-flex justify-content-center">

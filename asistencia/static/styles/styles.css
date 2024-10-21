@@ -5,6 +5,13 @@ header.container-fluid {
     padding: 12px;
 }
 
+header.container-fluid.enso-header {
+    /* Tus estilos personalizados */
+    color: #164569;
+    background-color: #ffffff;
+    padding: 12px;
+}
+
 header h1 {
     font-family: nimbus-sans, sans-serif;
     font-size: 2.5vw;
@@ -60,6 +67,37 @@ main.container {
     padding-bottom: 10px;
 }
 
+/* Estilos de la sección de facturación personal */
+
+.facturacion-personal .text-center {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.facturacion-personal .btn-outline-primary {
+    border-color: #164569;
+    color: #164569;
+}
+
+.facturacion-personal .btn-outline-primary:hover {
+    background-color: #164569;
+    color: #fff;
+}
+
+.facturacion-personal h1.display-4 {
+    font-size: 2.5rem;
+}
+
+.facturacion-personal .lead {
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.facturacion-personal hr.my-4 {
+    border-top: 2px solid #ddd;
+}
+
 /* Estilos del pie de página */
 #spinner {
     display: none;
@@ -67,6 +105,28 @@ main.container {
 
 .pie-de-pagina {
     background-color: #F2F2F2;
+}
+
+/* Estilo para el nuevo footer minimalista */
+footer.minimal-footer {
+    background-color: #f8f9fa; /* Fondo claro */
+    color: #164569; /* Color de texto acorde con el estilo de la página */
+    border-top: 1px solid #ddd; /* Línea superior sutil */
+}
+
+footer.minimal-footer p {
+    margin-bottom: 0.5rem; /* Ajustar espaciado entre los párrafos */
+    font-size: 0.9rem; /* Texto ligeramente más pequeño para mantener la sensación minimalista */
+}
+
+footer.minimal-footer a.footer-link {
+    color: #164569; /* Color del enlace */
+    text-decoration: none; /* Quitar subrayado por defecto */
+    font-weight: bold; /* Resaltar el correo */
+}
+
+footer.minimal-footer a.footer-link:hover {
+    text-decoration: underline; /* Subrayado en hover */
 }
 
 /* Estilos - lista de registros */

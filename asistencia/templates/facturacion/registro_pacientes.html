@@ -1,0 +1,131 @@
+{% extends 'drcejas.html' %}
+{% load static %}
+{% block title %}Registro de Pacientes{% endblock %}
+
+{% block content %}
+<h2 class="my-4">Registro de Pacientes</h2>
+
+<!-- Mensaje emergente de éxito fuera del contenido -->
+<div aria-live="polite" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 1050;">
+    <div class="toast-container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ message }} <!-- Muestra el mensaje actual -->
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<!-- Formulario para registrar pacientes en grilla compacta -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <h4>Formulario de Registro</h4>
+        <form method="POST" class="row g-3">
+            {% csrf_token %}
+            <div class="col-md-6">
+                <label for="id_dni" class="form-label">DNI</label>
+                {{ form.dni }}
+                {% if form.dni.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.dni.errors }}
+                </div>
+                {% endif %}
+                <div id="dniHelp" class="form-text">Ingrese el DNI sin puntos ni espacios.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label for="id_nombre" class="form-label">Nombre</label>
+                {{ form.nombre }}
+                {% if form.nombre.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.nombre.errors }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label for="id_apellido" class="form-label">Apellido</label>
+                {{ form.apellido }}
+                {% if form.apellido.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.apellido.errors }}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Región Ecográfica y cantidad -->
+            <div class="col-12">
+                <label for="id_regiones" class="form-label">Regiones Ecográficas</label>
+                {{ region_form.regiones }}
+                {% if region_form.regiones.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ region_form.regiones.errors }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label for="id_cantidad" class="form-label">Cantidad</label>
+                {{ region_form.cantidad }} <!-- Nuevo campo para seleccionar la cantidad de veces que se registra la región -->
+                {% if region_form.cantidad.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ region_form.cantidad.errors }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Registrar Paciente</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Lista de pacientes registrados -->
+    <div class="col-md-6">
+        <h4>Pacientes Registrados Hoy</h4>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Regiones (Conteo)</th>
+                    <th>Empresa</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paciente_region in pacientes_registrados %}
+                <tr>
+                    <td>{{ paciente_region.paciente.nombre }} {{ paciente_region.paciente.apellido }}</td>
+                    <td>{{ paciente_region.cantidad }} <!-- Muestra el conteo de veces que se registró la región --></td>
+                    <td>{{ paciente_region.empresa }}</td>
+                    <td>{{ paciente_region.fecha }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No se han registrado pacientes hoy.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Script para inicializar el toast -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl);
+        });
+        toastList.forEach(toast => toast.show());
+    });
+</script>
+{% endblock %}
+

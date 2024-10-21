@@ -1,0 +1,16 @@
+{% extends 'drcejas.html' %}
+{% load static %}
+{% block title %}Página Inicial{% endblock %}
+
+{% block content %}
+<div class="container py-3 px-0 facturacion-personal">
+    <div class="text-center py-5 px-4 px-md-5"> <!-- Agregado px-4 para pantallas pequeñas -->
+        <h1 class="display-4">Bienvenido a la Plataforma Médica</h1>
+        <p class="lead text-muted">Gestiona tus pacientes y estudios médicos de manera eficiente y sencilla.</p>
+        <hr class="my-4">
+        <p class="text-muted">Accede a todas las funcionalidades y mantén un control preciso de tus registros médicos.</p>
+        <!-- Cambiado btn-lg por btn-md para reducir el tamaño del botón -->
+        <a class="btn btn-outline-primary btn-md" href="#" role="button">Explorar funcionalidades</a>
+    </div>
+</div>
+{% endblock %}

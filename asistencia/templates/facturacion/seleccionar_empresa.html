@@ -1,0 +1,19 @@
+{% extends 'drcejas.html' %}
+{% block title %}Seleccionar Empresa{% endblock %}
+
+{% block content %}
+<h2 class="my-4">Selecciona la Empresa</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="empresa">Empresa</label>
+        <select name="empresa" id="empresa" class="form-control">
+            {% for empresa in empresas %}
+            <option value="{{ empresa.id }}">{{ empresa.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Comenzar Jornada</button>
+</form>
+{% endblock %}
