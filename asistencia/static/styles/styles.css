@@ -85,6 +85,21 @@ main.container {
     color: #fff;
 }
 
+/* Aumenta la especificidad del selector */
+
+form .btn.custom-btn {
+    background-color: #164569;
+    color: white;
+    border: 2px solid #164569;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+form .btn.custom-btn:hover {
+    background-color: white;
+    color: #164569;
+    border-color: #164569;
+}
+
 .facturacion-personal h1.display-4 {
     font-size: 2.5rem;
 }
@@ -107,7 +122,8 @@ main.container {
     background-color: #F2F2F2;
 }
 
-/* Estilo para el nuevo footer minimalista */
+/* Estilo para el nuevo footer minimalista de la sección de facturación */
+
 footer.minimal-footer {
     background-color: #f8f9fa; /* Fondo claro */
     color: #164569; /* Color de texto acorde con el estilo de la página */

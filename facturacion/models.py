@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from asistencia.models import Usuario
+from django.utils import timezone
 from datetime import datetime
 
 
@@ -76,7 +77,7 @@ class PacienteRegion(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     regiones = models.ManyToManyField(RegionEcografia)  # Relación muchos a muchos: un paciente puede tener varias regiones
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=True, blank=True)
-    fecha = models.DateField(auto_now_add=True)
+    fecha = models.DateTimeField(default=timezone.now)
 
     class Meta:
         verbose_name = "Regiones por paciente"

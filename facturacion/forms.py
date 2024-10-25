@@ -1,55 +1,43 @@
 from django import forms
-from .models import Paciente, PacienteRegion, RegionEcografia
+from django.utils import timezone
+from .models import Paciente, PacienteRegion, RegionEcografia, Empresa
+
+class EmpresaForm(forms.Form):
+    empresa = forms.ModelChoiceField(
+        queryset=Empresa.objects.all(), 
+        label="Seleccione la Empresa", 
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
 
 class PacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
-        fields = [
-            'dni',
-            'nombre',
-            'apellido',
-            # Otros campos si es necesario
-        ]
+        fields = ['dni', 'nombre', 'apellido']
         widgets = {
-            'dni': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Ingrese el DNI sin puntos',
-                'aria-describedby': 'dniHelp',  # Accesibilidad Bootstrap
-            }),
-            'nombre': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Ingrese el nombre'
-            }),
-            'apellido': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Ingrese el apellido'
-            }),
+            'dni': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'apellido': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
-    def clean_dni(self):
-        dni = self.cleaned_data.get('dni')
-        # Eliminar puntos y espacios
-        dni = dni.replace('.', '').replace(' ', '')
-        # Verificar que el DNI sea un número y tenga exactamente 8 dígitos
-        if not dni.isdigit() or len(dni) != 8:
-            raise forms.ValidationError("El DNI debe ser un número de 8 dígitos sin puntos ni espacios.")
-        return dni
-
-
 class PacienteRegionForm(forms.ModelForm):
+    empresa = forms.ModelChoiceField(
+        queryset=Empresa.objects.none(),
+        label='Empresa',
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=False
+    )
     regiones = forms.ModelMultipleChoiceField(
         queryset=RegionEcografia.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=True,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
         label='Regiones'
     )
     cantidad = forms.IntegerField(
         min_value=1,
         initial=1,
         label='Cantidad',
-        help_text='Cantidad de veces que se repite esta región (por ejemplo, rodillas x2).'
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
     )
 
     class Meta:
         model = PacienteRegion
-        fields = ['regiones', 'empresa', 'cantidad']
+        fields = ['regiones', 'empresa', 'cantidad', 'fecha']
