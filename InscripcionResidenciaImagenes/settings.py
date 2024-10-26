@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Mis aplicaciones
@@ -47,6 +48,8 @@ INSTALLED_APPS = [
     # Aplicaciones de terceros
     'taggit',
 ]
+
+SITE_ID = 1 # El ID del sitio principal
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -44,6 +44,9 @@ urlpatterns = [
     # Rutas de la aplicación de facturación
     path('facturacion/', include(('facturacion.urls', 'facturacion'), namespace='facturacion')),
 
+    # Prefijo específico para Imat
+    path('imat/', include(('imat.urls', 'imat'), namespace='imat')),
+
     # Rutas de administración
     path('admin/', admin.site.urls),
 ]
