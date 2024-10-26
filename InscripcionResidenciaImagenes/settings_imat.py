@@ -45,7 +45,7 @@ USE_TZ = True
 
 # Configuración específica para el sitio de Imat
 SITE_ID = 2
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'imat-residencia-cb65ac618754.herokuapp.com']
+ALLOWED_HOSTS = ['imat-residencia-cb65ac618754.herokuapp.com', '127.0.0.1', 'localhost']
 
 # Configuración de URLs
 ROOT_URLCONF = 'InscripcionResidenciaImagenes.urls'
