@@ -50,6 +50,10 @@ ALLOWED_HOSTS = ['imat-residencia-cb65ac618754.herokuapp.com', '127.0.0.1', 'loc
 # Configuración de URLs
 ROOT_URLCONF = 'InscripcionResidenciaImagenes.urls'
 
+# Cambiar `ROOT_URLCONF` si el sitio se accede desde el dominio de Imat
+if 'imat-residencia-cb65ac618754.herokuapp.com' in os.environ.get('HOST', ''):
+    ROOT_URLCONF = 'InscripcionResidenciaImagenes.urls_imat'
+
 # Aplicaciones instaladas
 INSTALLED_APPS = [
     'django.contrib.admin',

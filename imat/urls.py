@@ -6,5 +6,5 @@ from .views import InicioImatView
 app_name = 'imat'
 
 urlpatterns = [
-    path('', InicioImatView.as_view(), name='inicioimat'),  # Página de inicio específica de Imat
+    # path('', InicioImatView.as_view(), name='inicioimat'),  # Página de inicio específica de Imat
 ]
