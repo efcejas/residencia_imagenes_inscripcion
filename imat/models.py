@@ -34,6 +34,7 @@ class Residente(models.Model):
     nombre = models.CharField(max_length=100, verbose_name="Nombre")
     apellido = models.CharField(max_length=100, verbose_name="Apellido")
     dni = models.CharField(max_length=15, unique=True, verbose_name="DNI")
+    examenes = models.ManyToManyField(Examen, through='ExamenRespuesta', related_name='residentes')
 
     def __str__(self):
         return f"{self.nombre} {self.apellido} - {self.dni}"
@@ -45,7 +46,7 @@ class Residente(models.Model):
 
 # Nuevo modelo para registrar cada intento de examen realizado por un residente
 class ExamenRespuesta(models.Model):
-    residente = models.ForeignKey(Residente, on_delete=models.CASCADE, related_name='examenes', verbose_name="Residente")
+    residente = models.ForeignKey(Residente, on_delete=models.CASCADE, related_name='examenes_respuestas', verbose_name="Residente")
     examen = models.ForeignKey(Examen, on_delete=models.CASCADE, related_name='respuestas', verbose_name="Examen")
     fecha_realizacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de realización")
 
@@ -70,4 +71,3 @@ class Respuesta(models.Model):
     class Meta:
         verbose_name = "Respuesta"
         verbose_name_plural = "Respuestas"
-

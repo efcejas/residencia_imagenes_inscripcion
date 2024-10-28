@@ -1,3 +1,4 @@
+from django import forms
 from django.conf import settings
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import TemplateView, FormView
@@ -35,11 +36,25 @@ class DatosPersonalesView(FormView):
             defaults={'nombre': nombre, 'apellido': apellido}
         )
         
-        # Establecer el ID del residente y del examen en la sesión
+        # Guardar el residente en la sesión
         self.request.session['residente_id'] = residente.id
-        self.request.session['examen_id'] = Examen.objects.first().id  # Selecciona un examen específico, o define cuál será el examen actual
+        self.request.session['examen_id'] = Examen.objects.first().id
+
+        # Redirigir directamente al examen si el residente ya existe
+        if not creado:
+            return redirect(self.success_url)
 
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        # Esto asegura que no se mostrará un mensaje de error si el residente ya existe
+        dni = form.data.get('dni')
+        if dni and Residente.objects.filter(dni=dni).exists():
+            residente = Residente.objects.get(dni=dni)
+            self.request.session['residente_id'] = residente.id
+            self.request.session['examen_id'] = Examen.objects.first().id
+            return redirect(self.success_url)
+        return super().form_invalid(form)
 
 # Vista para capturar respuestas del examen
 class ExamenView(FormView):
