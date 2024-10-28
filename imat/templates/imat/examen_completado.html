@@ -1,0 +1,13 @@
+{% extends 'imat/pagina_base_imat_dos.html' %}
+{% load static %}
+{% block title %}Examen Completado{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2 style="color: #5cb85c;">Examen Completado</h2>
+    <p class="lead text-muted">Gracias, {{ residente_nombre }}, por completar el examen. Sus respuestas han sido registradas con éxito.</p>
+    <a href="{% url 'imat:salir' %}" class="btn btn-block mt-4" style="background-color: #d9534f; color: #fff;">
+        Salir
+    </a>
+</div>
+{% endblock %}

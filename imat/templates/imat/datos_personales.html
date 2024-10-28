@@ -1,0 +1,62 @@
+{% extends 'imat/pagina_base_imat_dos.html' %}
+{% load static %}
+{% block title %}Datos Personales{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center" style="color: #d9534f;">Datos Personales</h2>
+    <p class="text-center text-muted">Por favor, complete sus datos antes de comenzar el examen.</p>
+    <form method="post" class="mx-auto" style="max-width: 500px;">
+        {% csrf_token %}
+        
+        <!-- Mostrar errores generales del formulario -->
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Campo de nombre con errores -->
+        <div class="form-group mb-3">
+            {{ form.nombre }}
+            {% if form.nombre.errors %}
+                <div class="text-danger">
+                    {% for error in form.nombre.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo de apellido con errores -->
+        <div class="form-group mb-3">
+            {{ form.apellido }}
+            {% if form.apellido.errors %}
+                <div class="text-danger">
+                    {% for error in form.apellido.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo de DNI con errores -->
+        <div class="form-group mb-3">
+            {{ form.dni }}
+            {% if form.dni.errors %}
+                <div class="text-danger">
+                    {% for error in form.dni.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-block mt-3" style="background-color: #d9534f; color: #fff;">
+            Continuar al examen
+        </button>
+    </form>
+</div>
+{% endblock %}
