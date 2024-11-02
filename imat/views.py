@@ -71,6 +71,7 @@ class ExamenView(FormView):
         
         # Pasar el título del examen al contexto
         context['titulo_examen'] = examen.titulo
+        context['descripcion_examen'] = examen.descripcion
         return context
 
     def form_valid(self, form):

@@ -34,6 +34,18 @@ class Residente(models.Model):
     nombre = models.CharField(max_length=100, verbose_name="Nombre")
     apellido = models.CharField(max_length=100, verbose_name="Apellido")
     dni = models.CharField(max_length=15, unique=True, verbose_name="DNI")
+    anio_residencia = models.CharField(
+        help_text="Seleccione a que año pertenecés en la residencia",
+        max_length=20,
+        choices=[
+            ('primer', 'Primer Año'),
+            ('segundo', 'Segundo Año'),
+            ('tercer', 'Tercer Año'),
+            ('cuarto', 'Cuarto Año')
+        ],
+        default='primer',
+        verbose_name="Año de residencia"
+    )
     examenes = models.ManyToManyField(Examen, through='ExamenRespuesta', related_name='residentes')
 
     def __str__(self):

@@ -5,14 +5,14 @@ from .models import Residente, Pregunta, Respuesta
 class DatosPersonalesForm(forms.ModelForm):
     class Meta:
         model = Residente
-        fields = ['nombre', 'apellido', 'dni']
+        fields = ['nombre', 'apellido', 'dni', 'anio_residencia']
     
     def __init__(self, *args, **kwargs):
         super(DatosPersonalesForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({
                 'class': 'form-control',
-                'placeholder': field.label
+                # 'placeholder': field.label
             })
     
     def clean_nombre(self):
@@ -26,7 +26,6 @@ class DatosPersonalesForm(forms.ModelForm):
     def clean_dni(self):
         dni = self.cleaned_data['dni']
         return ''.join(filter(str.isdigit, dni))  # Elimina todos los caracteres que no sean números
-
 
 # Formulario del examen con preguntas estilizadas en Bootstrap
 class ExamenForm(forms.Form):
