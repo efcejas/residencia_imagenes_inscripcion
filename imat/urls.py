@@ -1,7 +1,7 @@
 # imat/urls.py
 from django.urls import path
 from . import views
-from .views import InicioImatView, BienvenidaView, DatosPersonalesView, ExamenView, ExamenCompletadoView
+from .views import InicioImatView, BienvenidaView, DatosPersonalesView, ExamenView, ExamenCompletadoView, ResidentesExamenListView, ResidenteExamenDetailView
 
 app_name = 'imat'  # Definir el namespace
 
@@ -12,4 +12,6 @@ urlpatterns = [
     path('examen/', ExamenView.as_view(), name='examen'),
     path('examen-completado/', ExamenCompletadoView.as_view(), name='examen_completado'),
     path('salir/', views.salir, name='salir'),
+    path('residentes-examen/', ResidentesExamenListView.as_view(), name='residentes_examen'),
+    path('residente-examen/<int:pk>/', ResidenteExamenDetailView.as_view(), name='residente_examen_detail'),
 ]

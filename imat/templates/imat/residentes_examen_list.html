@@ -1,0 +1,24 @@
+{% extends 'imat/pagina_base_imat_dos.html' %}
+{% load static %}
+{% block title %}Residentes{% endblock %}
+
+{% block content %}
+<div class="container mt-5 p-4 rounded shadow" style="background-color: #f9f9f9;">
+    <h2 class="text-center mb-4" style="color: #d9534f;">Residentes que ya presentaron el examen</h2>
+    
+    {% if residentes %}
+        <ul class="list-group">
+            {% for residente in residentes %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'imat:residente_examen_detail' residente.pk %}">
+                        {{ residente.nombre }} {{ residente.apellido }}
+                    </a>
+                    <span class="badge bg-success text-white">Presentado</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-center text-muted">No hay residentes que hayan presentado el examen aún.</p>
+    {% endif %}
+</div>
+{% endblock %}

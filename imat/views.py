@@ -1,7 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.shortcuts import redirect, get_object_or_404
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, ListView, DetailView
 from django.urls import reverse_lazy
 from .forms import DatosPersonalesForm, ExamenForm
 from .models import Residente, Examen, ExamenRespuesta
@@ -113,3 +113,30 @@ class ExamenCompletadoView(TemplateView):
 def salir(request):
     request.session.flush()  # Elimina todos los datos de la sesión
     return redirect('imat:bienvenida') # Redirige a la vista de bienvenida
+
+class ResidentesExamenListView(ListView):
+    model = Residente
+    template_name = 'imat/residentes_examen_list.html'
+    context_object_name = 'residentes'
+
+    def get_queryset(self):
+        # Obtener los residentes que ya presentaron el examen
+        examen_id = self.request.session.get('examen_id')
+        if examen_id:
+            return Residente.objects.filter(examenes_respuestas__examen_id=examen_id).distinct()
+        return Residente.objects.none()
+
+class ResidenteExamenDetailView(DetailView):
+    model = Residente
+    template_name = 'imat/residente_examen_detail.html'
+    context_object_name = 'residente'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        examen_id = self.request.session.get('examen_id')
+        if examen_id:
+            examen_respuesta = ExamenRespuesta.objects.filter(residente=self.object, examen_id=examen_id).first()
+            if examen_respuesta:
+                context['examen_respuesta'] = examen_respuesta
+                context['preguntas_respuestas'] = examen_respuesta.respuestas.all()
+        return context
