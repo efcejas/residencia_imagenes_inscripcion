@@ -13,7 +13,7 @@ class Examen(models.Model):
     class Meta:
         verbose_name = "Examen"
         verbose_name_plural = "Exámenes"
-
+        app_label = "imat"  # Para que Django pueda encontrar el modelo en la app 'imat'
 
 # Modelo para representar cada pregunta del examen
 class Pregunta(models.Model):
