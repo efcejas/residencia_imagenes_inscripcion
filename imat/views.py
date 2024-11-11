@@ -137,10 +137,9 @@ class ResidenteExamenDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        examen_id = self.request.session.get('examen_id')
-        if examen_id:
-            examen_respuesta = ExamenRespuesta.objects.filter(residente=self.object, examen_id=examen_id).first()
-            if examen_respuesta:
-                context['examen_respuesta'] = examen_respuesta
-                context['preguntas_respuestas'] = examen_respuesta.respuestas.all()
+        # Obtener el último examen respondido por el residente
+        examen_respuesta = ExamenRespuesta.objects.filter(residente=self.object).order_by('-fecha_realizacion').first()
+        if examen_respuesta:
+            context['examen_respuesta'] = examen_respuesta
+            context['preguntas_respuestas'] = examen_respuesta.respuestas.all()
         return context
