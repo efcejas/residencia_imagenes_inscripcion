@@ -1,0 +1,78 @@
+{% extends 'imat/pagina_base_imat_dos.html' %}
+{% load static %}
+{% block title %}Datos Personales{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center" style="color: #d9534f;">Datos Personales</h2>
+    <p class="text-center text-muted">Por favor, complete sus datos antes de comenzar el examen.</p>
+    <form method="post" class="mx-auto" style="max-width: 500px;">
+        {% csrf_token %}
+        
+        <!-- Mostrar errores generales del formulario -->
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Campo de nombre con errores -->
+        <div class="form-group mb-3">
+            <label for="{{ form.nombre.id_for_label }}" style="margin-bottom: 0.5rem;">{{ form.nombre.label }}</label>
+            {{ form.nombre }}
+            {% if form.nombre.errors %}
+                <div class="text-danger">
+                    {% for error in form.nombre.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo de apellido con errores -->
+        <div class="form-group mb-3">
+            <label for="{{ form.apellido.id_for_label }}" style="margin-bottom: 0.5rem;">{{ form.apellido.label }}</label>
+            {{ form.apellido }}
+            {% if form.apellido.errors %}
+                <div class="text-danger">
+                    {% for error in form.apellido.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo de DNI con errores -->
+        <div class="form-group mb-3">
+            <label for="{{ form.dni.id_for_label }}" style="margin-bottom: 0.5rem;">{{ form.dni.label }}</label>
+            {{ form.dni }}
+            {% if form.dni.errors %}
+                <div class="text-danger">
+                    {% for error in form.dni.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo de Año de Residencia con errores -->
+        <div class="form-group mb-3">
+            <label for="{{ form.anio_residencia.id_for_label }}" style="margin-bottom: 0.5rem;">{{ form.anio_residencia.label }}</label>
+            {{ form.anio_residencia }}
+            {% if form.anio_residencia.errors %}
+                <div class="text-danger">
+                    {% for error in form.anio_residencia.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-block mt-3" style="background-color: #d9534f; color: #fff;">
+            Continuar el examen
+        </button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'imat/pagina_base_imat_dos.html' %}
+{% load static %}
+{% block title %}{{ titulo_examen }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 p-4 rounded shadow" style="background-color: #f9f9f9;">
+    <h2 class="text-center mb-4" style="color: #d9534f;">{{ titulo_examen }}</h2>
+    <p class="text-center text-muted">{{ descripcion_examen }}</p>
+    
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        
+        <!-- Lista de preguntas con numeración alineada al label -->
+        <div class="list-group">
+            {% for field in form %}
+                <div class="list-group-item border-0 mb-3">
+                    <div class="d-flex align-items-baseline">
+                        <span class="font-weight-bold me-3" style="font-size: 1.1em;">{{ forloop.counter }}.</span> <!-- Número de pregunta con margen derecho -->
+                        <label class="font-weight-bold" style="font-size: 1.1em;">{{ field.label }}</label>
+                    </div>                    
+                    <div class="mt-2">
+                        {{ field }} <!-- Campo de respuesta -->
+                    </div>
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Botón de envío centrado y estilizado -->
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-danger btn-lg mt-4" style="width: 50%;">
+                Finalizar examen
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

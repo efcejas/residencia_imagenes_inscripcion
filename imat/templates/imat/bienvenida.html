@@ -1,0 +1,12 @@
+{% extends 'imat/pagina_base_imat_dos.html' %}
+{% load static %}
+{% block title %}Bienvenida{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2 class="display-4" style="color: #d9534f;">Bienvenidos al examen inicial</h2>
+    <p class="lead text-muted">Este examen nos ayudará a evaluar el nivel teórico inicial del grupo.</p>
+    <a href="{% url 'imat:datos_personales' %}" class="btn btn-lg mt-4" style="background-color: #d9534f; color: #fff;">Comenzar examen</a>
+</div>
+{% endblock %}
+

@@ -29,6 +29,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # ADVERTENCIA DE SEGURIDAD: ¡no ejecute con la depuración activada en producción!
 DEBUG = False
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'residentes-dm-9833103dde7d.herokuapp.com']
 
@@ -48,8 +49,6 @@ INSTALLED_APPS = [
     # Aplicaciones de terceros
     'taggit',
 ]
-
-SITE_ID = 1 # Del sitio actual
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
