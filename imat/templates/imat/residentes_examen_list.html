@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mt-5 p-4 rounded shadow" style="background-color: #f9f9f9;">
-    <h2 class="text-center mb-4" style="color: #d9534f;">Residentes que ya presentaron el examen</h2>
+    <h2 class="text-center mb-4" style="color: #d9534f;">Residentes que ya presentaron el último examen</h2>
     
     {% if residentes %}
         <ul class="list-group">
@@ -18,7 +18,7 @@
             {% endfor %}
         </ul>
     {% else %}
-        <p class="text-center text-muted">No hay residentes que hayan presentado el examen aún.</p>
+        <p class="text-center text-muted">No hay residentes que hayan presentado el último examen.</p>
     {% endif %}
 </div>
 {% endblock %}

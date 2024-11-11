@@ -120,10 +120,14 @@ class ResidentesExamenListView(ListView):
     context_object_name = 'residentes'
 
     def get_queryset(self):
-        # Obtener los residentes que ya presentaron el examen
-        examen_id = self.request.session.get('examen_id')
-        if examen_id:
-            return Residente.objects.filter(examenes_respuestas__examen_id=examen_id).distinct()
+        # Obtener el último examen presentado
+        ultimo_examen_respuesta = ExamenRespuesta.objects.order_by('-fecha_realizacion').first()
+        
+        if ultimo_examen_respuesta:
+            # Filtrar residentes que completaron el último examen
+            return Residente.objects.filter(examenes_respuestas__examen=ultimo_examen_respuesta.examen).distinct()
+        
+        # Si no hay exámenes presentados, devolver un queryset vacío
         return Residente.objects.none()
 
 class ResidenteExamenDetailView(DetailView):
