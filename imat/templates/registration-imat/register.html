@@ -1,0 +1,33 @@
+{% extends "imat/pagina_base_imat_dos.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 500px;">
+    <div class="card shadow-sm" style="border: none;">
+        <div class="card-body p-4">
+            <h3 class="card-title text-center mb-4" style="color: #d9534f;">Crear cuenta</h3>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+                    {{ field.label_tag }}
+                    {{ field|add_class:"form-control form-control-lg" }}
+                    {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-danger btn-lg w-100">Registrarse</button>
+            </form>
+        </div>
+        <div class="card-footer text-center bg-white border-0 mt-3 mb-3">
+            <small class="text-muted">¿Ya tienes una cuenta? <a href="{% url 'login_imat' %}" style="color: #d9534f;">Inicia sesión aquí</a></small>
+        </div>
+    </div>
+</div>
+{% endblock %}

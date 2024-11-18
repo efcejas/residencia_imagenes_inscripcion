@@ -13,7 +13,7 @@ environ.Env.read_env()  # Cargar las variables del archivo .env
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # Debugging
-DEBUG = env.bool("DEBUG", default=False)  # Asegúrate de ajustar esto en producción
+DEBUG = env.bool("DEBUG", default=True)  # Asegúrate de ajustar esto en producción
 
 # Base de datos
 DATABASES = {
@@ -69,14 +69,16 @@ INSTALLED_APPS = [
     'facturacion.apps.FacturacionConfig',
     'imat.apps.ImatConfig',
     # Aplicaciones de terceros
+    'widget_tweaks',
     'taggit',
 ]
 
 # Modelo de usuario personalizado
 AUTH_USER_MODEL = 'asistencia.Usuario'
 
-# Redirección de inicio de sesión
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = '/accounts/login/'  # URL específica para iniciar sesión en IMAT
+# LOGOUT_REDIRECT_URL = '/accounts/login/'  # URL para redirigir después de cerrar sesión
+LOGIN_REDIRECT_URL = '/'  # Página a la que se redirige después de iniciar sesión
 
 # Validadores de contraseña
 AUTH_PASSWORD_VALIDATORS = [

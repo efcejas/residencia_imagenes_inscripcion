@@ -3,11 +3,20 @@
 {% block content %}
 <div class="container mt-5">
     <div class="jumbotron">
-        <h1 class="display-4">Bienvenidos a Imat</h1>
-        <p class="lead">Este es el sitio de Imat.</p>
-        <hr class="my-4">
-        <p>Explora nuestras secciones para más información.</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Aprende más</a>
+        {% if user.is_authenticated %}
+            <h1 class="display-4">Bienvenidos a Imat</h1>
+            <p class="lead">Este es el sitio de Imat.</p>
+            <hr class="my-4">
+            <p>Explora nuestras secciones para más información.</p>
+            <a class="btn btn-danger btn-lg" href="#" role="button">Aprende más</a>
+        {% else %}
+            <h1 class="display-4">Bienvenido Visitante</h1>
+            <p class="lead">Por favor, inicia sesión para acceder a todas las funcionalidades.</p>
+            <hr class="my-4">
+            <p>Si no tienes una cuenta, regístrate para obtener más información.</p>
+            <a class="btn btn-danger btn-lg" href="{% url 'login_imat' %}" role="button">Iniciar sesión</a>
+            <a class="btn btn-secondary btn-lg" href="{% url 'register_imat' %}" role="button">Registrarse</a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

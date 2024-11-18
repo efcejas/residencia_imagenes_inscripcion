@@ -1,0 +1,19 @@
+{% extends 'imat/pagina_base_imat_dos.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Sesión Cerrada{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 400px;">
+    <div class="card shadow-sm" style="border: none;">
+        <div class="card-body p-4">
+            <h3 class="card-title text-center mb-4" style="color: #d9534f;">Sesión cerrada</h3>
+            <p class="text-center">Tu sesión se ha cerrado correctamente.</p>
+            <div class="text-center">
+                <a href="{% url 'login_imat' %}" class="btn btn-danger mt-3">Volver a iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

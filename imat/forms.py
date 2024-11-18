@@ -1,5 +1,14 @@
 from django import forms
 from .models import Residente, Pregunta, Respuesta
+from asistencia.models import Usuario
+
+class RegistroImatForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['username', 'email', 'first_name', 'last_name', 'password']
+        widgets = {
+            'password': forms.PasswordInput(),
+        }
 
 # Formulario de datos personales con validación y limpieza de datos
 class DatosPersonalesForm(forms.ModelForm):

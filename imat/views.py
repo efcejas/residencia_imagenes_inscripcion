@@ -1,10 +1,23 @@
 from django import forms
 from django.conf import settings
 from django.shortcuts import redirect, get_object_or_404
-from django.views.generic import TemplateView, FormView, ListView, DetailView
 from django.urls import reverse_lazy
+from django.views.generic import TemplateView, FormView, ListView, DetailView
+from django.views.generic.edit import CreateView
 from .forms import DatosPersonalesForm, ExamenForm
 from .models import Residente, Examen, ExamenRespuesta
+from asistencia.models import Usuario
+from imat.forms import RegistroImatForm
+
+# Vista de registro de usuario para Imat
+class RegistroImatView(CreateView):
+    model = Usuario
+    form_class = RegistroImatForm
+    template_name = 'registration-imat/register.html'
+    success_url = reverse_lazy('register_success_imat')
+
+class RegistroExitosoImatView(TemplateView):
+    template_name = 'registration-imat/register_success.html'
 
 # Vista de inicio para Imat
 class InicioImatView(TemplateView):

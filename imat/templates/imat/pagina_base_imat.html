@@ -34,6 +34,12 @@
                 {% if user.is_authenticated %}
                     <p class="mb-0"><strong>{{ user.get_full_name }}</strong></p>
                     <p class="mb-0">{{ user.email }}</p>
+                    <form method="post" action="{% url 'logout_imat' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary btn-sm mt-2">Cerrar sesión</button>
+                    </form>                    
+                {% else %}
+                    <a href="{% url 'login_imat' %}" class="btn btn-outline-danger btn-sm mt-2">Iniciar sesión</a>
                 {% endif %}
             </div>
         </div>
@@ -81,7 +87,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="container-fluid py-3 minimal-footer text-center sticky-bottom">
+    <footer class="container-fluid py-3 minimal-footer text-center sticky-footer">
         <p class="mt-3 mb-0">© 2024 <strong>Dr. Enso Fermín Cejas</strong>. Todos los derechos reservados.</p>
         <p class="mt-0 P-0">
             <a href="mailto:enso.cejas@diagnosticomedico.com" class="footer-link">ensofermincejas@gmail.com</a>
