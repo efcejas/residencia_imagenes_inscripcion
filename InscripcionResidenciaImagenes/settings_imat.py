@@ -13,7 +13,7 @@ environ.Env.read_env()  # Cargar las variables del archivo .env
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # Debugging
-DEBUG = env.bool("DEBUG", default=True)  # Asegúrate de ajustar esto en producción
+DEBUG = env.bool("DEBUG", default=False)  # Asegúrate de ajustar esto en producción
 
 # Base de datos
 DATABASES = {

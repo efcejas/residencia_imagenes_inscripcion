@@ -1,7 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.shortcuts import redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, FormView, ListView, DetailView, UpdateView
 from django.views.generic.edit import CreateView
 from .forms import DatosPersonalesForm, ExamenForm
