@@ -1,12 +1,14 @@
-{% extends 'imat/pagina_base_imat_dos.html' %}
+{% extends 'imat/pagina_base_imat.html' %}
 {% load static %}
 {% block title %}Detalle del Examen{% endblock %}
 
 {% block content %}
 <div class="container mt-5 p-4 rounded shadow" style="background-color: #f9f9f9;">
-    <h2 class="text-center mb-4" style="color: #d9534f;">Detalle del "{{ examen_respuesta.examen.titulo }}" de {{ residente.nombre }} {{ residente.apellido }}</h2>
+    <h2 class="text-center mb-4" style="color: #d9534f;">
+        Detalle del "{{ examen_respuesta.examen.titulo }}" de {{ residente.nombre }} {{ residente.apellido }}
+    </h2>
     
-    {% if examen_respuesta %}
+    {% if preguntas_respuestas %}
         <ul class="list-group">
             {% for respuesta in preguntas_respuestas %}
                 <li class="list-group-item">
@@ -18,8 +20,25 @@
     {% else %}
         <p class="text-center text-muted">No hay respuestas registradas para este examen.</p>
     {% endif %}
+
+    <hr class="mt-4">
+
+    {% if form %}
+        <h3 class="mt-4" style="color: #d9534f;">Calificar Examen</h3>
+        <form method="post" class="mt-3">
+            {% csrf_token %}
+            <input type="hidden" name="examen_respuesta_id" value="{{ examen_respuesta.id }}">
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-secondary mt-3">Guardar Calificación</button>
+        </form>
+    {% endif %}
+
     <div class="text-center mt-4">
-        <a href="{% url 'imat:residentes_examen' %}" class="btn btn-danger" style="background-color: #d9534f; border-color: #d9534f;">Volver a la lista de residentes</a>
+        <a href="{% url 'imat:residentes_examen' %}" class="btn btn-danger" style="background-color: #d9534f; border-color: #d9534f;">
+            Volver a la lista de residentes
+        </a>
     </div>
 </div>
 {% endblock %}

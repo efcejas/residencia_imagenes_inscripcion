@@ -29,13 +29,13 @@ class Pregunta(models.Model):
         verbose_name_plural = "Preguntas"
 
 
-# Modelo para almacenar información del residente que realiza el examen
+# Modelo para almacenar información del residente
 class Residente(models.Model):
     nombre = models.CharField(max_length=100, verbose_name="Nombre")
     apellido = models.CharField(max_length=100, verbose_name="Apellido")
     dni = models.CharField(max_length=15, unique=True, verbose_name="DNI")
     anio_residencia = models.CharField(
-        help_text="Seleccione a que año pertenecés en la residencia",
+        help_text="Seleccione a qué año pertenece en la residencia",
         max_length=20,
         choices=[
             ('primer', 'Primer Año'),
@@ -46,7 +46,6 @@ class Residente(models.Model):
         default='primer',
         verbose_name="Año de residencia"
     )
-    examenes = models.ManyToManyField(Examen, through='ExamenRespuesta', related_name='residentes')
 
     def __str__(self):
         return f"{self.nombre} {self.apellido} - {self.dni}"
@@ -55,15 +54,27 @@ class Residente(models.Model):
         verbose_name = "Residente"
         verbose_name_plural = "Residentes"
 
-
-# Nuevo modelo para registrar cada intento de examen realizado por un residente
+# Modelo para registrar los intentos de examen con nota
 class ExamenRespuesta(models.Model):
     residente = models.ForeignKey(Residente, on_delete=models.CASCADE, related_name='examenes_respuestas', verbose_name="Residente")
     examen = models.ForeignKey(Examen, on_delete=models.CASCADE, related_name='respuestas', verbose_name="Examen")
     fecha_realizacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de realización")
+    puntaje = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Puntaje")
+    nivel = models.CharField(
+        max_length=20,
+        choices=[
+            ('alto', 'Alto'),
+            ('intermedio', 'Intermedio'),
+            ('bajo', 'Bajo')
+        ],
+        blank=True,
+        null=True,
+        verbose_name="Nivel"
+    )
+    comentarios = models.TextField(blank=True, null=True, verbose_name="Comentarios del docente")
 
     def __str__(self):
-        return f"Examen '{self.examen.titulo}' realizado por {self.residente}"
+        return f"Examen '{self.examen.titulo}' de {self.residente}"
 
     class Meta:
         verbose_name = "Examen Respuesta"
@@ -83,3 +94,39 @@ class Respuesta(models.Model):
     class Meta:
         verbose_name = "Respuesta"
         verbose_name_plural = "Respuestas"
+
+# Modelo para registrar evaluaciones prácticas
+class EvaluacionPractica(models.Model):
+    residente = models.ForeignKey(Residente, on_delete=models.CASCADE, related_name='evaluaciones_practicas', verbose_name="Residente")
+    fecha = models.DateField(default=timezone.now, verbose_name="Fecha de evaluación")
+    puntaje = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Puntaje")
+    nivel = models.CharField(
+        max_length=20,
+        choices=[
+            ('alto', 'Alto'),
+            ('intermedio', 'Intermedio'),
+            ('bajo', 'Bajo')
+        ],
+        verbose_name="Nivel"
+    )
+    comentarios = models.TextField(blank=True, null=True, verbose_name="Comentarios del docente")
+
+    def __str__(self):
+        return f"Evaluación práctica de {self.residente} - {self.fecha}"
+
+    class Meta:
+        verbose_name = "Evaluación Práctica"
+        verbose_name_plural = "Evaluaciones Prácticas"
+
+# Modelo para el progreso del residente
+class ProgresoResidente(models.Model):
+    residente = models.OneToOneField(Residente, on_delete=models.CASCADE, related_name='progreso', verbose_name="Residente")
+    puntaje_teorico_total = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Puntaje Teórico Total")
+    puntaje_practico_total = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Puntaje Práctico Total")
+
+    def __str__(self):
+        return f"Progreso de {self.residente}"
+
+    class Meta:
+        verbose_name = "Progreso del Residente"
+        verbose_name_plural = "Progresos de los Residentes"

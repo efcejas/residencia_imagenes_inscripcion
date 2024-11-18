@@ -2,12 +2,12 @@ from django import forms
 from django.conf import settings
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, FormView, ListView, DetailView
+from django.views.generic import TemplateView, FormView, ListView, DetailView, UpdateView
 from django.views.generic.edit import CreateView
 from .forms import DatosPersonalesForm, ExamenForm
-from .models import Residente, Examen, ExamenRespuesta
+from .models import Residente, Examen, ExamenRespuesta, EvaluacionPractica
 from asistencia.models import Usuario
-from imat.forms import RegistroImatForm
+from imat.forms import RegistroImatForm, ExamenRespuestaForm, EvaluacionPracticaForm
 
 # Vista de registro de usuario para Imat
 class RegistroImatView(CreateView):
@@ -150,9 +150,29 @@ class ResidenteExamenDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
         # Obtener el último examen respondido por el residente
         examen_respuesta = ExamenRespuesta.objects.filter(residente=self.object).order_by('-fecha_realizacion').first()
         if examen_respuesta:
             context['examen_respuesta'] = examen_respuesta
             context['preguntas_respuestas'] = examen_respuesta.respuestas.all()
+
+            # Incluir el formulario de calificación del examen
+            context['form'] = ExamenRespuestaForm(instance=examen_respuesta)
+
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()  # Obtener el residente actual
+        examen_respuesta_id = request.POST.get('examen_respuesta_id')
+        examen_respuesta = ExamenRespuesta.objects.get(id=examen_respuesta_id)
+
+        form = ExamenRespuestaForm(request.POST, instance=examen_respuesta)
+        if form.is_valid():
+            form.save()  # Guardar la calificación
+            return redirect(reverse('imat:residente_examen_detail', args=[self.object.pk]))
+
+        # Si el formulario no es válido, volver a cargar con errores
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        return self.render_to_response(context)

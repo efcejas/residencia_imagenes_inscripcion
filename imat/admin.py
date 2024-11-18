@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Examen, Pregunta, Residente, Respuesta, ExamenRespuesta
+from .models import Examen, Pregunta, Residente, Respuesta, ExamenRespuesta, EvaluacionPractica, ProgresoResidente
 
 # Configuración para el modelo Examen en el panel de administración
 class ExamenAdmin(admin.ModelAdmin):
@@ -33,9 +33,23 @@ class RespuestaAdmin(admin.ModelAdmin):
     ordering = ('creado_en',)
     list_filter = ('examen_respuesta__examen', 'pregunta')
 
+# Configuración para el modelo EvaluacionPractica en el panel de administración
+class EvaluacionPracticaAdmin(admin.ModelAdmin):
+    list_display = ('residente', 'fecha', 'puntaje')
+    search_fields = ('residente__nombre', 'residente__apellido', 'fecha')
+    ordering = ('fecha',)
+
+# Configuración para el modelo ProgresoResidente en el panel de administración
+class ProgresoResidenteAdmin(admin.ModelAdmin):
+    list_display = ('residente', 'puntaje_teorico_total', 'puntaje_practico_total')
+    search_fields = ('residente__nombre', 'residente__apellido')
+    ordering = ('residente',)
+
 # Registrar los modelos en el sitio de administración
 admin.site.register(Examen, ExamenAdmin)
 admin.site.register(Pregunta, PreguntaAdmin)
 admin.site.register(Residente, ResidenteAdmin)
 admin.site.register(ExamenRespuesta, ExamenRespuestaAdmin)
 admin.site.register(Respuesta, RespuestaAdmin)
+admin.site.register(EvaluacionPractica, EvaluacionPracticaAdmin)
+admin.site.register(ProgresoResidente, ProgresoResidenteAdmin)

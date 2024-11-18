@@ -1,6 +1,7 @@
 from django import forms
 from .models import Residente, Pregunta, Respuesta
 from asistencia.models import Usuario
+from imat.models import ExamenRespuesta, EvaluacionPractica
 
 class RegistroImatForm(forms.ModelForm):
     class Meta:
@@ -61,3 +62,25 @@ class ExamenForm(forms.Form):
                 pregunta=pregunta,
                 texto=value
             )
+
+class EvaluacionPracticaForm(forms.ModelForm):
+    class Meta:
+        model = EvaluacionPractica
+        fields = ['fecha', 'puntaje', 'nivel', 'comentarios']
+
+
+# Formulario para evaluar una respuesta de un examen
+class ExamenRespuestaForm(forms.ModelForm):
+    class Meta:
+        model = ExamenRespuesta
+        fields = ['puntaje', 'nivel', 'comentarios']
+        widgets = {
+            'comentarios': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ExamenRespuestaForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.update({
+                'class': 'form-control',
+            })
