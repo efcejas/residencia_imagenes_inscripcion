@@ -45,9 +45,13 @@ INSTALLED_APPS = [
     'asistencia.apps.AsistenciaConfig', # Se pone .apps.AsistenciaConfig para que sepa que es una aplicacion y cumpla con el estandar de Django
     'casos_interesantes_db.apps.CasosInteresantesDbConfig',
     'facturacion.apps.FacturacionConfig',  # Nueva aplicación
+    'imat.apps.ImatConfig',
     # Aplicaciones de terceros
     'taggit',
 ]
+
+# Configuración del sitio predeterminado
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
